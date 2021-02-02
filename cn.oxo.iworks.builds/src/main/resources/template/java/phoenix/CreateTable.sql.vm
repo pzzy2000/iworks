@@ -1,0 +1,8 @@
+
+CREATE TABLE IF NOT EXISTS ${TableBean.name} (
+ ${TableBean.idColumn.name} ${TableBean.idColumn.columnType.type} NOT NULL ,
+  #foreach($columnBean  in   ${TableBean.columnBeans}) 
+  ${columnBean.name} ${columnBean.columnType.type} ,
+  #end
+  CONSTRAINT PK PRIMARY KEY (${TableBean.idColumn.name})
+)

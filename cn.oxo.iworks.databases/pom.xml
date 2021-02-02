@@ -7,7 +7,6 @@
     <artifactId>cn.oxo.iworks</artifactId>
    <version>0.0.1</version>
   </parent>
-  <groupId>cn.oxo.iworks.databases</groupId>
   <artifactId>cn.oxo.iworks.databases</artifactId>
   <name>cn.oxo.iworks.databases</name>
   <url>http://maven.apache.org</url>

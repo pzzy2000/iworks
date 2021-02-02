@@ -1,0 +1,59 @@
+<!-- sq_add  -->
+<div th:fragment="search" class="modal fade" id="main_search_windows" event="search" role="dialog" aria-hidden="true" data-backdrop="static">
+ <div class="modal-dialog" role="document" style="width: 900px;">
+  <div class="modal-content">
+   <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h4 class="modal-title">
+     <span>查询 </span>
+     <span class="error" id="errMsg"></span>
+    </h4>
+   </div>
+   <div class="modal-body">
+    <form method="post">
+     <div class="row">
+      <div class="col-md-6">
+       <div class="form-group">
+        <label for="searchsearchBean_name"> <span>种植物名称:</span> <span class="help-from-block">[不能为空2~10个汉字]</span>
+        </label>
+        <input type="text" class="form-control" id="searchBean_name" name="searchBean.name" placeholder="" data-bv-notempty-message="分类名称不能为空" pattern="^(?!_)(?!.*?_$)[\u4e00-\u9fa5]{2,10}$"
+         data-bv-regexp-message="分类名称输入格式不对[2~10个汉字]"
+        />
+       </div>
+      </div>
+      <div class="col-md-6">
+       <div class="form-group">
+        <label for="searchBean_status"> <span>状态 :</span> <span class="help-from-block">[不能为空5~10个字母或数字]</span>
+        </label>
+        <select class="form-control" id="searchBean_status" name="searchBean.status" data-bv-notempty-message="状态不能为空">
+         <option value="" style="display: none"></option>
+         <option value="0">删除</option>
+         <option value="1">正常</option>
+        </select>
+       </div>
+      </div>
+     </div>
+     <div class="row">
+      <div class="col-md-12">
+       <div class="form-group">
+        <label for="searchBean_search_plantCatId"> <span>分类 :</span> <span class="help-from-block">[可多选]</span>
+        </label>
+        <select class="form-control select2" id="searchBean_plantCatId" name="searchBean.plantCatIds" data-bv-notempty-message="分类不能为空">
+        </select>
+       </div>
+      </div>
+     </div>
+    </form>
+   </div>
+   <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal">关&nbsp;闭</button>
+    <button id="submit" opt="add" type="submit" data-loading-text="数据正在提交..." class="btn btn-primary">查&nbsp;询</button>
+   </div>
+  </div>
+ </div>
+ <!-- /.modal-content -->
+</div>
+<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<!-- sq_add  -->

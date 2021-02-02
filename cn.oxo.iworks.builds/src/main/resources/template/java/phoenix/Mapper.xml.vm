@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="${BuildDaoBean.basePath}.service.mybatis.${BuildDaoBean.className}BaseMapper">
+  <resultMap id="${BuildDaoBean.className}Bean" type="${BuildDaoBean.clazz.getName()}">
+     <id column="${TableBean.idColumn.name}" jdbcType="${TableBean.idColumn.columnType.getType()}" property="${TableBean.idColumn.fieldName}" />
+    #foreach($columnBean  in   ${TableBean.columnBeans})
+     <result column="${columnBean.name}" jdbcType="${columnBean.columnType.getType()}" property="${columnBean.fieldName}"  />
+    #end
+  </resultMap>
+  
+  <sql id="Base_Column_List">
+       ${TableBean.idColumn.name} #foreach($columnBean  in   ${TableBean.columnBeans}) ,${columnBean.name} #end
+  </sql>
+  
+   <sql id="order_by">
+       <if test="commSearchBean!=null and commSearchBean.dir !=null  ">
+           order by  ${commSearchBean.dir} 
+           <choose>
+				<when test="commSearchBean.sort != null"> ${commSearchBean.sort} </when>
+				<otherwise>desc</otherwise>
+			</choose> 
+         
+       </if>
+      
+  </sql>
+  
+  
+  <select id="selectByPrimaryKey" parameterType="${TableBean.idColumn.fieldType.getName()}" resultMap="${BuildDaoBean.className}Bean">
+    select 
+    <include refid="Base_Column_List" />
+     from  ${TableBean.name}  
+    where 
+    ${TableBean.idColumn.name} = #{${TableBean.idColumn.fieldName},jdbcType=${TableBean.idColumn.columnType.type}}
+  </select>
+  
+  <delete id="deleteByPrimaryKey" parameterType="${TableBean.idColumn.fieldType.getName()}">
+   
+    delete from ${TableBean.name} 
+    where 
+      ${TableBean.idColumn.name} = #{${TableBean.idColumn.fieldName},jdbcType=${TableBean.idColumn.columnType.type}}
+  </delete>
+  
+  <insert id="insertSelective" parameterType="${TableBean.pojo.getName()}">
+    UPSERT into ${TableBean.name}
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+    
+     <if test="${TableBean.idColumn.fieldName} != null">
+        ${TableBean.idColumn.name} , $!{empty}
+     </if>
+    
+    #foreach($columnBean  in   ${TableBean.columnBeans})
+    
+      <if test="${columnBean.fieldName} != null">
+           ${columnBean.name}#if(${velocityCount} != ${TableBean.columnBeans.size()}),$!{empty}
+      #end
+      </if>
+    #end
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="${TableBean.idColumn.fieldName} != null">
+         #{${TableBean.idColumn.fieldName},jdbcType=${TableBean.idColumn.columnType.type}}, $!{empty}
+        </if>
+       #foreach($columnBean  in   ${TableBean.columnBeans}) 
+        <if test="${columnBean.fieldName} != null">
+                #{${columnBean.fieldName},jdbcType=${columnBean.columnType.type}} #if(${velocityCount} != ${TableBean.columnBeans.size()}),#end $!{empty}
+        </if>
+       #end
+    </trim>
+  </insert>
+  
+  <update id="updateByPrimaryKeySelective" parameterType="${TableBean.pojo.getName()}">
+    UPSERT into ${TableBean.name}
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+    
+     <if test="${TableBean.idColumn.fieldName} != null">
+        ${TableBean.idColumn.name} , $!{empty}
+     </if>
+    
+    #foreach($columnBean  in   ${TableBean.columnBeans})
+    
+      <if test="${columnBean.fieldName} != null">
+           ${columnBean.name}#if(${velocityCount} != ${TableBean.columnBeans.size()}),$!{empty}
+      #end
+      </if>
+    #end
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+        <if test="${TableBean.idColumn.fieldName} != null">
+         #{${TableBean.idColumn.fieldName},jdbcType=${TableBean.idColumn.columnType.type}}, $!{empty}
+        </if>
+       #foreach($columnBean  in   ${TableBean.columnBeans}) 
+        <if test="${columnBean.fieldName} != null">
+                #{${columnBean.fieldName},jdbcType=${columnBean.columnType.type}} #if(${velocityCount} != ${TableBean.columnBeans.size()}),#end $!{empty}
+        </if>
+       #end
+    </trim>
+  </update>
+  
+  
+  <sql id="search_entity">
+       <if test="searchBean !=null" >
+         where  1=1 
+		 #foreach($columnBean  in   ${TableBean.columnBeans})
+	      <if test="searchBean.${columnBean.fieldName} != null">
+	        and
+	        ${columnBean.name}  #if( ${columnBean.selectType.name().equals("LIKE")})  like concat('%',#{searchBean.${columnBean.fieldName},jdbcType=${columnBean.columnType.getType()}},'%')  
+	            #else
+	             = #{searchBean.${columnBean.fieldName},jdbcType=${columnBean.columnType.getType()}}
+	            #end
+	      </if>
+	     #end
+	     </if>
+  </sql>
+  
+  <select id="search${BuildDaoBean.className}Selective"  resultMap="${BuildDaoBean.className}Bean">
+     SELECT
+      <include refid="Base_Column_List" />
+	  from ${TableBean.name}
+	  <include refid="search_entity" />
+	   <include refid="order_by" />
+	   <if test="commSearchBean!=null">
+	       LIMIT
+			<if test="commSearchBean.limit != null">#{commSearchBean.limit}</if>
+			offset
+			<choose>
+				<when test="commSearchBean.start != null"> #{commSearchBean.start} 
+				</when>
+				<otherwise> 0 </otherwise>
+			</choose>
+			
+	  </if>
+	  
+  </select>
+  
+  <select id="search${BuildDaoBean.className}Count"   resultType="long">
+     SELECT
+     count(${TableBean.idColumn.name})
+	 from ${TableBean.name}
+	 <include refid="search_entity" />
+  </select>
+  
+</mapper>

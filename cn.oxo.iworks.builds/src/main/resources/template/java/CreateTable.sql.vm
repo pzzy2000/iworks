@@ -1,0 +1,12 @@
+
+CREATE TABLE `${TableBean.name}` (
+ `${TableBean.idColumn.name}` ${TableBean.idColumn.columnType.type}(${TableBean.idColumn.length})  NOT NULL COMMENT '${TableBean.idColumn.desc}' ,
+  #foreach($columnBean  in   ${TableBean.columnBeans}) 
+  `${columnBean.name}` ${columnBean.columnType.type}  #if(${columnBean.length}!=-1)  (${columnBean.length} #if(${columnBean.scale}!=-1) , ${columnBean.scale}  #end)  #end  #if(!${columnBean.canNull}) NOT NULL #if(${columnBean.defaultValue} !='')  DEFAULT '${columnBean.defaultValue}' #end  #end COMMENT '${columnBean.desc}' ,
+  #end
+  #foreach($columnBean  in   ${TableBean.columnBeans}) 
+  #if(${columnBean.index}) #if(${columnBean.index.type()}!="Default") ${columnBean.index.type()} #end  KEY `${columnBean.index.name()}` (`${columnBean.name}`),   #end
+  #end
+  
+  PRIMARY KEY (`${TableBean.idColumn.name}`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='${TableBean.desc}'

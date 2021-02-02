@@ -1,0 +1,24 @@
+package ${BuildDaoBean.basePath}.service.mybatis;
+
+import java.util.List;
+import org.apache.ibatis.annotations.Param;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import ${BuildDaoBean.clazz.getName()};
+import ${BuildDaoBean.basePath}.pojo.bean.${BuildDaoBean.className}SearchBean;
+import cn.zy.dev.tools.units.CommSearchBean;
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+public interface ${BuildDaoBean.className}BaseMapper extends BaseMapper<${BuildDaoBean.className}> {
+ 
+   
+    public List<${BuildDaoBean.className}> search${BuildDaoBean.className}Selective(Page<${BuildDaoBean.className}> page ,@Param("searchBean") ${BuildDaoBean.className}SearchBean searchBean , @Param("commSearchBean") CommSearchBean commSearchBean );
+    
+    public int deleteByPrimaryKey(${TableBean.idColumn.fieldType.getSimpleName()} id);
+
+    public int insertSelective(${BuildDaoBean.className} ${BuildDaoBean.className.toLowerCase()});
+
+    public ${BuildDaoBean.className} selectByPrimaryKey(${TableBean.idColumn.fieldType.getSimpleName()} id);
+   
+    public int updateByPrimaryKeySelective(${BuildDaoBean.className} ${BuildDaoBean.className.toLowerCase()});
+
+}

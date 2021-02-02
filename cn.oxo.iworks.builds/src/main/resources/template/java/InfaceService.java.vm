@@ -1,0 +1,39 @@
+package ${BuildDaoBean.basePath}.inface;
+
+import java.util.List;
+
+import cn.zy.dev.tools.ex.SystemOptServiceException;
+import cn.zy.dev.tools.units.CommSearchBean;
+import cn.zy.dev.tools.units.SQLUilts.OptType;
+import cn.zy.dev.tools.units.SelectPage;
+ 
+ 
+import ${BuildDaoBean.clazz.getName()};
+import ${BuildDaoBean.basePath}.pojo.bean.${BuildDaoBean.className}SearchBean;
+
+public interface Inface${BuildDaoBean.className}Service {
+    
+    
+       /**
+             *  增加或更新
+             */
+            public ${BuildDaoBean.className}   saveUpdate(OptType  optType ,   ${BuildDaoBean.className}   opt${BuildDaoBean.className}, Long   optUserId)throws SystemOptServiceException;
+            
+            public SelectPage<${BuildDaoBean.className} > search(OptType  optType , ${BuildDaoBean.className}SearchBean  searchBean,CommSearchBean  commSearchBean , Long   optUserId  )throws SystemOptServiceException;
+            
+            public List<${BuildDaoBean.className} > searchList(OptType  optType ,  ${BuildDaoBean.className}SearchBean  searchBean,CommSearchBean  commSearchBean  )throws SystemOptServiceException;
+            
+            public ${BuildDaoBean.className}  searchSingle(OptType optType, ${BuildDaoBean.className}SearchBean searchBean)throws SystemOptServiceException;
+            
+            public  ${BuildDaoBean.className}    remove(OptType  optType ,  ${BuildDaoBean.className}SearchBean  searchBean,Long   optUserId)throws SystemOptServiceException;
+            
+            public  List<${BuildDaoBean.className} >    removes(OptType  optType ,  ${BuildDaoBean.className}SearchBean  searchBean,Long   optUserId)throws SystemOptServiceException;
+            
+             public  ${BuildDaoBean.className} get(Long id)throws SystemOptServiceException;
+            
+       
+		   
+		   
+
+
+}

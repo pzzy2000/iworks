@@ -1,0 +1,76 @@
+package ${BuildDaoBean.basePath}.controller.aop.imples;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+import cn.zy.dev.tools.ex.SystemOptServiceException;
+import cn.zy.dev.tools.units.CommSearchBean;
+import cn.zy.dev.tools.units.SQLUilts.OptType;
+import cn.zy.dev.tools.units.SelectPage;
+
+
+import ${BuildDaoBean.clazz.getName()};
+import ${BuildDaoBean.basePath}.pojo.bean.${BuildDaoBean.className}SearchBean;
+import ${BuildDaoBean.basePath}.service.I${BuildDaoBean.className}Service;
+import ${BuildDaoBean.basePath}.controller.aop.IAop${BuildDaoBean.className}Service;
+
+
+
+@Component(IAop${BuildDaoBean.className}Service.name)
+public class Aop${BuildDaoBean.className}Service implements IAop${BuildDaoBean.className}Service {
+
+    @Autowired
+    @Qualifier(I${BuildDaoBean.className}Service.name)
+    private I${BuildDaoBean.className}Service i${BuildDaoBean.className}Service ;
+     @Override
+     public ${BuildDaoBean.className}  saveUpdate(OptType  optType ,   ${BuildDaoBean.className}   opt${BuildDaoBean.className} ,Long   optUserId )throws SystemOptServiceException{
+	    return  i${BuildDaoBean.className}Service.saveUpdate(  optType ,  opt${BuildDaoBean.className} ,optUserId );
+	 
+	 }
+            
+       	 @Override 
+     public SelectPage<${BuildDaoBean.className} > search(OptType  optType ,    
+				           ${BuildDaoBean.className}SearchBean  searchBean,CommSearchBean  commSearchBean ,Long   optUserId  )throws SystemOptServiceException{
+	
+	 return  i${BuildDaoBean.className}Service.search(  optType , searchBean,  commSearchBean ,optUserId  );
+					
+	}
+	@Override
+	public List<${BuildDaoBean.className} > searchList(OptType  optType ,    
+				           ${BuildDaoBean.className}SearchBean  searchBean,CommSearchBean  commSearchBean  )throws SystemOptServiceException{
+             
+			 return  i${BuildDaoBean.className}Service.searchList(  optType ,    
+				                                                          searchBean,  commSearchBean  );
+            
+    }
+            @Override
+    public  ${BuildDaoBean.className}    remove(OptType  optType ,  ${BuildDaoBean.className}SearchBean  searchBean,Long   optUserId)throws SystemOptServiceException{
+			
+			   return  i${BuildDaoBean.className}Service.remove(  optType ,   searchBean,optUserId);
+			
+	}
+	@Override
+	 public  List<${BuildDaoBean.className} >    removes(OptType  optType , ${BuildDaoBean.className}SearchBean  searchBean
+			,Long   optUserId
+			)throws SystemOptServiceException{
+			 return  i${BuildDaoBean.className}Service.removes(  optType ,  searchBean,optUserId);
+			}
+			
+            
+            @Override
+           public  ${BuildDaoBean.className} get(Long id)throws SystemOptServiceException
+		   {
+		           return  i${BuildDaoBean.className}Service.get(id);
+		   
+		   }
+		   
+		 @Override
+	public ${BuildDaoBean.className} searchSingle(OptType optType, ${BuildDaoBean.className}SearchBean searchBean) throws SystemOptServiceException {
+		// TODO Auto-generated method stub
+		return i${BuildDaoBean.className}Service.searchSingle(optType, searchBean);
+	}
+
+}

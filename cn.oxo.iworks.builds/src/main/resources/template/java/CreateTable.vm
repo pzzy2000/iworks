@@ -1,0 +1,9 @@
+
+CREATE TABLE `${TableBean.name}` (
+   `${TableBean.idColumn.name}` ${TableBean.idColumn.columnType.getType().type}(${TableBean.idColumn.columnType.length})
+    #if(!${TableBean.idColumn.canNull}) NOT NULL  #end AUTO_INCREMENT,
+   #foreach($columnBean  in   ${TableBean.columnBeans})
+  `${columnBean.name}` ${columnBean.columnType.name}(${columnBean.columnType.length}) DEFAULT NULL COMMENT '姓名',
+   #end
+  PRIMARY KEY (`${TableBean.idColumn.name}`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COMMENT='${TableBean.desc}'

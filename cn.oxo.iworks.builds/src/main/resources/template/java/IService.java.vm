@@ -1,0 +1,16 @@
+ package  ${BuildDaoBean.basePath}.service;
+
+ import ${BuildDaoBean.basePath}.inface.Inface${BuildDaoBean.className}Service;
+ 
+ 
+public interface I${BuildDaoBean.className}Service  extends Inface${BuildDaoBean.className}Service { 
+    
+            public String name="I${BuildDaoBean.className}Service";
+            
+                
+        
+            
+            
+            
+
+}

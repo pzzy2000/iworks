@@ -1,0 +1,85 @@
+package  ${BuildDaoBean.basePath}.service.units;
+
+import java.util.List;
+
+import org.springframework.stereotype.Component ;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import cn.zy.dev.tools.distributed.IMySQLCreateIdFactory;
+import ${BuildDaoBean.clazz.getName()};
+import cn.zy.dev.tools.ex.SystemOptServiceException;
+import cn.zy.dev.tools.units.SQLUilts.OptType;
+import com.zscat.mallplus.db.ABBaseUnits;
+import ${BuildDaoBean.basePath}.service.mybatis.${BuildDaoBean.className}BaseMapper;
+import ${BuildDaoBean.basePath}.pojo.bean.${BuildDaoBean.className}SearchBean;
+@Component("${BuildDaoBean.className}SaveUpdateRemoveUnits")
+public class ${BuildDaoBean.className}SaveUpdateRemoveUnits extends ABBaseUnits {
+
+@Autowired
+private ${BuildDaoBean.className}BaseMapper  i${BuildDaoBean.className}BaseMapper;
+
+
+
+
+    public ${BuildDaoBean.className} saveUpdate(OptType optType, ${BuildDaoBean.className} opt${BuildDaoBean.className}) throws SystemOptServiceException {
+
+        switch (optType) {
+		
+		 case init:
+		  return   init(opt${BuildDaoBean.className}) ;
+        case save:
+            return   save(opt${BuildDaoBean.className}) ;
+           
+        case update:
+            return update(opt${BuildDaoBean.className}) ;
+        
+
+        default:
+            throw new SystemOptServiceException("[操作类型错误]") ;
+        }
+    }
+	
+	 public ${BuildDaoBean.className}  init(${BuildDaoBean.className} opt${BuildDaoBean.className}) throws SystemOptServiceException {
+             throw new SystemOptServiceException("[操作类型错误]") ;
+    }
+
+    public ${BuildDaoBean.className}  save(${BuildDaoBean.className} opt${BuildDaoBean.className}) throws SystemOptServiceException {
+    
+           
+
+            int r = i${BuildDaoBean.className}BaseMapper.insertSelective(opt${BuildDaoBean.className});
+            
+            if(r==0)throw new SystemOptServiceException("save  data error  ! return "+r);
+            
+            return opt${BuildDaoBean.className};
+    }
+
+    public ${BuildDaoBean.className}  update(${BuildDaoBean.className} opt${BuildDaoBean.className}) throws SystemOptServiceException {
+
+          int r =  i${BuildDaoBean.className}BaseMapper.updateByPrimaryKeySelective(opt${BuildDaoBean.className});
+           
+             if(r==0)throw new SystemOptServiceException("update  data error  ! return "+r);
+           
+           return get(opt${BuildDaoBean.className}.getId());
+    }
+    
+     public ${BuildDaoBean.className}  get(Long id) throws SystemOptServiceException {
+
+        return  i${BuildDaoBean.className}BaseMapper.selectByPrimaryKey(id);
+     
+   }
+    
+     public ${BuildDaoBean.className}  remove(OptType optType, ${BuildDaoBean.className}SearchBean  searchBean  ) throws SystemOptServiceException {
+         
+         ${BuildDaoBean.className}   remove${BuildDaoBean.className} =get(searchBean.getId());
+         
+         throw new SystemOptServiceException("not work!");
+    }
+    
+     public List<${BuildDaoBean.className}>  removes(OptType optType, ${BuildDaoBean.className}SearchBean  searchBean  ) throws SystemOptServiceException {
+         
+         
+         throw new SystemOptServiceException("not work!");
+    }
+
+}

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head th:include="/module/module_head.html::head">
+</head>
+<body style="height: 100%;">
+ <div id="${ModuleDifBean.moduleDif.id()}_toolbar_btn" class="btn-group pull-left" style="padding-bottom: 0px;">
+ #foreach($opt  in   ${ModuleDifBean.moduleDif.opt()})
+    #if(${opt} =='add')
+   <button id="${ModuleDifBean.moduleDif.id()}_${opt}" opt="${opt}" onclick="${ModuleDifBean.moduleDif.id()}Opt.${opt.opt}(this)" type="button" class="glyphicon glyphicon-plus btn btn-default btn-space" style="display: none">
+     <span class="fa fa-plus-square btn-icon-space" aria-hidden="true"></span>
+     <span>&nbsp;${opt.name}&nbsp;</span>
+   </button> 
+    #else
+    <button id="${ModuleDifBean.moduleDif.id()}_${opt}" opt="${opt}" onclick="${ModuleDifBean.moduleDif.id()}Opt.${opt.opt}(this)" type="button" class="glyphicon glyphicon-${opt.opt} btn btn-default btn-space" style="display: none">
+     <span class="fa fa-plus-square btn-icon-space" aria-hidden="true"></span>
+     <span>&nbsp;${opt.name}&nbsp;</span>
+   </button> 
+    #end 
+ #end
+ </div>
+ <table id="${ModuleDifBean.moduleDif.id()}_table" data-show-columns="true"></table>
+
+  #foreach($opt  in   ${ModuleDifBean.moduleDif.opt()})
+  <div th:replace="module/${ModuleDifBean.moduleDif.id()}/${ModuleDifBean.moduleDif.id()}_${opt}.html::${opt}">${opt}</div>
+  #end
+</body>
+<!-- 这里要自己引用 写自己的逻辑 大部分可以共用 -->
+<script src="module/${ModuleDifBean.moduleDif.id()}/${ModuleDifBean.moduleDif.id()}/M${ModuleDifBean.moduleDif.id()}Opt.js"></script>
+<script type="text/javascript">
+	$(function() {
+		${ModuleDifBean.moduleDif.id()}Opt = new M${ModuleDifBean.moduleDif.id()}Opt();
+		if (MyAppSystem.iframeChecking() == false) {
+		} else {
+
+			${ModuleDifBean.moduleDif.id()}Opt.intWork({
+				tableParams : {
+					height : MyAppSystem.getIframeBoyHeight()
+				}
+
+			});
+		}
+
+	});
+</script>
+</html>

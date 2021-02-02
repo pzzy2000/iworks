@@ -1,0 +1,15 @@
+package ${BuildDaoBean.basePath}.controller.aop;
+
+
+ 
+import ${BuildDaoBean.basePath}.inface.Inface${BuildDaoBean.className}Service;
+
+public interface IAop${BuildDaoBean.className}Service  extends Inface${BuildDaoBean.className}Service {
+    
+            public String name="IAop${BuildDaoBean.className}Service";
+            
+                
+            
+            
+
+}

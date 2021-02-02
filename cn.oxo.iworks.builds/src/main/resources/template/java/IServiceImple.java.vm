@@ -1,0 +1,90 @@
+ package   ${BuildDaoBean.basePath}.service.imples;
+ 
+
+
+
+
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Component;
+
+import cn.zy.dev.tools.ex.SystemOptServiceException;
+import cn.zy.dev.tools.units.CommSearchBean;
+import cn.zy.dev.tools.units.SQLUilts.OptType;
+import cn.zy.dev.tools.units.SelectPage;
+
+
+import ${BuildDaoBean.clazz.getName()};
+import ${BuildDaoBean.basePath}.pojo.bean.${BuildDaoBean.className}SearchBean;
+import ${BuildDaoBean.basePath}.service.I${BuildDaoBean.className}Service;
+
+import ${BuildDaoBean.basePath}.service.units.${BuildDaoBean.className}SearchUnits;
+import ${BuildDaoBean.basePath}.service.units.${BuildDaoBean.className}SaveUpdateRemoveUnits;
+
+
+@Component(I${BuildDaoBean.className}Service.name)
+public class ${BuildDaoBean.className}ServiceImple   implements I${BuildDaoBean.className}Service {
+
+         
+			  @Autowired
+            @Qualifier("${BuildDaoBean.className}SearchUnits")        
+            private  ${BuildDaoBean.className}SearchUnits  i${BuildDaoBean.className}SearchUnits;
+            
+            
+            @Autowired
+	@Qualifier("${BuildDaoBean.className}SaveUpdateRemoveUnits")
+	private ${BuildDaoBean.className}SaveUpdateRemoveUnits i${BuildDaoBean.className}SaveUpdateRemoveUnits;
+           
+        
+		   
+			@Override
+            public ${BuildDaoBean.className} saveUpdate(OptType  optType ,   ${BuildDaoBean.className}  
+			opt${BuildDaoBean.className} ,Long   optUserId )throws SystemOptServiceException{
+        	     return 	i${BuildDaoBean.className}SaveUpdateRemoveUnits.saveUpdate(optType, opt${BuildDaoBean.className});
+        		}
+            
+       	   @Override
+            public SelectPage<${BuildDaoBean.className} > search(OptType  optType ,    
+				   ${BuildDaoBean.className}SearchBean  searchBean , CommSearchBean  commSearchBean, Long   optUserId )throws SystemOptServiceException{
+				    return  i${BuildDaoBean.className}SearchUnits.search(optType, searchBean,
+					commSearchBean  );
+            }
+			
+			 @Override
+			public List<${BuildDaoBean.className} > searchList(OptType  optType ,    
+				           ${BuildDaoBean.className}SearchBean  searchBean,CommSearchBean  commSearchBean  )throws SystemOptServiceException{
+             
+			  return  i${BuildDaoBean.className}SearchUnits.list(optType, searchBean,
+					commSearchBean  );
+            
+    }
+            
+			@Override
+            public  ${BuildDaoBean.className}   remove(OptType  optType ,   ${BuildDaoBean.className}SearchBean  searchBean  ,Long   optUserId )throws SystemOptServiceException{
+			      return   i${BuildDaoBean.className}SaveUpdateRemoveUnits.remove(optType, searchBean);
+			  }
+			  @Override
+			  public  List<${BuildDaoBean.className} >    removes(OptType  optType ,  ${BuildDaoBean.className}SearchBean  searchBean,Long   optUserId
+			)throws SystemOptServiceException{
+			
+			return   i${BuildDaoBean.className}SaveUpdateRemoveUnits.removes(optType, searchBean);
+			
+			
+			}
+			  
+			   @Override
+            public ${BuildDaoBean.className} get(Long id) throws SystemOptServiceException {
+                
+                return   i${BuildDaoBean.className}SaveUpdateRemoveUnits.get(id);
+            }
+			
+	        @Override
+	public ${BuildDaoBean.className} searchSingle(OptType optType, ${BuildDaoBean.className}SearchBean searchBean) throws SystemOptServiceException {
+		
+		return  i${BuildDaoBean.className}SearchUnits.searchSingle( optType, searchBean);
+	}
+            
+}

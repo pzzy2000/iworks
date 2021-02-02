@@ -1,0 +1,63 @@
+<!-- sq_add  -->
+<div th:fragment="add" class="modal fade" id="${ModuleDifBean.moduleDif.id()}_add_windows" event="save" role="dialog" aria-hidden="true"
+	data-backdrop="static"  sindex="2"
+>
+	<div class="modal-dialog" role="document" style="width: 900px;">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+				<h4 class="modal-title">
+					<span>增加</span>
+					<span class="error" id="errMsg"></span>
+				</h4>
+			</div>
+			<div class="modal-body">
+				<form method="post" data-bv-message="This value is not valid" data-bv-feedbackicons-valid="glyphicon glyphicon-ok"
+					data-bv-feedbackicons-invalid="glyphicon glyphicon-remove"
+					data-bv-feedbackicons-validating="glyphicon glyphicon-refresh"
+				>
+					<div class="row"> 
+						 #foreach($htmlGridDefBean  in   ${ModuleDifBean.htmlGridDefBeans})
+						 
+					       #if( $htmlGridDefBean.isFieldShow('Input'))
+					        <!--  ${htmlGridDefBean.name}  start  -->
+					      <div class="col-md-6 my-form-group" >
+					       <div class="form-group">
+					        <label for="addBean_${htmlGridDefBean.name}"> <span>${htmlGridDefBean.htmlGridDef.name()}</span> <span class="help-from-block"><!--  验证说明 --></span>
+					        </label>
+					        #if(${htmlGridDefBean.htmlGridDef.fieldType()}=='localCombo')
+					           <select class="form-control" id="addBean_${htmlGridDefBean.name}" name="bean.${htmlGridDefBean.name}"  data-bv-notempty data-bv-notempty-message="状态不能为空">
+						         <option value="" style="display: none"></option>
+						         #foreach($detail_  in   ${htmlGridDefBean.detail})
+						            <option value="${detail_.key}">${detail_.value}</option>
+						          #end
+						        </select>
+					        #else
+					         <input type="text" class="form-control" id="addBean_${htmlGridDefBean.name}" name="bean.${htmlGridDefBean.name}" placeholder="" data-bv-notempty data-bv-notempty-message="分类名称不能为空" pattern="^(?!_)(?!.*?_$)[\u4e00-\u9fa5]{2,10}$"
+					         data-bv-regexp-message="分类名称输入格式不对[2~10个汉字]"
+					        />
+					        #end
+					        
+					       </div>
+					      </div>
+					         <!--  ${htmlGridDefBean.name} end  -->
+					        #end
+					     #end												
+					</div>
+					
+					
+					
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">关&nbsp;闭</button>
+				<button id="submit" opt="add" type="submit" data-loading-text="数据正在提交..." class="btn btn-primary">保&nbsp;存</button>
+			</div>
+		</div>
+	</div>
+	<!-- /.modal-content -->
+</div>
+<!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<!-- sq_add  -->
