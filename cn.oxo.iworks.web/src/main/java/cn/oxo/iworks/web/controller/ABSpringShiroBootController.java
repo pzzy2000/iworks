@@ -3,6 +3,8 @@ package cn.oxo.iworks.web.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
+import cn.oxo.iworks.web.LoginSessionBean;
+
 public class ABSpringShiroBootController extends ABController {
 
 	protected String getRequestParams() {
@@ -12,15 +14,21 @@ public class ABSpringShiroBootController extends ABController {
 	@Autowired
 	protected Environment env;
 
-	public <V> V getLoginUserInfo() {
+	public void putSession(LoginSessionBean iSysManagerUser) {
+		ShiroSubjectFactory.saveUserInfo(iSysManagerUser);
 
+	}
+
+	public LoginSessionBean getLoginUser() {
 		return ShiroSubjectFactory.getUserInfo();
 
 	}
 
-	public <V> V searchSession(String key) {
-		return ShiroSubjectFactory.getSession(key);
+	public Long getLoginUserId() {
 
+		LoginSessionBean loginBean = getLoginUser();
+
+		return loginBean == null ? null : loginBean.getId();
 	}
 
 }
