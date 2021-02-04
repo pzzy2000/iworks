@@ -70,7 +70,7 @@ public @interface Column {
 	
 	public SelectType  selectType() default SelectType.EQ ;
 	
-	public int   length() default 255;
+	public int   length() default -1;
 	
 	public int   scale() default -1;
 	
