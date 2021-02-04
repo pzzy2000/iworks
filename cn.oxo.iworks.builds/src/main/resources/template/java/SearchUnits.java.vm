@@ -5,17 +5,18 @@ import org.apache.commons.lang3.StringUtils;
 
 import org.springframework.stereotype.Component ;
 import org.springframework.beans.factory.annotation.Autowired;
-import cn.zy.dev.tools.ex.SystemOptServiceException;
-import cn.zy.dev.tools.units.CommSearchBean;
-import cn.zy.dev.tools.units.SQLUilts.OptType;
-import cn.zy.dev.tools.units.SelectPage;
+
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import ${BuildDaoBean.clazz.getName()};
 
 import ${BuildDaoBean.basePath}.pojo.bean.${BuildDaoBean.className}SearchBean;
 import ${BuildDaoBean.basePath}.service.mybatis.${BuildDaoBean.className}BaseMapper;
-import com.zscat.mallplus.db.ABBaseUnits;
-
+import cn.oxo.iworks.databases.ABBaseUnits;
+import cn.oxo.iworks.databases.CommSearchBean;
+import cn.oxo.iworks.databases.SQLUilts.OptType;
+import cn.oxo.iworks.databases.SysOptError;
+import cn.oxo.iworks.databases.SystemOptServiceException;
+import cn.oxo.iworks.databases.SelectPage;
 
 @Component("${BuildDaoBean.className}SearchUnits")
 public class ${BuildDaoBean.className}SearchUnits  extends ABBaseUnits {
@@ -85,7 +86,7 @@ private ${BuildDaoBean.className}BaseMapper  i${BuildDaoBean.className}BaseMappe
 		commSearchBean.setPageSize(1);
 		Page<${BuildDaoBean.className}> page =createPage(optType, searchBean, commSearchBean);
 		List<${BuildDaoBean.className}>  result = list(page, searchBean,commSearchBean);
-		if(result.size()>1)throw new SystemOptServiceException("searcn Single Bean  error  resut > 1 ");
+		if(result.size()>1)throw new SystemOptServiceException(SysOptError.SysError.getCode(),SysOptError.SysError.getName()+"[查询结果大于1个]");
 	    return result.size() ==0 ? null:result.get(0);
 				
 	}

@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import ${BuildDaoBean.clazz.getName()};
 import ${BuildDaoBean.basePath}.pojo.bean.${BuildDaoBean.className}SearchBean;
-import cn.zy.dev.tools.units.CommSearchBean;
+import cn.oxo.iworks.databases.CommSearchBean;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 
 public interface ${BuildDaoBean.className}BaseMapper extends BaseMapper<${BuildDaoBean.className}> {

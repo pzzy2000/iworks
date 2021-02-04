@@ -5,11 +5,12 @@ import java.util.List;
 import org.springframework.stereotype.Component ;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import cn.zy.dev.tools.distributed.IMySQLCreateIdFactory;
+
 import ${BuildDaoBean.clazz.getName()};
-import cn.zy.dev.tools.ex.SystemOptServiceException;
-import cn.zy.dev.tools.units.SQLUilts.OptType;
-import com.zscat.mallplus.db.ABBaseUnits;
+import cn.oxo.iworks.databases.ABBaseUnits;
+import cn.oxo.iworks.databases.SQLUilts.OptType;
+import cn.oxo.iworks.databases.SystemOptServiceException;
+import cn.oxo.iworks.databases.SysOptError;
 import ${BuildDaoBean.basePath}.service.mybatis.${BuildDaoBean.className}BaseMapper;
 import ${BuildDaoBean.basePath}.pojo.bean.${BuildDaoBean.className}SearchBean;
 @Component("${BuildDaoBean.className}SaveUpdateRemoveUnits")
@@ -35,21 +36,21 @@ private ${BuildDaoBean.className}BaseMapper  i${BuildDaoBean.className}BaseMappe
         
 
         default:
-            throw new SystemOptServiceException("[操作类型错误]") ;
+            throw new SystemOptServiceException(SysOptError.SysError.getCode(),SysOptError.SysError.getName()+"[操作类型错误]") ;
         }
     }
 	
 	 public ${BuildDaoBean.className}  init(${BuildDaoBean.className} opt${BuildDaoBean.className}) throws SystemOptServiceException {
-             throw new SystemOptServiceException("[操作类型错误]") ;
+             throw new SystemOptServiceException(SysOptError.SysError.getCode(),SysOptError.SysError.getName()+"[操作没实现]") ;
     }
 
     public ${BuildDaoBean.className}  save(${BuildDaoBean.className} opt${BuildDaoBean.className}) throws SystemOptServiceException {
     
-           
+             opt${BuildDaoBean.className}.setId(createIdFactory.createDBId());
 
             int r = i${BuildDaoBean.className}BaseMapper.insertSelective(opt${BuildDaoBean.className});
             
-            if(r==0)throw new SystemOptServiceException("save  data error  ! return "+r);
+            if(r==0)throw new SystemOptServiceException(SysOptError.SysError.getCode(),SysOptError.SysError.getName()+"[插入数据错误]");
             
             return opt${BuildDaoBean.className};
     }
@@ -58,7 +59,7 @@ private ${BuildDaoBean.className}BaseMapper  i${BuildDaoBean.className}BaseMappe
 
           int r =  i${BuildDaoBean.className}BaseMapper.updateByPrimaryKeySelective(opt${BuildDaoBean.className});
            
-             if(r==0)throw new SystemOptServiceException("update  data error  ! return "+r);
+             if(r==0)throw new SystemOptServiceException(SysOptError.SysError.getCode(),SysOptError.SysError.getName()+"[更新数据错误]");
            
            return get(opt${BuildDaoBean.className}.getId());
     }
@@ -73,13 +74,13 @@ private ${BuildDaoBean.className}BaseMapper  i${BuildDaoBean.className}BaseMappe
          
          ${BuildDaoBean.className}   remove${BuildDaoBean.className} =get(searchBean.getId());
          
-         throw new SystemOptServiceException("not work!");
+         throw new SystemOptServiceException(SysOptError.SysError.getCode(),SysOptError.SysError.getName()+"[操作没实现]");
     }
     
      public List<${BuildDaoBean.className}>  removes(OptType optType, ${BuildDaoBean.className}SearchBean  searchBean  ) throws SystemOptServiceException {
          
          
-         throw new SystemOptServiceException("not work!");
+         throw new SystemOptServiceException(SysOptError.SysError.getCode(),SysOptError.SysError.getName()+"[操作没实现]");
     }
 
 }

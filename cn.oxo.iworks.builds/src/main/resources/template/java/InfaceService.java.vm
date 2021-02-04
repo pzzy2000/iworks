@@ -2,10 +2,10 @@ package ${BuildDaoBean.basePath}.inface;
 
 import java.util.List;
 
-import cn.zy.dev.tools.ex.SystemOptServiceException;
-import cn.zy.dev.tools.units.CommSearchBean;
-import cn.zy.dev.tools.units.SQLUilts.OptType;
-import cn.zy.dev.tools.units.SelectPage;
+import cn.oxo.iworks.databases.CommSearchBean;
+import cn.oxo.iworks.databases.SQLUilts.OptType;
+import cn.oxo.iworks.databases.SelectPage;
+import cn.oxo.iworks.databases.SystemOptServiceException;
  
  
 import ${BuildDaoBean.clazz.getName()};
