@@ -2,7 +2,7 @@ package cn.oxo.iworks.web;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-@JsonFormat(shape = JsonFormat.Shape.OBJECT)
+//@JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum UserType {
 	manager("manager", "管理员", "管理员"),
 
@@ -30,6 +30,18 @@ public enum UserType {
 
 	public String getSysPlatform() {
 		return sysPlatform;
+	}
+
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setSysPlatform(String sysPlatform) {
+		this.sysPlatform = sysPlatform;
 	}
 
 	public static UserType getBycode(String code) {
