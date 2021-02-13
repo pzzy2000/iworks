@@ -1,5 +1,7 @@
 package cn.oxo.iworks.web.controller;
 
+import java.io.Serializable;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 
@@ -16,6 +18,11 @@ public class ABSpringShiroBootController extends ABController {
 
 	public void putSession(LoginSessionBean iSysManagerUser) {
 		ShiroSubjectFactory.saveUserInfo(iSysManagerUser);
+
+	}
+	
+	public void put(String key ,Serializable  object) {
+		ShiroSubjectFactory.saveSessions(key, object);
 
 	}
 
