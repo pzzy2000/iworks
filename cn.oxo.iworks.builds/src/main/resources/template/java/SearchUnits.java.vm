@@ -27,6 +27,9 @@ private ${BuildDaoBean.className}BaseMapper  i${BuildDaoBean.className}BaseMappe
    @SuppressWarnings("deprecation")
 	private Page<${BuildDaoBean.className}>  createPage(OptType optType,
 		                            ${BuildDaoBean.className}SearchBean searchBean,CommSearchBean commSearchBean){
+		if(commSearchBean ==null){
+		return null;
+		}else{
 		Page<${BuildDaoBean.className}> page = new Page<${BuildDaoBean.className}>(commSearchBean.getPageNum(),
 				commSearchBean.getPageSize());
 		if(StringUtils.isNotEmpty(commSearchBean.getDir())) {
@@ -43,6 +46,7 @@ private ${BuildDaoBean.className}BaseMapper  i${BuildDaoBean.className}BaseMappe
 			}
 		}
 		return page;
+		}
 	}
 
     public SelectPage<${BuildDaoBean.className}> search(OptType optType,
@@ -63,11 +67,15 @@ private ${BuildDaoBean.className}BaseMapper  i${BuildDaoBean.className}BaseMappe
 	    public List<${BuildDaoBean.className}> list(OptType optType,
 		                            ${BuildDaoBean.className}SearchBean searchBean,CommSearchBean commSearchBean) throws SystemOptServiceException {
        
-       Page<${BuildDaoBean.className}> page =createPage(optType, searchBean, commSearchBean);
-       
+        Page<${BuildDaoBean.className}> page =createPage(optType, searchBean, commSearchBean);
+        if(page ==null){
+        return i${BuildDaoBean.className}BaseMapper.search${BuildDaoBean.className}Selective(searchBean,commSearchBean);
+        }else{
         List<${BuildDaoBean.className}> result = list(page,searchBean, commSearchBean);
 
 		return result;
+        }
+        
 
     }
 	

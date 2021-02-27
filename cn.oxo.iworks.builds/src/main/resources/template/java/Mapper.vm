@@ -13,6 +13,8 @@ public interface ${BuildDaoBean.className}BaseMapper extends BaseMapper<${BuildD
    
     public List<${BuildDaoBean.className}> search${BuildDaoBean.className}Selective(Page<${BuildDaoBean.className}> page ,@Param("searchBean") ${BuildDaoBean.className}SearchBean searchBean , @Param("commSearchBean") CommSearchBean commSearchBean );
     
+     public List<${BuildDaoBean.className}> search${BuildDaoBean.className}Selective(@Param("searchBean") ${BuildDaoBean.className}SearchBean searchBean , @Param("commSearchBean") CommSearchBean commSearchBean );
+    
     public int deleteByPrimaryKey(${TableBean.idColumn.fieldType.getSimpleName()} id);
 
     public int insertSelective(${BuildDaoBean.className} ${BuildDaoBean.className.toLowerCase()});
