@@ -165,7 +165,7 @@ public class JdbcTemplate {
 	protected <T> T doExecute(StatementCallback<T> action, String sql, final Class<?> paramClass, SqlParameter... params) throws SQLException{
 		Assert.notNull(action, "Callback object must not be null");
 		Assert.notNull(sql, "sql must not be null");
-//		System.out.println(">>>>>>>>>>>>   "+sql);
+		
 		Connection connection = TransactionManager.getConnection(connectionFactory);
 		DruidPooledPreparedStatement stmt = null;
 		try {
@@ -184,7 +184,7 @@ public class JdbcTemplate {
 				Field iField = iEntityMapCache.searchByColumnName(param.getName());
 //				Column column = iField.getAnnotation(Column.class);
 				Object val = param.getValue();
-//				System.out.println("?>>>>>>>>>>>>   "+val);
+				
 				stmt.setObject(idx, val);
 				idx ++;
 			}
@@ -387,6 +387,7 @@ public class JdbcTemplate {
 	 * @throws SQLException
 	 */
 	public <T> T queryForObject(Class<T> cls, String sql, final SqlParameter... params) throws SQLException {
+		
 		RowsResultSetExtractor<T> extractor = new RowsResultSetExtractor<T>(objectReader, cls);
 		extractor.setMax(1);
 		List<T> results = null;

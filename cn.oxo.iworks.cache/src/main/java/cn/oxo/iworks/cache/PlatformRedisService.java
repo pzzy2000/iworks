@@ -32,8 +32,8 @@ public class PlatformRedisService implements IPlatformCacheService {
 		Serializable v = cacheService.get(id, "id", clazz);
 		if (v == null) {
 			try {
-				Serializable iSerializable = search.search(clazz, "id", id);
-				if (iSerializable != null) {
+				v = search.search(clazz, "id", id);
+				if (v != null) {
 					cacheService.set(id, "id", v);
 				}
 			} catch (Exception e) {
