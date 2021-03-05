@@ -12,6 +12,10 @@ import java.lang.annotation.Target;
 public @interface GPSCCache {
 
 	String store();
-
+  
+	/**
+	 * 
+	 * @return
+	 */
 	String[] cachefield() default { "id" };
 }
