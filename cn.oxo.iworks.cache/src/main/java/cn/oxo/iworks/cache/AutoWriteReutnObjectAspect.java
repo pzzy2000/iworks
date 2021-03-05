@@ -67,9 +67,9 @@ public abstract class AutoWriteReutnObjectAspect {
 					@SuppressWarnings({ "unchecked", "rawtypes" })
 					@Override
 					public <V extends Serializable> V searchObjectById(String id, Class clazz) {
-
+						
 						Serializable iSerializable = platformCacheService.searchObjectById(id, clazz);
-
+                       
 						return (V) iSerializable;
 
 					}
