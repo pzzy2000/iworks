@@ -46,6 +46,7 @@
 		<module>cn.oxo.iworks.builds</module>
 		<module>cn.oxo.iworks.task</module>
     <module>cn.oxo.iworks.web</module>
+    <module>cn.oxo.iworks.cache</module>
   </modules>
 	<build>
 		<plugins>
