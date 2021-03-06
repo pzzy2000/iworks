@@ -30,8 +30,9 @@ private ${BuildDaoBean.className}BaseMapper  i${BuildDaoBean.className}BaseMappe
 		if(commSearchBean ==null){
 		return null;
 		}else{
-		Page<${BuildDaoBean.className}> page = new Page<${BuildDaoBean.className}>(commSearchBean.getPageNum(),
-				commSearchBean.getPageSize());
+		Page<${BuildDaoBean.className}> page = new Page<${BuildDaoBean.className}>(
+					commSearchBean.getPageNum() == null ? 1 : commSearchBean.getPageNum(),
+					commSearchBean.getPageSize() == null ? 10 : commSearchBean.getPageSize());
 		if(StringUtils.isNotEmpty(commSearchBean.getDir())) {
 			String sort =StringUtils.isNotEmpty(commSearchBean.getSort())?"desc":commSearchBean.getSort();
 			switch (sort.toLowerCase()) {
@@ -55,10 +56,18 @@ private ${BuildDaoBean.className}BaseMapper  i${BuildDaoBean.className}BaseMappe
         Page<${BuildDaoBean.className}> page =createPage(optType, searchBean, commSearchBean);
 		 List<${BuildDaoBean.className}> result= list(page, searchBean, commSearchBean);
 		 SelectPage<${BuildDaoBean.className}> selectPage = new SelectPage<${BuildDaoBean.className}>();
-		selectPage.setTotal(page.getTotal());
-		selectPage.setSize(page.getSize());
-		selectPage.setCurrent(page.getCurrent());
-		selectPage.setRecords(result);
+		if (page == null) {
+			selectPage.setTotal((long) result.size());
+			selectPage.setSize(result.size());
+			selectPage.setCurrent(result.size());
+			selectPage.setRecords(result);
+		} else {
+			selectPage.setTotal(page.getTotal());
+			selectPage.setSize(page.getSize());
+			selectPage.setCurrent(page.getCurrent());
+			selectPage.setRecords(result);
+		}
+		
 		return selectPage;
 
     }
