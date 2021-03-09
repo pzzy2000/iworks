@@ -30,11 +30,15 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.reflect.FieldUtils;
 import org.apache.commons.lang3.time.DateUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import ognl.ObjectPropertyAccessor;
 import ognl.OgnlException;
 
 public class MYObjectAccessor extends ObjectPropertyAccessor {
+	private static Logger logger = LogManager.getLogger(MYObjectAccessor.class);
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public Object getProperty(@SuppressWarnings("rawtypes") Map context, Object target, Object oname)
@@ -66,27 +70,30 @@ public class MYObjectAccessor extends ObjectPropertyAccessor {
 		}
 
 	}
-	
-	//正则表达式通用匹配
-    private static boolean genericMatcher(String regexExpre,String testStr){
-        Pattern pattern=Pattern.compile(regexExpre);
-        Matcher matcher = pattern.matcher(testStr);
-        return matcher.matches();
-    }
+
+	// 正则表达式通用匹配
+	private static boolean genericMatcher(String regexExpre, String testStr) {
+		Pattern pattern = Pattern.compile(regexExpre);
+		Matcher matcher = pattern.matcher(testStr);
+		return matcher.matches();
+	}
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public void setProperty(Map context, Object target, Object oname, Object value) throws OgnlException {
 		Field iField = FieldUtils.getField(target.getClass(), (String) oname, true);
-		if (iField == null)
-			throw new OgnlException("not find field name " + ((String) oname) + " field ! ");
-		if(iField.isAnnotationPresent(MYformat.class) && value !=null) {
+		if (iField == null) {
+			logger.error(">>>>XXXX--> not find field name " + ((String) oname) + " field ! ");
+			return;
+		}
+//			throw new OgnlException("not find field name " + ((String) oname) + " field ! ");
+		if (iField.isAnnotationPresent(MYformat.class) && value != null) {
 			MYformat iMYformat = iField.getAnnotation(MYformat.class);
-			if(!iMYformat.verification().equals("")) {
-			//验证 正则验证
-		     if(!genericMatcher(iMYformat.verification(),value.toString())){
-		    	 throw new OgnlException(" iField  "+iField.getName()+" value "+value+" format error !"); 
-		     }
+			if (!iMYformat.verification().equals("")) {
+				// 验证 正则验证
+				if (!genericMatcher(iMYformat.verification(), value.toString())) {
+					throw new OgnlException(" iField  " + iField.getName() + " value " + value + " format error !");
+				}
 			}
 		}
 		if (OnGLUnits.verificationBaseValue(iField.getType())) {
@@ -132,11 +139,11 @@ public class MYObjectAccessor extends ObjectPropertyAccessor {
 		} else
 
 		if (OnGLUnits.verificationEnumValue(iField.getType())) {
-			if(value!=null && !StringUtils.isEmpty( value.toString())) {
-			   Object x =	Enum.valueOf(((Class)iField.getType()), value.toString());
-				super.setProperty(context, target, oname,  x);
+			if (value != null && !StringUtils.isEmpty(value.toString())) {
+				Object x = Enum.valueOf(((Class) iField.getType()), value.toString());
+				super.setProperty(context, target, oname, x);
 			}
-			
+
 		} else
 
 		{
