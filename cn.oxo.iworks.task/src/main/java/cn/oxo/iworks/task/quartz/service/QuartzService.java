@@ -3,11 +3,14 @@ package cn.oxo.iworks.task.quartz.service;
 import java.util.Date;
 
 import org.quartz.CronScheduleBuilder;
+import org.quartz.Job;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.JobKey;
 import org.quartz.Scheduler;
 import org.quartz.SchedulerException;
+import org.quartz.SimpleScheduleBuilder;
+import org.quartz.SimpleTrigger;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
@@ -28,11 +31,13 @@ public abstract class QuartzService implements IQuartzService {
 	public <V extends ExecQuartzTask> void submitTask(String taskGroup, Long taskId, String params, Date excTime, Class<V> quartzTaskClass)
 			throws SchedulerQuartzException {
 		try {
-			
-			JobDetail job = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup).usingJobData(IQuartzService.key_task_params_json, params).build();
+
+			JobDetail job = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup)
+					.usingJobData(IQuartzService.key_task_params_json, params).build();
 
 			// Trigger the job to run now, and then repeat every 40 seconds
-			Trigger trigger = TriggerBuilder.newTrigger().withIdentity(taskId.toString(), taskGroup).startNow().withSchedule(CronScheduleBuilder.cronSchedule(CronDateUnits.getCron(excTime))).build();
+			Trigger trigger = TriggerBuilder.newTrigger().withIdentity(taskId.toString(), taskGroup).startNow()
+					.withSchedule(CronScheduleBuilder.cronSchedule(CronDateUnits.getCron(excTime))).build();
 			// Tell quartz to schedule the job using our trigger
 			scheduler.scheduleJob(job, trigger);
 		} catch (SchedulerException e) {
@@ -45,14 +50,34 @@ public abstract class QuartzService implements IQuartzService {
 	public <V extends ExecQuartzTask> void submitTask(String taskGroup, Long taskId, String params, String cronTime, Class<V> quartzTaskClass)
 			throws SchedulerQuartzException {
 		try {
-			JobDetail job = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup).usingJobData(IQuartzService.key_task_params_json, params).build();
+
+			JobDetail job = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup)
+					.usingJobData(IQuartzService.key_task_params_json, params).build();
 
 			// Trigger the job to run now, and then repeat every 40 seconds
 
-			Trigger trigger = TriggerBuilder.newTrigger().withIdentity(taskId.toString(), taskGroup).startNow().withSchedule(CronScheduleBuilder.cronSchedule(cronTime)).build();
+			Trigger trigger = TriggerBuilder.newTrigger().withIdentity(taskId.toString(), taskGroup).startNow()
+					.withSchedule(CronScheduleBuilder.cronSchedule(cronTime)).build();
 			// Tell quartz to schedule the job using our trigger
 			scheduler.scheduleJob(job, trigger);
 
+		} catch (SchedulerException e) {
+			throw new SchedulerQuartzException(e);
+		}
+
+	}
+
+	@Override
+	public <V extends ExecQuartzTask> void submitTaskBy(String taskGroup, Long taskId, Class<V> quartzTaskClass, String params, Date startTime,
+			int secondsSpace) throws SchedulerQuartzException {
+		try {
+			JobDetail job = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup)
+					.usingJobData(IQuartzService.key_task_params_json, params).build();
+
+			SimpleTrigger simpleTrigger = (SimpleTrigger) TriggerBuilder.newTrigger().withIdentity(taskId.toString(), taskGroup).startAt(startTime)
+					.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(secondsSpace).repeatForever()).build();
+
+			scheduler.scheduleJob(job, simpleTrigger);
 		} catch (SchedulerException e) {
 			throw new SchedulerQuartzException(e);
 		}
