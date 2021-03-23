@@ -3,6 +3,7 @@ package cn.oxo.iworks.task.quartz.service;
 import java.util.Date;
 
 import org.quartz.CronScheduleBuilder;
+import org.quartz.CronTrigger;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
 import org.quartz.JobKey;
@@ -75,6 +76,32 @@ public abstract class QuartzService implements IQuartzService {
 		}
 
 	}
+	
+	public void reshetlTask(String taskGroup, Long taskId,Date exc) throws SchedulerQuartzException {
+		try {
+			
+			 TriggerKey triggerKey = TriggerKey.triggerKey(taskId.toString(), taskGroup);
+			 
+			 if(scheduler.checkExists(triggerKey)) {
+				 CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
+				  
+				  trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(CronScheduleBuilder.cronSchedule(CronDateUnits.getCron(exc))).build();
+				 
+				  scheduler.rescheduleJob(triggerKey, trigger);	 
+			 }else {
+				 throw new SchedulerQuartzException("not exist trigger key : "+taskId.toString()+" taskGroup "+taskGroup);
+			 }
+			 
+			 
+			
+		} catch (SchedulerException e) {
+			throw new SchedulerQuartzException(e);
+		}
+
+	}
+	
+	
+	
 
 	@Override
 	public void startAllTasks() throws SchedulerQuartzException {
