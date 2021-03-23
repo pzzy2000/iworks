@@ -24,6 +24,9 @@ public interface IQuartzService {
 
 	public <V extends ExecQuartzTask> void submitTask(String taskGroup, Long taskId, String params, String cronTime, Class<V> QuartzTaskClass)
 			throws SchedulerQuartzException;
+	
+	
+	public void reshetlTask(String taskGroup, Long taskId,Date exc) throws SchedulerQuartzException;
 
 	public <V extends ExecQuartzTask> void submitTaskBy(String taskGroup, Long taskId, Class<V> quartzTaskClass, String params, Date startTime,
 			int secondsSpace) throws SchedulerQuartzException;
