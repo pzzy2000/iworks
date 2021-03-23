@@ -5,6 +5,8 @@ import org.quartz.JobExecutionException;
 import org.quartz.JobKey;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
+import com.alibaba.fastjson.JSONObject;
+
 import cn.oxo.iworks.task.quartz.service.IQuartzService;
 
 public abstract class ExecQuartzTask extends QuartzJobBean {
@@ -13,11 +15,11 @@ public abstract class ExecQuartzTask extends QuartzJobBean {
 	protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
 		JobKey key = context.getJobDetail().getKey();
 
-		String params = context.getJobDetail().getJobDataMap().getString(IQuartzService.key_task_params_json);
-
-		exec(key, params);
+		String params = (String) context.getJobDetail().getJobDataMap().get(IQuartzService.key_task_params_json);
+         
+		exec(key, JSONObject.parseObject(params));
 
 	}
 
-	protected abstract void exec(JobKey key, String params);
+	protected abstract void exec(JobKey key, JSONObject  params);
 }

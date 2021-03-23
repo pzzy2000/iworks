@@ -1,8 +1,10 @@
 package cn.oxo.iworks.task.quartz.service;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import org.quartz.CronScheduleBuilder;
+import org.quartz.CronTrigger;
 import org.quartz.Job;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
@@ -16,11 +18,16 @@ import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.alibaba.fastjson.JSONObject;
+
 import cn.oxo.iworks.task.quartz.CronDateUnits;
 import cn.oxo.iworks.task.quartz.ExecQuartzTask;
 import cn.oxo.iworks.task.quartz.SchedulerQuartzException;
 
 // https://blog.csdn.net/pan_junbiao/article/details/109328069
+
+//https://blog.csdn.net/zixiao217/article/details/53091812
+//https://blog.csdn.net/weixin_34062469/article/details/85562155
 //@Component
 public abstract class QuartzService implements IQuartzService {
 
@@ -28,12 +35,13 @@ public abstract class QuartzService implements IQuartzService {
 	private Scheduler scheduler;
 
 	@Override
-	public <V extends ExecQuartzTask> void submitTask(String taskGroup, Long taskId, String params, Date excTime, Class<V> quartzTaskClass)
+	public <V extends ExecQuartzTask> void submitTask(String taskGroup, Long taskId,  Serializable params, Date excTime, Class<V> quartzTaskClass)
 			throws SchedulerQuartzException {
 		try {
 
-			JobDetail job = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup)
-					.usingJobData(IQuartzService.key_task_params_json, params).build();
+			JobDetail job = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup).requestRecovery().storeDurably().build();
+			
+			job.getJobDataMap().put(IQuartzService.key_task_params_json, JSONObject.toJSON(params).toString());
 
 			// Trigger the job to run now, and then repeat every 40 seconds
 			Trigger trigger = TriggerBuilder.newTrigger().withIdentity(taskId.toString(), taskGroup).startNow()
@@ -47,13 +55,12 @@ public abstract class QuartzService implements IQuartzService {
 	}
 
 	@Override
-	public <V extends ExecQuartzTask> void submitTask(String taskGroup, Long taskId, String params, String cronTime, Class<V> quartzTaskClass)
+	public <V extends ExecQuartzTask> void submitTask(String taskGroup, Long taskId, Serializable params, String cronTime, Class<V> quartzTaskClass)
 			throws SchedulerQuartzException {
 		try {
 
-			JobDetail job = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup)
-					.usingJobData(IQuartzService.key_task_params_json, params).build();
-
+			JobDetail job = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup).build();
+			job.getJobDataMap().put(IQuartzService.key_task_params_json,JSONObject.toJSON(params).toString());
 			// Trigger the job to run now, and then repeat every 40 seconds
 
 			Trigger trigger = TriggerBuilder.newTrigger().withIdentity(taskId.toString(), taskGroup).startNow()
@@ -68,11 +75,11 @@ public abstract class QuartzService implements IQuartzService {
 	}
 
 	@Override
-	public <V extends ExecQuartzTask> void submitTaskBy(String taskGroup, Long taskId, Class<V> quartzTaskClass, String params, Date startTime,
+	public <V extends ExecQuartzTask> void submitTaskBy(String taskGroup, Long taskId, Class<V> quartzTaskClass, Serializable params, Date startTime,
 			int secondsSpace) throws SchedulerQuartzException {
 		try {
-			JobDetail job = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup)
-					.usingJobData(IQuartzService.key_task_params_json, params).build();
+			JobDetail job = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup).build();
+			job.getJobDataMap().put(IQuartzService.key_task_params_json,JSONObject.toJSON(params).toString());
 
 			SimpleTrigger simpleTrigger = (SimpleTrigger) TriggerBuilder.newTrigger().withIdentity(taskId.toString(), taskGroup).startAt(startTime)
 					.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(secondsSpace).repeatForever()).build();
@@ -100,32 +107,34 @@ public abstract class QuartzService implements IQuartzService {
 		}
 
 	}
-	
-	public void reshetlTask(String taskGroup, Long taskId,Date exc) throws SchedulerQuartzException {
+
+	@Override
+	public void updateTaskParams(String taskGroup, Long taskId, Serializable params) throws SchedulerQuartzException {
+
 		try {
-			
-			 TriggerKey triggerKey = TriggerKey.triggerKey(taskId.toString(), taskGroup);
-			 
-			 if(scheduler.checkExists(triggerKey)) {
-				 CronTrigger trigger = (CronTrigger) scheduler.getTrigger(triggerKey);
-				  
-				  trigger = trigger.getTriggerBuilder().withIdentity(triggerKey).withSchedule(CronScheduleBuilder.cronSchedule(CronDateUnits.getCron(exc))).build();
-				 
-				  scheduler.rescheduleJob(triggerKey, trigger);	 
-			 }else {
-				 throw new SchedulerQuartzException("not exist trigger key : "+taskId.toString()+" taskGroup "+taskGroup);
-			 }
-			 
-			 
-			
+			JobKey jobKey = new JobKey(taskId.toString(), taskGroup);
+
+			if (!scheduler.checkExists(jobKey))
+				throw new SchedulerQuartzException("not find job Key taskGroup " + taskGroup + " taskId " + taskId);
+
+			JobDetail jobDetail = scheduler.getJobDetail(jobKey);
+			jobDetail.getJobDataMap().put(IQuartzService.key_task_params_json, JSONObject.toJSON(params).toString());
+
+			TriggerKey triggerKey = TriggerKey.triggerKey(taskId.toString(), taskGroup);
+
+			if (!scheduler.checkExists(triggerKey))
+
+				throw new SchedulerQuartzException("not find Trigger Key taskGroup " + taskGroup + " taskId " + taskId);
+
+			Trigger trigger = scheduler.getTrigger(triggerKey);
+
+			 scheduler.rescheduleJob(triggerKey, trigger);
+
 		} catch (SchedulerException e) {
 			throw new SchedulerQuartzException(e);
 		}
 
 	}
-	
-	
-	
 
 	@Override
 	public void startAllTasks() throws SchedulerQuartzException {
