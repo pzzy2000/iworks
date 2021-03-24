@@ -39,7 +39,7 @@ public abstract class QuartzService implements IQuartzService {
 			throws SchedulerQuartzException {
 		try {
 
-			JobDetail job = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup).requestRecovery().storeDurably().build();
+			JobDetail job = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup).requestRecovery().storeDurably(true).build();
 			
 			job.getJobDataMap().put(IQuartzService.key_task_params_json, JSONObject.toJSON(params).toString());
 
@@ -59,7 +59,7 @@ public abstract class QuartzService implements IQuartzService {
 			throws SchedulerQuartzException {
 		try {
 
-			JobDetail job = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup).build();
+			JobDetail job = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup).storeDurably(true) .build();
 			job.getJobDataMap().put(IQuartzService.key_task_params_json,JSONObject.toJSON(params).toString());
 			// Trigger the job to run now, and then repeat every 40 seconds
 
@@ -78,7 +78,7 @@ public abstract class QuartzService implements IQuartzService {
 	public <V extends ExecQuartzTask> void submitTaskBy(String taskGroup, Long taskId, Class<V> quartzTaskClass, Serializable params, Date startTime,
 			int secondsSpace) throws SchedulerQuartzException {
 		try {
-			JobDetail job = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup).build();
+			JobDetail job = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup).storeDurably(true) .build();
 			job.getJobDataMap().put(IQuartzService.key_task_params_json,JSONObject.toJSON(params).toString());
 
 			SimpleTrigger simpleTrigger = (SimpleTrigger) TriggerBuilder.newTrigger().withIdentity(taskId.toString(), taskGroup).startAt(startTime)
@@ -109,7 +109,7 @@ public abstract class QuartzService implements IQuartzService {
 	}
 
 	@Override
-	public void updateTaskParams(String taskGroup, Long taskId, Serializable params) throws SchedulerQuartzException {
+	public <V extends ExecQuartzTask>  void updateTaskParams(String taskGroup, Long taskId,Class<V> quartzTaskClass, Serializable params) throws SchedulerQuartzException {
 
 		try {
 			JobKey jobKey = new JobKey(taskId.toString(), taskGroup);
@@ -117,7 +117,7 @@ public abstract class QuartzService implements IQuartzService {
 			if (!scheduler.checkExists(jobKey))
 				throw new SchedulerQuartzException("not find job Key taskGroup " + taskGroup + " taskId " + taskId);
 
-			JobDetail jobDetail = scheduler.getJobDetail(jobKey);
+			JobDetail jobDetail =  JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup).build(); 
 			jobDetail.getJobDataMap().put(IQuartzService.key_task_params_json, JSONObject.toJSON(params).toString());
 			scheduler.addJob(jobDetail, true);
 		} catch (SchedulerException e) {
