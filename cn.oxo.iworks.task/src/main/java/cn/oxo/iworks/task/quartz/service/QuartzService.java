@@ -119,17 +119,7 @@ public abstract class QuartzService implements IQuartzService {
 
 			JobDetail jobDetail = scheduler.getJobDetail(jobKey);
 			jobDetail.getJobDataMap().put(IQuartzService.key_task_params_json, JSONObject.toJSON(params).toString());
-
-			TriggerKey triggerKey = TriggerKey.triggerKey(taskId.toString(), taskGroup);
-
-			if (!scheduler.checkExists(triggerKey))
-
-				throw new SchedulerQuartzException("not find Trigger Key taskGroup " + taskGroup + " taskId " + taskId);
-
-			Trigger trigger = scheduler.getTrigger(triggerKey);
-
-			 scheduler.rescheduleJob(triggerKey, trigger);
-
+			scheduler.addJob(jobDetail, true);
 		} catch (SchedulerException e) {
 			throw new SchedulerQuartzException(e);
 		}
