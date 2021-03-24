@@ -20,16 +20,17 @@ public interface IQuartzService {
 	 * @param QuartzTaskClass
 	 * @throws SchedulerQuartzException
 	 */
-	public <V extends ExecQuartzTask> void submitTask(String taskGroup, Long taskId, Serializable params, Date excTime, Class<V> QuartzTaskClass)
-			throws SchedulerQuartzException;
+	public <V extends ExecQuartzTask> void submitTask(String taskGroup, Long taskId, Serializable params, Date excTime,
+			Class<V> QuartzTaskClass) throws SchedulerQuartzException;
 
-	public <V extends ExecQuartzTask> void submitTask(String taskGroup, Long taskId, Serializable params, String cronTime, Class<V> QuartzTaskClass)
-			throws SchedulerQuartzException;
+	public <V extends ExecQuartzTask> void submitTask(String taskGroup, Long taskId, Serializable params,
+			String cronTime, Class<V> QuartzTaskClass) throws SchedulerQuartzException;
 
-	public <V extends ExecQuartzTask>  void updateTaskParams(String taskGroup, Long taskId,Class<V> quartzTaskClass ,Serializable params) throws SchedulerQuartzException;
+	public <V extends ExecQuartzTask> void updateTaskParams(String taskGroup, Long taskId, Class<V> quartzTaskClass,
+			Serializable params) throws SchedulerQuartzException;
 
-	public <V extends ExecQuartzTask> void submitTaskBy(String taskGroup, Long taskId, Class<V> quartzTaskClass, Serializable params, Date startTime,
-			int secondsSpace) throws SchedulerQuartzException;
+	public <V extends ExecQuartzTask> void submitTaskBy(String taskGroup, Long taskId, Class<V> quartzTaskClass,
+			Serializable params, Date startTime, int secondsSpace) throws SchedulerQuartzException;
 
 	public void cancelTask(String taskGroup, Long taskId) throws SchedulerQuartzException;
 

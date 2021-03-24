@@ -80,7 +80,7 @@ public abstract class QuartzService implements IQuartzService {
 		try {
 			JobDetail job = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup).storeDurably(true) .build();
 			job.getJobDataMap().put(IQuartzService.key_task_params_json,JSONObject.toJSON(params).toString());
-
+//            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   "+job.isDurable());
 			SimpleTrigger simpleTrigger = (SimpleTrigger) TriggerBuilder.newTrigger().withIdentity(taskId.toString(), taskGroup).startAt(startTime)
 					.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(secondsSpace).repeatForever()).build();
 
@@ -113,11 +113,14 @@ public abstract class QuartzService implements IQuartzService {
 
 		try {
 			JobKey jobKey = new JobKey(taskId.toString(), taskGroup);
-
+			
 			if (!scheduler.checkExists(jobKey))
 				throw new SchedulerQuartzException("not find job Key taskGroup " + taskGroup + " taskId " + taskId);
 
-			JobDetail jobDetail =  JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup).build(); 
+			JobDetail jobDetail =scheduler.getJobDetail(jobKey);
+			if (jobDetail ==null)
+				throw new SchedulerQuartzException("not find job detail  taskGroup " + taskGroup + " taskId " + taskId);
+			
 			jobDetail.getJobDataMap().put(IQuartzService.key_task_params_json, JSONObject.toJSON(params).toString());
 			scheduler.addJob(jobDetail, true);
 		} catch (SchedulerException e) {
