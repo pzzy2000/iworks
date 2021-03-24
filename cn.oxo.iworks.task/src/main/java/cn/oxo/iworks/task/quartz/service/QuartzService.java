@@ -80,7 +80,6 @@ public abstract class QuartzService implements IQuartzService {
 		try {
 			JobDetail job = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup).storeDurably(true) .build();
 			job.getJobDataMap().put(IQuartzService.key_task_params_json,JSONObject.toJSON(params).toString());
-//            System.out.println(">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>   "+job.isDurable());
 			SimpleTrigger simpleTrigger = (SimpleTrigger) TriggerBuilder.newTrigger().withIdentity(taskId.toString(), taskGroup).startAt(startTime)
 					.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(secondsSpace).repeatForever()).build();
 
