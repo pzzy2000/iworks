@@ -48,7 +48,7 @@ public abstract class QuartzConfig implements ApplicationListener<ContextRefresh
 		factory.setDataSource(dataSource);
 		factory.setJobFactory(taskJobFactory);
 		factory.setWaitForJobsToCompleteOnShutdown(true);// 这样当spring关闭时，会等待所有已经启动的quartz job结束后spring才能完全shutdown。
-		factory.setOverwriteExistingJobs(false);
+		factory.setOverwriteExistingJobs(true);
 		factory.setStartupDelay(1);
 		return factory;
 	}
