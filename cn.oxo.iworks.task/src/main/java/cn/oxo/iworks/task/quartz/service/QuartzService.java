@@ -18,6 +18,7 @@ import org.quartz.TriggerBuilder;
 import org.quartz.TriggerKey;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 
 import cn.oxo.iworks.task.quartz.CronDateUnits;
@@ -76,7 +77,7 @@ public abstract class QuartzService implements IQuartzService {
 
 			JobDetail job = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup).requestRecovery().storeDurably(true).build();
 
-			job.getJobDataMap().put(IQuartzService.key_task_params_json, JSONObject.toJSON(params).toString());
+			job.getJobDataMap().put(IQuartzService.key_task_params_json, JSON.toJSONString(params));
 
 			// Trigger the job to run now, and then repeat every 40 seconds
 			Trigger trigger = TriggerBuilder.newTrigger().withIdentity(taskId.toString(), taskGroup).startNow()
@@ -95,7 +96,7 @@ public abstract class QuartzService implements IQuartzService {
 		try {
 			overwriteTask(taskGroup, taskId, overwrite);
 			JobDetail job = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup).storeDurably(true).build();
-			job.getJobDataMap().put(IQuartzService.key_task_params_json, JSONObject.toJSON(params).toString());
+			job.getJobDataMap().put(IQuartzService.key_task_params_json, JSON.toJSONString(params));
 			// Trigger the job to run now, and then repeat every 40 seconds
 
 			Trigger trigger = TriggerBuilder.newTrigger().withIdentity(taskId.toString(), taskGroup).startNow()
@@ -115,8 +116,7 @@ public abstract class QuartzService implements IQuartzService {
 		try {
 			overwriteTask(taskGroup, taskId, overwrite);
 			JobDetail job = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup).storeDurably(true).build();
-			job.getJobDataMap().put(IQuartzService.key_task_params_json, JSONObject.toJSON(params).toString());
-			System.out.println(">>  " + job.isDurable());
+			job.getJobDataMap().put(IQuartzService.key_task_params_json, JSON.toJSONString(params));
 			SimpleTrigger simpleTrigger = (SimpleTrigger) TriggerBuilder.newTrigger().withIdentity(taskId.toString(), taskGroup).startAt(startTime)
 					.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(secondsSpace).repeatForever()).build();
 
@@ -162,7 +162,7 @@ public abstract class QuartzService implements IQuartzService {
 				throw new SchedulerQuartzException("not find job Key taskGroup " + taskGroup + " taskId " + taskId);
 
 			JobDetail jobDetail = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup).build();
-			jobDetail.getJobDataMap().put(IQuartzService.key_task_params_json, JSONObject.toJSON(params).toString());
+			jobDetail.getJobDataMap().put(IQuartzService.key_task_params_json,JSON.toJSONString(params));
 			scheduler.addJob(jobDetail, true);
 		} catch (SchedulerException e) {
 			throw new SchedulerQuartzException(e);
