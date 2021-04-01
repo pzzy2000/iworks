@@ -38,6 +38,8 @@ public interface IHttpProtocolService {
     public final long defaultHttpConnectionManagerTimeout = 3 * 1000;
 
     public GetPostHttpRequestResult post(String url, ABGetPostRequest request) throws HttpRequestServiceException;
+    
+    public GetPostHttpRequestResult upload(String url, PostUploadFileRequest request) throws HttpRequestServiceException;
 
     public GetPostHttpRequestResult get(String url, ABGetPostRequest request) throws HttpRequestServiceException;
 

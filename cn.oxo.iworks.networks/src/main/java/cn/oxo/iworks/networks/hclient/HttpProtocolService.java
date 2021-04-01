@@ -1,10 +1,12 @@
 package cn.oxo.iworks.networks.hclient;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -14,6 +16,7 @@ import java.util.logging.Logger;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
 import org.apache.http.HttpException;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
@@ -26,8 +29,13 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.protocol.HttpClientContext;
 import org.apache.http.cookie.Cookie;
+import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.entity.mime.HttpMultipartMode;
+import org.apache.http.entity.mime.MultipartEntityBuilder;
+import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
@@ -154,6 +162,119 @@ public class HttpProtocolService implements IHttpProtocolService {
 		}
 		return params;
 	}
+	
+	
+	public GetPostHttpRequestResult upload(String url, PostUploadFileRequest request) throws HttpRequestServiceException {
+	    System.out.println("upload upload upload  "+request.toString());
+        HttpPost postMethod = new HttpPost(url);
+        addCommTequestHeader(postMethod);
+        addPrivateRequestHeader(postMethod, request);
+        try {
+            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+            builder.setCharset(Charset.forName(request.charEncoded.name()));
+            builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);//加上此行代码解决返回中文乱码问题
+            for (Map.Entry<String, String> e : request.getRequestParams().entrySet()) {
+                 builder.addTextBody(e.getKey(), e.getValue());// 类似浏览器表单提交，对应input的name和value
+           }
+            builder.addBinaryBody("file", request.getFile());
+            HttpEntity  httpEntity = builder.build();        
+            postMethod.setEntity(httpEntity);
+            logger.info("http protocol service  post    request  URL : " + url);
+            printRequestHeader(postMethod.getAllHeaders());
+            HttpClientContext context = HttpClientContext.create();
+            addReqCookies(request, context);
+            HttpResponse httpResponse = httpclient.execute(postMethod, context);
+            logger.info("http protocol service  post  status " + httpResponse.getStatusLine().getStatusCode());
+            GetPostHttpRequestResult httpRequestResult = new GetPostHttpRequestResult();
+            httpRequestResult.setHeaders(httpResponse.getAllHeaders());
+            httpRequestResult.setHttpCode(httpResponse.getStatusLine().getStatusCode());
+            if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+                if (httpResponse.getHeaders("Transfer-Encoding") != null
+                        && httpResponse.getHeaders("Transfer-Encoding").length > 0) {
+                    httpRequestResult.setHttpCode(httpResponse.getStatusLine().getStatusCode());
+                    InputStream in = httpResponse.getEntity().getContent();
+                    try {
+                        byte[] cache = new byte[1024];
+                        ByteArrayOutputStream tmpos = new ByteArrayOutputStream();
+                        int data = -1;
+
+                        do {
+                            data = in.read(cache);
+                            if (data > -1) {
+                                tmpos.write(cache, 0, data);
+                            }
+
+                        } while (data != -1);
+                        byte[] xx = tmpos.toByteArray();
+                        if (httpResponse.containsHeader("Content-Encoding")
+                                && search(httpResponse.getHeaders("Content-Encoding"), "gzip")) {
+                            xx = GZIPUtils.uncompress(tmpos.toByteArray());
+                        }
+                        String re;
+                        try {
+                            re = new String(xx, request.getCharEncoded() == null ? default_CharSet
+                                    : request.getCharEncoded().name());
+                        } catch (Exception e) {
+                            re = new String(xx);
+                        }
+
+                        httpRequestResult.getCookie().addAll(context.getCookieStore().getCookies());
+                        httpRequestResult.setResponseByte(re.getBytes(
+                                request.getCharEncoded() == null ? default_CharSet : request.getCharEncoded().name()));
+                        httpRequestResult.setResponse(re);
+                        return httpRequestResult;
+                    } finally {
+                        try {
+                            httpResponse.getEntity().getContent().close();
+                        } catch (Exception e) {
+
+                        }
+                    }
+
+                } else {
+                    try {
+                        httpRequestResult.setHttpCode(httpResponse.getStatusLine().getStatusCode());
+                        String xx = EntityUtils.toString(httpResponse.getEntity(),
+                                request.getCharEncoded() == null ? default_CharSet : request.getCharEncoded().name());
+                        httpRequestResult.setResponseByte(xx.getBytes(
+                                request.getCharEncoded() == null ? default_CharSet : request.getCharEncoded().name()));
+                        httpRequestResult.setResponse(xx);
+                        httpRequestResult.getCookie().addAll(context.getCookieStore().getCookies());
+                        logger.info("=================print HttpResponse  Cookies======================");
+                        printCookies(httpRequestResult.getCookie());
+                        logger.info("=================print HttpResponse Cookies======================");
+                        logger.info("http protocol service  get   request  URL : " + url + " end");
+                        return httpRequestResult;
+                    } finally {
+                        try {
+                            httpResponse.getEntity().getContent().close();
+                        } catch (Exception e) {
+
+                        }
+                    }
+                }
+
+            } else {
+                String errResult = EntityUtils.toString(httpResponse.getEntity(),request.getCharEncoded() == null ? default_CharSet : request.getCharEncoded().name());
+                httpRequestResult.setError(errResult);
+            }
+            return httpRequestResult;
+        } catch (UnsupportedEncodingException e) {
+            throw new HttpRequestServiceException(e);
+        } catch (IOException e) {
+            throw new HttpRequestServiceException(e);
+        } finally {
+            postMethod.releaseConnection();
+        }
+    }
+	
+	
+	
+	
+	
+	
+	
+	
 
 	public GetPostHttpRequestResult post(String url, ABGetPostRequest request) throws HttpRequestServiceException {
 
