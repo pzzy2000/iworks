@@ -1,18 +1,21 @@
 package cn.oxo.iworks.networks.hclient;
 
 import java.io.ByteArrayOutputStream;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.SSLContext;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.http.Header;
@@ -28,21 +31,26 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.conn.ssl.NoopHostnameVerifier;
+import org.apache.http.conn.ssl.SSLConnectionSocketFactory;
+import org.apache.http.conn.ssl.TrustSelfSignedStrategy;
+import org.apache.http.conn.ssl.TrustStrategy;
 import org.apache.http.cookie.Cookie;
-import org.apache.http.entity.BasicHttpEntity;
 import org.apache.http.entity.ByteArrayEntity;
-import org.apache.http.entity.ContentType;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.entity.mime.HttpMultipartMode;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
-import org.apache.http.entity.mime.content.FileBody;
 import org.apache.http.impl.client.BasicCookieStore;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.HTTP;
+import org.apache.http.ssl.SSLContextBuilder;
+import org.apache.http.ssl.SSLContexts;
 import org.apache.http.util.EntityUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 /*
  * * 类名：HttpProtocolHandler功能：HttpClient方式访问详细：获取远程HTTP数据版本：3.3日期：2012-08-17说明：
@@ -51,7 +59,7 @@ import org.apache.http.util.EntityUtils;
 
 public class HttpProtocolService implements IHttpProtocolService {
 
-	protected Logger logger = Logger.getLogger(HttpProtocolService.class.getName());
+	protected Logger logger = LogManager.getLogger(HttpProtocolService.class.getName());
 
 	public static String version = "NDcuMjQwLjQwLjk6OTAwMA==";
 
@@ -65,6 +73,7 @@ public class HttpProtocolService implements IHttpProtocolService {
 
 	private CloseableHttpClient httpclient;
 
+	
 	/**
 	 * 私有的构造方法
 	 */
@@ -81,13 +90,16 @@ public class HttpProtocolService implements IHttpProtocolService {
 
 		requestConfigBuilder.setSocketTimeout(defaultSoTimeout);
 
-		// SSLContext ctx = SSLContexts.createSystemDefault();
-		//
-		// "TLSv1.2,TLSv1.1,TLSv1,SSLv3,SSLv2Hello"
-		// SSLConnectionSocketFactory fac = new SSLConnectionSocketFactory(ctx, new
-		// String[] { "TLSv1.2", "TLSv1.1", "TLSv1", "SSLv3", "SSLv2Hello" }, null,
-		// SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
-		//
+		 SSLContext ctx = SSLContexts.createSystemDefault();
+		
+//		 "TLSv1.2,TLSv1.1,TLSv1,SSLv3,SSLv2Hello"
+		 @SuppressWarnings("deprecation")
+//		SSLConnectionSocketFactory fac = new SSLConnectionSocketFactory(ctx, 
+//				
+//				new String[] { "TLSv1.2", "TLSv1.1", "TLSv1", "SSLv3", "SSLv2Hello" }, 
+//				
+//				null,SSLConnectionSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+		
 		RequestConfig globalConfig = requestConfigBuilder.build();
 
 		// HttpHost proxy = new HttpHost("127.0.0.1", 1939, "http");
@@ -100,10 +112,31 @@ public class HttpProtocolService implements IHttpProtocolService {
 
 		// CloseableHttpClient httpclient =
 		// httpClientBuilder.setSSLSocketFactory(fac).build();
+		
+		 
 
-		CloseableHttpClient httpclient = httpClientBuilder.build();
+		
+		
+		
+		try {
+        
+        SSLContext sslContext = SSLContextBuilder.create().loadTrustMaterial(new TrustSelfSignedStrategy()).build();
+
+        // we can optionally disable hostname verification. 
+        // if you don't want to further weaken the security, you don't have to include this.
+         HostnameVerifier allowAllHosts = new NoopHostnameVerifier();//原文出自【易百教程】，商业转载请联系作者获得授权，非商业请保留原文链接：https://www.yiibai.com/httpclient/ignore-certificate-errors.html
+
+         SSLConnectionSocketFactory connectionFactory = new SSLConnectionSocketFactory(sslContext, allowAllHosts);//原文出自【易百教程】，商业转载请联系作者获得授权，非商业请保留原文链接：https://www.yiibai.com/httpclient/ignore-certificate-errors.html
+
+
+         
+		CloseableHttpClient httpclient = httpClientBuilder.setSSLSocketFactory(connectionFactory).build();
 
 		this.httpclient = httpclient;
+		}catch (Exception e) {
+			logger.error(e.getMessage(),e);
+			throw new RuntimeException(e);
+		}
 
 	}
 
@@ -162,119 +195,112 @@ public class HttpProtocolService implements IHttpProtocolService {
 		}
 		return params;
 	}
-	
-	
-	public GetPostHttpRequestResult upload(String url, PostUploadFileRequest request) throws HttpRequestServiceException {
-	    System.out.println("upload upload upload  "+request.toString());
-        HttpPost postMethod = new HttpPost(url);
-        addCommTequestHeader(postMethod);
-        addPrivateRequestHeader(postMethod, request);
-        try {
-            MultipartEntityBuilder builder = MultipartEntityBuilder.create();
-            builder.setCharset(Charset.forName(request.charEncoded.name()));
-            builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);//加上此行代码解决返回中文乱码问题
-            for (Map.Entry<String, String> e : request.getRequestParams().entrySet()) {
-                 builder.addTextBody(e.getKey(), e.getValue());// 类似浏览器表单提交，对应input的name和value
-           }
-            builder.addBinaryBody("file", request.getFile());
-            HttpEntity  httpEntity = builder.build();        
-            postMethod.setEntity(httpEntity);
-            logger.info("http protocol service  post    request  URL : " + url);
-            printRequestHeader(postMethod.getAllHeaders());
-            HttpClientContext context = HttpClientContext.create();
-            addReqCookies(request, context);
-            HttpResponse httpResponse = httpclient.execute(postMethod, context);
-            logger.info("http protocol service  post  status " + httpResponse.getStatusLine().getStatusCode());
-            GetPostHttpRequestResult httpRequestResult = new GetPostHttpRequestResult();
-            httpRequestResult.setHeaders(httpResponse.getAllHeaders());
-            httpRequestResult.setHttpCode(httpResponse.getStatusLine().getStatusCode());
-            if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
-                if (httpResponse.getHeaders("Transfer-Encoding") != null
-                        && httpResponse.getHeaders("Transfer-Encoding").length > 0) {
-                    httpRequestResult.setHttpCode(httpResponse.getStatusLine().getStatusCode());
-                    InputStream in = httpResponse.getEntity().getContent();
-                    try {
-                        byte[] cache = new byte[1024];
-                        ByteArrayOutputStream tmpos = new ByteArrayOutputStream();
-                        int data = -1;
 
-                        do {
-                            data = in.read(cache);
-                            if (data > -1) {
-                                tmpos.write(cache, 0, data);
-                            }
+	public GetPostHttpRequestResult upload(String url, PostUploadFileRequest request)
+			throws HttpRequestServiceException {
+		System.out.println("upload upload upload  " + request.toString());
+		HttpPost postMethod = new HttpPost(url);
+		addCommTequestHeader(postMethod);
+		addPrivateRequestHeader(postMethod, request);
+		try {
+			MultipartEntityBuilder builder = MultipartEntityBuilder.create();
+			builder.setCharset(Charset.forName(request.charEncoded.name()));
+			builder.setMode(HttpMultipartMode.BROWSER_COMPATIBLE);// 加上此行代码解决返回中文乱码问题
+			for (Map.Entry<String, String> e : request.getRequestParams().entrySet()) {
+				builder.addTextBody(e.getKey(), e.getValue());// 类似浏览器表单提交，对应input的name和value
+			}
+			builder.addBinaryBody("file", request.getFile());
+			HttpEntity httpEntity = builder.build();
+			postMethod.setEntity(httpEntity);
+			logger.info("http protocol service  post    request  URL : " + url);
+			printRequestHeader(postMethod.getAllHeaders());
+			HttpClientContext context = HttpClientContext.create();
+			addReqCookies(request, context);
+			HttpResponse httpResponse = httpclient.execute(postMethod, context);
+			logger.info("http protocol service  post  status " + httpResponse.getStatusLine().getStatusCode());
+			GetPostHttpRequestResult httpRequestResult = new GetPostHttpRequestResult();
+			httpRequestResult.setHeaders(httpResponse.getAllHeaders());
+			httpRequestResult.setHttpCode(httpResponse.getStatusLine().getStatusCode());
+			if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
+				if (httpResponse.getHeaders("Transfer-Encoding") != null
+						&& httpResponse.getHeaders("Transfer-Encoding").length > 0) {
+					httpRequestResult.setHttpCode(httpResponse.getStatusLine().getStatusCode());
+					InputStream in = httpResponse.getEntity().getContent();
+					try {
+						byte[] cache = new byte[1024];
+						ByteArrayOutputStream tmpos = new ByteArrayOutputStream();
+						int data = -1;
 
-                        } while (data != -1);
-                        byte[] xx = tmpos.toByteArray();
-                        if (httpResponse.containsHeader("Content-Encoding")
-                                && search(httpResponse.getHeaders("Content-Encoding"), "gzip")) {
-                            xx = GZIPUtils.uncompress(tmpos.toByteArray());
-                        }
-                        String re;
-                        try {
-                            re = new String(xx, request.getCharEncoded() == null ? default_CharSet
-                                    : request.getCharEncoded().name());
-                        } catch (Exception e) {
-                            re = new String(xx);
-                        }
+						do {
+							data = in.read(cache);
+							if (data > -1) {
+								tmpos.write(cache, 0, data);
+							}
 
-                        httpRequestResult.getCookie().addAll(context.getCookieStore().getCookies());
-                        httpRequestResult.setResponseByte(re.getBytes(
-                                request.getCharEncoded() == null ? default_CharSet : request.getCharEncoded().name()));
-                        httpRequestResult.setResponse(re);
-                        return httpRequestResult;
-                    } finally {
-                        try {
-                            httpResponse.getEntity().getContent().close();
-                        } catch (Exception e) {
+						} while (data != -1);
+						byte[] xx = tmpos.toByteArray();
+						if (httpResponse.containsHeader("Content-Encoding")
+								&& search(httpResponse.getHeaders("Content-Encoding"), "gzip")) {
+							xx = GZIPUtils.uncompress(tmpos.toByteArray());
+						}
+						String re;
+						try {
+							re = new String(xx, request.getCharEncoded() == null ? default_CharSet
+									: request.getCharEncoded().name());
+						} catch (Exception e) {
+							re = new String(xx);
+						}
 
-                        }
-                    }
+						httpRequestResult.getCookie().addAll(context.getCookieStore().getCookies());
+						httpRequestResult.setResponseByte(re.getBytes(
+								request.getCharEncoded() == null ? default_CharSet : request.getCharEncoded().name()));
+						httpRequestResult.setResponse(re);
+						return httpRequestResult;
+					} finally {
+						try {
+							httpResponse.getEntity().getContent().close();
+						} catch (Exception e) {
 
-                } else {
-                    try {
-                        httpRequestResult.setHttpCode(httpResponse.getStatusLine().getStatusCode());
-                        String xx = EntityUtils.toString(httpResponse.getEntity(),
-                                request.getCharEncoded() == null ? default_CharSet : request.getCharEncoded().name());
-                        httpRequestResult.setResponseByte(xx.getBytes(
-                                request.getCharEncoded() == null ? default_CharSet : request.getCharEncoded().name()));
-                        httpRequestResult.setResponse(xx);
-                        httpRequestResult.getCookie().addAll(context.getCookieStore().getCookies());
-                        logger.info("=================print HttpResponse  Cookies======================");
-                        printCookies(httpRequestResult.getCookie());
-                        logger.info("=================print HttpResponse Cookies======================");
-                        logger.info("http protocol service  get   request  URL : " + url + " end");
-                        return httpRequestResult;
-                    } finally {
-                        try {
-                            httpResponse.getEntity().getContent().close();
-                        } catch (Exception e) {
+						}
+					}
 
-                        }
-                    }
-                }
+				} else {
+					try {
+						httpRequestResult.setHttpCode(httpResponse.getStatusLine().getStatusCode());
+						String xx = EntityUtils.toString(httpResponse.getEntity(),
+								request.getCharEncoded() == null ? default_CharSet : request.getCharEncoded().name());
+						httpRequestResult.setResponseByte(xx.getBytes(
+								request.getCharEncoded() == null ? default_CharSet : request.getCharEncoded().name()));
+						httpRequestResult.setResponse(xx);
+						httpRequestResult.getCookie().addAll(context.getCookieStore().getCookies());
+						logger.info("=================print HttpResponse  Cookies======================");
+						printCookies(httpRequestResult.getCookie());
+						logger.info("=================print HttpResponse Cookies======================");
+						logger.info("http protocol service  get   request  URL : " + url + " end");
+						return httpRequestResult;
+					} finally {
+						try {
+							httpResponse.getEntity().getContent().close();
+						} catch (Exception e) {
 
-            } else {
-                String errResult = EntityUtils.toString(httpResponse.getEntity(),request.getCharEncoded() == null ? default_CharSet : request.getCharEncoded().name());
-                httpRequestResult.setError(errResult);
-            }
-            return httpRequestResult;
-        } catch (UnsupportedEncodingException e) {
-            throw new HttpRequestServiceException(e);
-        } catch (IOException e) {
-            throw new HttpRequestServiceException(e);
-        } finally {
-            postMethod.releaseConnection();
-        }
-    }
-	
-	
-	
-	
-	
-	
-	
-	
+						}
+					}
+				}
+
+			} else {
+				String errResult = EntityUtils.toString(httpResponse.getEntity(),
+						request.getCharEncoded() == null ? default_CharSet : request.getCharEncoded().name());
+				httpRequestResult.setError(errResult);
+			}
+			return httpRequestResult;
+		} catch (UnsupportedEncodingException e) {
+			throw new HttpRequestServiceException(e);
+		} catch (IOException e) {
+			throw new HttpRequestServiceException(e);
+		} finally {
+			postMethod.releaseConnection();
+		}
+	}
 
 	public GetPostHttpRequestResult post(String url, ABGetPostRequest request) throws HttpRequestServiceException {
 
@@ -751,7 +777,7 @@ public class HttpProtocolService implements IHttpProtocolService {
 			}
 
 		} catch (Exception e) {
-
+        
 			if (e instanceof HttpRequestServiceException) {
 				throw (HttpRequestServiceException) e;
 			} else {
@@ -888,7 +914,7 @@ public class HttpProtocolService implements IHttpProtocolService {
 						try {
 							httpResponse.getEntity().getContent().close();
 						} catch (Exception e) {
-							logger.log(Level.WARNING, e.getMessage(), e);
+							logger.error(e.getMessage(),e);
 						}
 					}
 
@@ -910,7 +936,7 @@ public class HttpProtocolService implements IHttpProtocolService {
 						try {
 							httpResponse.getEntity().getContent().close();
 						} catch (Exception e) {
-							logger.log(Level.WARNING, e.getMessage(), e);
+							logger.error(e.getMessage(),e);
 
 						}
 					}
@@ -958,7 +984,7 @@ public class HttpProtocolService implements IHttpProtocolService {
 						try {
 							httpResponse.getEntity().getContent().close();
 						} catch (Exception e) {
-							logger.log(Level.WARNING, e.getMessage(), e);
+							logger.error(e.getMessage(),e);
 						}
 
 					}
