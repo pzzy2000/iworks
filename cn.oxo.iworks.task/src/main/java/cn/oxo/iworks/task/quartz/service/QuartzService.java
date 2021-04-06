@@ -161,7 +161,7 @@ public abstract class QuartzService implements IQuartzService {
 			if (!scheduler.checkExists(jobKey))
 				throw new SchedulerQuartzException("not find job Key taskGroup " + taskGroup + " taskId " + taskId);
 
-			JobDetail jobDetail = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup).build();
+			JobDetail jobDetail = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup).storeDurably(true).build();
 			jobDetail.getJobDataMap().put(IQuartzService.key_task_params_json,JSON.toJSONString(params));
 			scheduler.addJob(jobDetail, true);
 		} catch (SchedulerException e) {
