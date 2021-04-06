@@ -1,38 +1,19 @@
-package cn.oxo.iworks.databases;
-
-import junit.framework.Test;
-import junit.framework.TestCase;
-import junit.framework.TestSuite;
-
-/**
- * Unit test for simple App.
- */
-public class AppTest 
-    extends TestCase
-{
-    /**
-     * Create the test case
-     *
-     * @param testName name of the test case
-     */
-    public AppTest( String testName )
-    {
-        super( testName );
-    }
-
-    /**
-     * @return the suite of tests being tested
-     */
-    public static Test suite()
-    {
-        return new TestSuite( AppTest.class );
-    }
-
-    /**
-     * Rigourous Test :-)
-     */
-    public void testApp()
-    {
-        assertTrue( true );
-    }
-}
+//package cn.oxo.iworks.databases;
+//
+//import cn.oxo.iworks.databases.ids.MySQLCreateIdFactory;
+//import junit.framework.Test;
+//import junit.framework.TestCase;
+//import junit.framework.TestSuite;
+//
+///**
+// * Unit test for simple App.
+// */
+//public class AppTest 
+//    extends TestCase
+//{
+//   public static void main(String[] args) {
+//	MySQLCreateIdFactory ss=new MySQLCreateIdFactory(5L, 5L);
+//		
+//		System.out.println(">>>>>>>>>>>>>>>  "+ss.createDBId());
+//}
+//}
