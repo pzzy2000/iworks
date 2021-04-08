@@ -121,6 +121,7 @@ public abstract class QuartzService implements IQuartzService {
 					.withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(secondsSpace).repeatForever()).build();
 
 			scheduler.scheduleJob(job, simpleTrigger);
+			
 		} catch (SchedulerException e) {
 			throw new SchedulerQuartzException(e);
 		}
@@ -164,9 +165,32 @@ public abstract class QuartzService implements IQuartzService {
 			JobDetail jobDetail = JobBuilder.newJob(quartzTaskClass).withIdentity(taskId.toString(), taskGroup).storeDurably(true).build();
 			jobDetail.getJobDataMap().put(IQuartzService.key_task_params_json,JSON.toJSONString(params));
 			scheduler.addJob(jobDetail, true);
+			
 		} catch (SchedulerException e) {
 			throw new SchedulerQuartzException(e);
 		}
+
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	@Override
+	public <V extends ExecQuartzTask> void updateTaskParams(String taskGroup, Long taskId, Class<V> quartzTaskClass,Serializable params, int secondsSpace) throws SchedulerQuartzException {
+		updateTaskParams(taskGroup, taskId, quartzTaskClass, params);
+		// retrieve the trigger
+		try {
+		    Trigger oldTrigger = scheduler.getTrigger(TriggerKey.triggerKey(taskId.toString(),taskGroup));
+		    
+		    TriggerBuilder tb = oldTrigger.getTriggerBuilder();
+		
+		    Trigger newTrigger = tb.withSchedule( SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(secondsSpace).repeatForever()).build();
+
+		    scheduler.rescheduleJob(oldTrigger.getKey(), newTrigger);
+		
+		}catch (SchedulerException e) {
+			 throw new SchedulerQuartzException(e);
+		}
+
+	
 
 	}
 
