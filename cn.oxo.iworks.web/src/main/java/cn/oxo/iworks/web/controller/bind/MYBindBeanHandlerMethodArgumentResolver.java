@@ -88,7 +88,8 @@ public class MYBindBeanHandlerMethodArgumentResolver implements HandlerMethodArg
 
 		OgnlRuntime.setPropertyAccessor(List.class, new MYListPropertyAccessor());
 	}
-
+	
+	
 	@Override
 	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer arg1, NativeWebRequest webRequest, WebDataBinderFactory arg3)
 			throws Exception {
@@ -115,7 +116,7 @@ public class MYBindBeanHandlerMethodArgumentResolver implements HandlerMethodArg
 			// json 格式
 			result = createRequestJsonBean(webRequest, iFormModel.parameterName(), parameter.getParameterType());
 		}
-
+        
 		return result;
 
 		// if (result != null) {
