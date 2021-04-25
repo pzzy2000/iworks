@@ -39,7 +39,7 @@ public enum RequestResultErrorMsg {
 
 	public Integer getErrorCode() {
 		return errorCode;
-	}
+	} 
 
 	public String getErrorMeg() {
 		return errorMeg;

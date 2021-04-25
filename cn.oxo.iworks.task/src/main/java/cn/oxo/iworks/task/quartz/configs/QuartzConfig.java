@@ -28,6 +28,9 @@ public abstract class QuartzConfig implements ApplicationListener<ContextRefresh
 //		log.info("任务已经启动..." + event.getSource());
 
 	}
+	
+	// "/configs/task_quartz.properties"
+	protected abstract  String getConfile() ;
 
 	@Bean
 	public TaskJobFactory taskJobFactory(@Autowired AutowireCapableBeanFactory capableBeanFactory) {
@@ -38,7 +41,7 @@ public abstract class QuartzConfig implements ApplicationListener<ContextRefresh
 	public SchedulerFactoryBean schedulerFactoryBean(@Autowired DataSource dataSource, @Autowired TaskJobFactory taskJobFactory) throws IOException {
 		// 获取配置属性
 		PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
-		propertiesFactoryBean.setLocation(new ClassPathResource("/configs/task_quartz.properties"));
+		propertiesFactoryBean.setLocation(new ClassPathResource(getConfile()));
 		// 在quartz.properties中的属性被读取并注入后再初始化对象
 		propertiesFactoryBean.afterPropertiesSet();
 		// 创建SchedulerFactoryBean

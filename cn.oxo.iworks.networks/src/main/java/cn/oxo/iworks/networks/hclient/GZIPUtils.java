@@ -76,12 +76,20 @@ public class GZIPUtils {
 		return uncompressToString(bytes, GZIP_ENCODE_UTF_8);
 	}
 
-	public static void main(String[] args) throws IOException {
-		String s = "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
-		// System.out.println("字符串长度："+s.length());
-		// System.out.println("压缩后：："+compress(s).length);
-		// System.out.println("解压后："+uncompress(compress(s)).length);
-		// System.out.println("解压字符串后：："+uncompressToString(compress(s)).length());
+public static void main(String[] args) throws Exception {
+		
+		HttpPostSingleMessageRequestActivity postSingleMessageRequestActivity = new HttpPostSingleMessageRequestActivity();
+		
+		PostStringSingleMessageRequest iPostGetRequest = new PostStringSingleMessageRequest("wewe");
+
+//		iPostGetRequest.getHeader().put("auth", IecmiClientConfigs.instance().getiLoginBean().getToken());
+
+		postSingleMessageRequestActivity.doActive("https://106.52.184.24/ixd/api/ecmi/business/cookie/list", iPostGetRequest);
+//
+//		JSONObject result = JSONObject.parseObject(iPostGetRequest.getResponse());
+//		
+//		
+//		
 	}
 
 }

@@ -14,7 +14,7 @@ public class LoginSessionBean {
 
 	private UserType userType;
 
-	// private String password;
+	 private Long  roleId;
 
 	private Date createDate;
 
@@ -74,6 +74,14 @@ public class LoginSessionBean {
 
 	public void setToken(String token) {
 		this.token = token;
+	}
+
+	public Long getRoleId() {
+		return roleId;
+	}
+
+	public void setRoleId(Long roleId) {
+		this.roleId = roleId;
 	}
 	
 	
