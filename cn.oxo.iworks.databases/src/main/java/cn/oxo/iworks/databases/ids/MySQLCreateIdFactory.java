@@ -18,19 +18,19 @@ public class MySQLCreateIdFactory implements IMySQLCreateIdFactory
     // private SnowFlake snowFlake = new SnowFlake((long) SQLUilts.getIUniqueId(), (long)
     // SQLUilts.getIUniqueId());
 
-    private SnowflakeIdWorker snowFlake;
+    private SnowflakeIdWorkerV2 snowFlake;
 
     // 构造方法设置机器码：第9个机房的第20台机器
     public MySQLCreateIdFactory(long datacenterId, long machineId)
     {
         logger.info("MySQL Create Id Factory : datacenterId -> " + datacenterId + " machineId  "
                     + machineId);
-        SnowflakeIdWorker snowFlake = new SnowflakeIdWorker(datacenterId, machineId);
+        SnowflakeIdWorkerV2 snowFlake = new SnowflakeIdWorkerV2(datacenterId, machineId);
 
         setSnowFlake(snowFlake);
     }
 
-    private void setSnowFlake(SnowflakeIdWorker snowFlake)
+    private void setSnowFlake(SnowflakeIdWorkerV2 snowFlake)
     {
         this.snowFlake = snowFlake;
     }
