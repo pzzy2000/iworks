@@ -151,7 +151,8 @@ public abstract class QuartzService implements IQuartzService {
 		}
 
 	}
-
+	
+	
 	@Override
 	public <V extends ExecQuartzTask> void updateTaskParams(String taskGroup, Long taskId, Class<V> quartzTaskClass, Serializable params)
 			throws SchedulerQuartzException {

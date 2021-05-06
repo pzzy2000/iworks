@@ -53,4 +53,6 @@ public interface IQuartzService {
 	public void startAllTasks() throws SchedulerQuartzException;
 
 	public void shutdownAllTasks() throws SchedulerQuartzException;
+	
+
 }
