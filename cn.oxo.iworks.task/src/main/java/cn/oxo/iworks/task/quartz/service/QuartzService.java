@@ -36,27 +36,27 @@ public abstract class QuartzService implements IQuartzService {
 	private Scheduler scheduler;
 
 	@Override
-	public <V extends ExecQuartzTask> void submitTask(String taskGroup, Long taskId, Serializable params, Date excTime, Class<V> QuartzTaskClass)
+	public <V extends ExecQuartzTask> void submitTask(String taskGroup, String taskId, Serializable params, Date excTime, Class<V> QuartzTaskClass)
 			throws SchedulerQuartzException {
 		submitTask(taskGroup, taskId, params, excTime, QuartzTaskClass, false);
 
 	}
 
 	@Override
-	public <V extends ExecQuartzTask> void submitIntervalTask(String taskGroup, Long taskId, Class<V> quartzTaskClass, Serializable params, Date startTime,
+	public <V extends ExecQuartzTask> void submitIntervalTask(String taskGroup, String taskId, Class<V> quartzTaskClass, Serializable params, Date startTime,
 			int secondsSpace) throws SchedulerQuartzException {
 		submitIntervalTask(taskGroup, taskId, quartzTaskClass, params, startTime, secondsSpace, false);
 
 	}
 
 	@Override
-	public <V extends ExecQuartzTask> void submitTask(String taskGroup, Long taskId, Serializable params, String cronTime, Class<V> QuartzTaskClass)
+	public <V extends ExecQuartzTask> void submitTask(String taskGroup, String taskId, Serializable params, String cronTime, Class<V> QuartzTaskClass)
 			throws SchedulerQuartzException {
 		submitTask(taskGroup, taskId, params, cronTime, QuartzTaskClass, false);
 
 	}
 
-	private void overwriteTask(String taskGroup, Long taskId, boolean overwrite) throws SchedulerQuartzException {
+	private void overwriteTask(String taskGroup, String taskId, boolean overwrite) throws SchedulerQuartzException {
 		JobKey jobKey = new JobKey(taskId.toString(), taskGroup);
 		boolean exist = existTask(jobKey);
 		if (exist == true) {
@@ -69,7 +69,7 @@ public abstract class QuartzService implements IQuartzService {
 	}
 
 	@Override
-	public <V extends ExecQuartzTask> void submitTask(String taskGroup, Long taskId, Serializable params, Date excTime, Class<V> quartzTaskClass,
+	public <V extends ExecQuartzTask> void submitTask(String taskGroup, String taskId, Serializable params, Date excTime, Class<V> quartzTaskClass,
 			boolean overwrite) throws SchedulerQuartzException {
 		try {
 
@@ -91,7 +91,7 @@ public abstract class QuartzService implements IQuartzService {
 	}
 
 	@Override
-	public <V extends ExecQuartzTask> void submitTask(String taskGroup, Long taskId, Serializable params, String cronTime, Class<V> quartzTaskClass,
+	public <V extends ExecQuartzTask> void submitTask(String taskGroup, String taskId, Serializable params, String cronTime, Class<V> quartzTaskClass,
 			boolean overwrite) throws SchedulerQuartzException {
 		try {
 			overwriteTask(taskGroup, taskId, overwrite);
@@ -111,7 +111,7 @@ public abstract class QuartzService implements IQuartzService {
 	}
 
 	@Override
-	public <V extends ExecQuartzTask> void submitIntervalTask(String taskGroup, Long taskId, Class<V> quartzTaskClass, Serializable params, Date startTime,
+	public <V extends ExecQuartzTask> void submitIntervalTask(String taskGroup, String taskId, Class<V> quartzTaskClass, Serializable params, Date startTime,
 			int secondsSpace, boolean overwrite) throws SchedulerQuartzException {
 		try {
 			overwriteTask(taskGroup, taskId, overwrite);
@@ -129,7 +129,7 @@ public abstract class QuartzService implements IQuartzService {
 	}
 
 	@Override
-	public void cancelTask(String taskGroup, Long taskId) throws SchedulerQuartzException {
+	public void cancelTask(String taskGroup, String taskId) throws SchedulerQuartzException {
 
 		JobKey jobKey = new JobKey(taskId.toString(), taskGroup);
 		cancelTask(jobKey);
@@ -154,7 +154,7 @@ public abstract class QuartzService implements IQuartzService {
 	
 	
 	@Override
-	public <V extends ExecQuartzTask> void updateTaskParams(String taskGroup, Long taskId, Class<V> quartzTaskClass, Serializable params)
+	public <V extends ExecQuartzTask> void updateTaskParams(String taskGroup, String taskId, Class<V> quartzTaskClass, Serializable params)
 			throws SchedulerQuartzException {
 
 		try {
@@ -175,7 +175,7 @@ public abstract class QuartzService implements IQuartzService {
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	@Override
-	public <V extends ExecQuartzTask> void updateTaskParams(String taskGroup, Long taskId, Class<V> quartzTaskClass,Serializable params, int secondsSpace) throws SchedulerQuartzException {
+	public <V extends ExecQuartzTask> void updateTaskParams(String taskGroup, String taskId, Class<V> quartzTaskClass,Serializable params, int secondsSpace) throws SchedulerQuartzException {
 		updateTaskParams(taskGroup, taskId, quartzTaskClass, params);
 		// retrieve the trigger
 		try {
@@ -219,7 +219,7 @@ public abstract class QuartzService implements IQuartzService {
 	}
 
 	@Override
-	public boolean existTask(String taskGroup, Long taskId) throws SchedulerQuartzException {
+	public boolean existTask(String taskGroup, String taskId) throws SchedulerQuartzException {
 		JobKey jobKey = new JobKey(taskId.toString(), taskGroup);
 
 		return existTask(jobKey);
