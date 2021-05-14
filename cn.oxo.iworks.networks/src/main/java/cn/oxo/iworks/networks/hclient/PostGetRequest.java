@@ -9,15 +9,15 @@ import cn.oxo.iworks.networks.hclient.IHttpProtocolService.CharEncoded;
  * 
  */
 public class PostGetRequest extends CharStringGetPostRequest {
-
-    public PostGetRequest(CharEncoded charEncoded) {
-        super( charEncoded );
-
-    }
-
-    public PostGetRequest() {
-        super( CharEncoded.UTF8 );
-
-    }
-
+	
+	public PostGetRequest(CharEncoded charEncoded) {
+		super(charEncoded);
+		
+	}
+	
+	public PostGetRequest() {
+		super(CharEncoded.UTF8);
+		
+	}
+	
 }

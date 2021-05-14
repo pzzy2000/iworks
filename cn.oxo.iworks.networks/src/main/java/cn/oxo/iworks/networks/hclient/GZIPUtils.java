@@ -8,11 +8,11 @@ import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
 public class GZIPUtils {
-	private  static long x = new Date().getTime();
-
+	private static long x = new Date().getTime();
+	
 	public static final String GZIP_ENCODE_UTF_8 = "UTF-8";
 	public static final String GZIP_ENCODE_ISO_8859_1 = "ISO-8859-1";
-
+	
 	public static byte[] compress(String str, String encoding) {
 		if (str == null || str.length() == 0) {
 			return null;
@@ -28,11 +28,11 @@ public class GZIPUtils {
 		}
 		return out.toByteArray();
 	}
-
+	
 	public static byte[] compress(String str) throws IOException {
 		return compress(str, GZIP_ENCODE_UTF_8);
 	}
-
+	
 	public static byte[] uncompress(byte[] bytes) {
 		if (bytes == null || bytes.length == 0) {
 			return null;
@@ -51,7 +51,7 @@ public class GZIPUtils {
 		}
 		return out.toByteArray();
 	}
-
+	
 	public static String uncompressToString(byte[] bytes, String encoding) {
 		if (bytes == null || bytes.length == 0) {
 			return null;
@@ -71,25 +71,27 @@ public class GZIPUtils {
 		}
 		return null;
 	}
-
+	
 	public static String uncompressToString(byte[] bytes) {
 		return uncompressToString(bytes, GZIP_ENCODE_UTF_8);
 	}
-
-public static void main(String[] args) throws Exception {
+	
+	public static void main(String[] args) throws Exception {
 		
 		HttpPostSingleMessageRequestActivity postSingleMessageRequestActivity = new HttpPostSingleMessageRequestActivity();
 		
 		PostStringSingleMessageRequest iPostGetRequest = new PostStringSingleMessageRequest("wewe");
-
-//		iPostGetRequest.getHeader().put("auth", IecmiClientConfigs.instance().getiLoginBean().getToken());
-
+		
+		// iPostGetRequest.getHeader().put("auth",
+		// IecmiClientConfigs.instance().getiLoginBean().getToken());
+		
 		postSingleMessageRequestActivity.doActive("https://106.52.184.24/ixd/api/ecmi/business/cookie/list", iPostGetRequest);
-//
-//		JSONObject result = JSONObject.parseObject(iPostGetRequest.getResponse());
-//		
-//		
-//		
+		//
+		// JSONObject result =
+		// JSONObject.parseObject(iPostGetRequest.getResponse());
+		//
+		//
+		//
 	}
-
+	
 }

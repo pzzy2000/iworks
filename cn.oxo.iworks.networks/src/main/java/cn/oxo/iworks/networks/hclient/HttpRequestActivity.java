@@ -4,7 +4,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 public class HttpRequestActivity {
-
+	
 	/**
 	 * 绑定http GET 参数
 	 * 
@@ -26,5 +26,5 @@ public class HttpRequestActivity {
 		}
 		return buffer.toString();
 	}
-
+	
 }

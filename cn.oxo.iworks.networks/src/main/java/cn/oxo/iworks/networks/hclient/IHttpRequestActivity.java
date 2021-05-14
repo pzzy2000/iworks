@@ -7,7 +7,7 @@ package cn.oxo.iworks.networks.hclient;
  * 
  */
 public interface IHttpRequestActivity<Bean extends IRequest> {
-
-    public void doActive(String url,Bean request) throws HttpRequestServiceException;
-
+	
+	public void doActive(String url, Bean request) throws HttpRequestServiceException;
+	
 }
