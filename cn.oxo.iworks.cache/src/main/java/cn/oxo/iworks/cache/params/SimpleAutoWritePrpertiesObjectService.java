@@ -8,23 +8,23 @@ import java.util.List;
  * 
  * @author youss
  * 
- */ 
+ */
 
 public abstract class SimpleAutoWritePrpertiesObjectService extends AutoWritePrpertiesObjectService {
 
-	private IAutoWriteObject iAutoWriteObject;
+      private IAutoWriteObject iAutoWriteObject;
 
-	public SimpleAutoWritePrpertiesObjectService(String idSuffix, List<String> regexPackage, IAutoWriteObject iAutoWriteObject) {
-		super(idSuffix,regexPackage);
-		this.iAutoWriteObject = iAutoWriteObject;
-		iAutoWriteObject.setiAutoWritePrpertiesObjectService(this);
+      public SimpleAutoWritePrpertiesObjectService(String idSuffix, List<String> regexPackage, IAutoWriteObject iAutoWriteObject) {
+            super(idSuffix, regexPackage);
+            this.iAutoWriteObject = iAutoWriteObject;
+            iAutoWriteObject.setiAutoWritePrpertiesObjectService(this);
 
-	}
+      }
 
-	@Override
-	protected Object handField(Field field, Object result) {
-		return iAutoWriteObject.handField(field, result);
+      @Override
+      protected Object handField(Field field, Object result) {
+            return iAutoWriteObject.handField(field, result);
 
-	}
+      }
 
 }

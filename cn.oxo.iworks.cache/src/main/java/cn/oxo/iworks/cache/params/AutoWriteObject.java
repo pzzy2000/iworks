@@ -5,12 +5,10 @@ import org.apache.logging.log4j.Logger;
 
 public abstract class AutoWriteObject extends IAutoWriteObject {
 
-	public AutoWriteObject(boolean isSetNull) {
-		super(isSetNull);
-	} 
+      public AutoWriteObject(boolean isSetNull) {
+            super(isSetNull);
+      }
 
-	protected Logger logger = LogManager.getLogger(AutoWriteObject.class);
-
-		
+      protected Logger logger = LogManager.getLogger(AutoWriteObject.class);
 
 }

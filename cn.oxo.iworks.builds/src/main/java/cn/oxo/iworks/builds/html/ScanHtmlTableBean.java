@@ -10,80 +10,80 @@ import cn.oxo.iworks.builds.html.FieldParams.FieldType;
 
 public class ScanHtmlTableBean {
 
-	public ModuleDifBean scan(Class<?> clazz) throws Exception {
+      public ModuleDifBean scan(Class<?> clazz) throws Exception {
 
-		ModuleDifBean iTableBean = new ModuleDifBean();
+            ModuleDifBean iTableBean = new ModuleDifBean();
 
-		paserTable(iTableBean, clazz);
+            paserTable(iTableBean, clazz);
 
-		paserColumn(iTableBean, clazz);
+            paserColumn(iTableBean, clazz);
 
-		return iTableBean;
+            return iTableBean;
 
-	}
+      }
 
-	private void paserTable(ModuleDifBean iTableBean, Class<?> clazz) throws Exception {
-		if (clazz.isAnnotationPresent(ModuleDif.class)) {
+      private void paserTable(ModuleDifBean iTableBean, Class<?> clazz) throws Exception {
+            if (clazz.isAnnotationPresent(ModuleDif.class)) {
 
-			ModuleDif iTable = clazz.getAnnotation(ModuleDif.class);
-			iTableBean.setModuleDif(iTable);
+                  ModuleDif iTable = clazz.getAnnotation(ModuleDif.class);
+                  iTableBean.setModuleDif(iTable);
 
-		} else {
-			System.err.println("not find ModuleDif -> class : " + clazz.getName());
-			throw new Exception("not find ModuleDif -> class : " + clazz.getName());
-		}
-	}
+            } else {
+                  System.err.println("not find ModuleDif -> class : " + clazz.getName());
+                  throw new Exception("not find ModuleDif -> class : " + clazz.getName());
+            }
+      }
 
-	private void paserColumn(ModuleDifBean iTableBean, Class<?> clazz) throws Exception {
+      private void paserColumn(ModuleDifBean iTableBean, Class<?> clazz) throws Exception {
 
-		Field[] fields = FieldUtils.getAllFields(clazz);
-		for (Field field : fields) {
+            Field[] fields = FieldUtils.getAllFields(clazz);
+            for (Field field : fields) {
 
-			if (!field.isAnnotationPresent(HtmlGridDef.class))
-				continue;
+                  if (!field.isAnnotationPresent(HtmlGridDef.class))
+                        continue;
 
-			HtmlGridDef iColumn = field.getAnnotation(HtmlGridDef.class);
+                  HtmlGridDef iColumn = field.getAnnotation(HtmlGridDef.class);
 
-			HtmlGridDefBean iHtmlGridDefBean = new HtmlGridDefBean();
-			iTableBean.getHtmlGridDefBeans().add(iHtmlGridDefBean);
+                  HtmlGridDefBean iHtmlGridDefBean = new HtmlGridDefBean();
+                  iTableBean.getHtmlGridDefBeans().add(iHtmlGridDefBean);
 
-			iHtmlGridDefBean.setHtmlGridDef(iColumn);
-			
-			iHtmlGridDefBean.setName(field.getName());
+                  iHtmlGridDefBean.setHtmlGridDef(iColumn);
 
-			paserLocalCombo(iHtmlGridDefBean, field);
+                  iHtmlGridDefBean.setName(field.getName());
 
-		}
+                  paserLocalCombo(iHtmlGridDefBean, field);
 
-	}
+            }
 
-	// "k:v";"k:v""k:v"
-	private void paserLocalCombo(HtmlGridDefBean iHtmlGridDefBean, Field field) throws Exception {
+      }
 
-		if (!iHtmlGridDefBean.getHtmlGridDef().fieldType().equals(FieldType.localCombo))
-			return;
+      // "k:v";"k:v""k:v"
+      private void paserLocalCombo(HtmlGridDefBean iHtmlGridDefBean, Field field) throws Exception {
 
-		if (!field.isAnnotationPresent(LocalCombos.class)) {
+            if (!iHtmlGridDefBean.getHtmlGridDef().fieldType().equals(FieldType.localCombo))
+                  return;
 
-			System.out.println(" FieldType :  " + FieldType.localCombo + " not have @LocalCombos");
+            if (!field.isAnnotationPresent(LocalCombos.class)) {
 
-			throw new Exception(" FieldType :  " + FieldType.localCombo + " not have @LocalCombos");
-		}
+                  System.out.println(" FieldType :  " + FieldType.localCombo + " not have @LocalCombos");
 
-		LocalCombos iLocalCombos = field.getAnnotation(LocalCombos.class);
+                  throw new Exception(" FieldType :  " + FieldType.localCombo + " not have @LocalCombos");
+            }
 
-		List<KValue> kvalues = new ArrayList<KValue>();
+            LocalCombos iLocalCombos = field.getAnnotation(LocalCombos.class);
 
-		String[] vs = iLocalCombos.value();
+            List<KValue> kvalues = new ArrayList<KValue>();
 
-		for (String v : vs) {
-			String[] v_ = v.split(":");
-			KValue iKValue = new KValue();
-			iKValue.setKey(v_[0]);
-			iKValue.setValue(v_[1]);
-			kvalues.add(iKValue);
-		}
-		iHtmlGridDefBean.setDetail(kvalues);
-	}
+            String[] vs = iLocalCombos.value();
+
+            for (String v : vs) {
+                  String[] v_ = v.split(":");
+                  KValue iKValue = new KValue();
+                  iKValue.setKey(v_[0]);
+                  iKValue.setValue(v_[1]);
+                  kvalues.add(iKValue);
+            }
+            iHtmlGridDefBean.setDetail(kvalues);
+      }
 
 }

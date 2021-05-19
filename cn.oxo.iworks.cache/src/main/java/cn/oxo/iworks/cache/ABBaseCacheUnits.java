@@ -6,11 +6,11 @@ import cn.oxo.iworks.databases.ABBaseUnits;
 
 public class ABBaseCacheUnits extends ABBaseUnits {
 
-	@Autowired
-	protected IGPSCacheService cacheService;
+      @Autowired
+      protected IGPSCacheService cacheService;
 
-	public void clear(Object value) {
-		cacheService.clear(value);
-	}
+      public void clear(Object value) {
+            cacheService.clear(value);
+      }
 
 }

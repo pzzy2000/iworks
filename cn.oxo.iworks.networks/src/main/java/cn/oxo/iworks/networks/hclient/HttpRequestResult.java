@@ -15,33 +15,33 @@ import org.apache.http.cookie.Cookie;
  * 
  */
 public abstract class HttpRequestResult {
-	
-	private Set<Cookie> cookie = new HashSet<Cookie>();
-	
-	private Header[] headers;
-	
-	public Header[] getHeaders() {
-		return headers;
-	}
-	
-	public Map<String, String> getHeadersByMap() {
-		Map<String, String> xx = new HashMap<String, String>();
-		for (Header header : headers) {
-			xx.put(header.getName(), header.getValue());
-		}
-		return xx;
-	}
-	
-	public void setHeaders(Header[] headers) {
-		this.headers = headers;
-	}
-	
-	public Set<Cookie> getCookie() {
-		return cookie;
-	}
-	
-	public void setCookie(Set<Cookie> cookie) {
-		this.cookie = cookie;
-	}
-	
+
+      private Set<Cookie> cookie = new HashSet<Cookie>();
+
+      private Header[] headers;
+
+      public Header[] getHeaders() {
+            return headers;
+      }
+
+      public Map<String, String> getHeadersByMap() {
+            Map<String, String> xx = new HashMap<String, String>();
+            for (Header header : headers) {
+                  xx.put(header.getName(), header.getValue());
+            }
+            return xx;
+      }
+
+      public void setHeaders(Header[] headers) {
+            this.headers = headers;
+      }
+
+      public Set<Cookie> getCookie() {
+            return cookie;
+      }
+
+      public void setCookie(Set<Cookie> cookie) {
+            this.cookie = cookie;
+      }
+
 }

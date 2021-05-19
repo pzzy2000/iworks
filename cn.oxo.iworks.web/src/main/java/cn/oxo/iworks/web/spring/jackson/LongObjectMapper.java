@@ -8,27 +8,27 @@ import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
 public class LongObjectMapper extends ObjectMapper {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8365212110783780682L;
+      /**
+      	 * 
+      	 */
+      private static final long serialVersionUID = -8365212110783780682L;
 
-	private Logger logger = LogManager.getLogger(LongObjectMapper.class);
+      private Logger logger = LogManager.getLogger(LongObjectMapper.class);
 
-	public LongObjectMapper() {
-		init();
-	}
+      public LongObjectMapper() {
+            init();
+      }
 
-	private void init() {
+      private void init() {
 
-		SimpleModule simpleModule = new SimpleModule();
+            SimpleModule simpleModule = new SimpleModule();
 
-		simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
+            simpleModule.addSerializer(Long.class, ToStringSerializer.instance);
 
-		simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
+            simpleModule.addSerializer(Long.TYPE, ToStringSerializer.instance);
 
-		registerModule(simpleModule);
+            registerModule(simpleModule);
 
-	}
+      }
 
 }

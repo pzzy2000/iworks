@@ -9,33 +9,33 @@ import cn.oxo.iworks.web.LoginSessionBean;
 
 public class ABSpringShiroBootController extends ABController {
 
-	protected String getRequestParams() {
-		return this.request.getRequestURI();
-	}
+      protected String getRequestParams() {
+            return this.request.getRequestURI();
+      }
 
-	@Autowired
-	protected Environment env;
+      @Autowired
+      protected Environment env;
 
-	public void putSession(LoginSessionBean iSysManagerUser) {
-		ShiroSubjectFactory.saveUserInfo(iSysManagerUser);
+      public void putSession(LoginSessionBean iSysManagerUser) {
+            ShiroSubjectFactory.saveUserInfo(iSysManagerUser);
 
-	}
-	
-	public void put(String key ,Serializable  object) {
-		ShiroSubjectFactory.saveSessions(key, object);
+      }
 
-	}
+      public void put(String key, Serializable object) {
+            ShiroSubjectFactory.saveSessions(key, object);
 
-	public LoginSessionBean getLoginUser() {
-		return ShiroSubjectFactory.getUserInfo();
+      }
 
-	}
+      public LoginSessionBean getLoginUser() {
+            return ShiroSubjectFactory.getUserInfo();
 
-	public Long getLoginUserId() {
+      }
 
-		LoginSessionBean loginBean = getLoginUser();
+      public Long getLoginUserId() {
 
-		return loginBean == null ? null : loginBean.getId();
-	}
+            LoginSessionBean loginBean = getLoginUser();
+
+            return loginBean == null ? null : loginBean.getId();
+      }
 
 }

@@ -4,64 +4,64 @@ import java.util.List;
 
 public class TableBean {
 
-	private String name;
-	
-	private String desc;
-	
-	private Class<?> pojo;
+      private String name;
 
-	private ColumnBean idColumn;
+      private String desc;
 
-	private List<ColumnBean> columnBeans;
-	
-	private String action;
+      private Class<?> pojo;
 
-	public String getName() {
-		return name;
-	}
+      private ColumnBean idColumn;
 
-	public void setName(String name) {
-		this.name = name;
-	}
+      private List<ColumnBean> columnBeans;
 
-	public ColumnBean getIdColumn() {
-		return idColumn;
-	}
+      private String action;
 
-	public void setIdColumn(ColumnBean idColumn) {
-		this.idColumn = idColumn;
-	}
+      public String getName() {
+            return name;
+      }
 
-	public List<ColumnBean> getColumnBeans() {
-		return columnBeans;
-	}
+      public void setName(String name) {
+            this.name = name;
+      }
 
-	public void setColumnBeans(List<ColumnBean> columnBeans) {
-		this.columnBeans = columnBeans;
-	}
+      public ColumnBean getIdColumn() {
+            return idColumn;
+      }
 
-	public Class<?> getPojo() {
-		return pojo;
-	}
+      public void setIdColumn(ColumnBean idColumn) {
+            this.idColumn = idColumn;
+      }
 
-	public void setPojo(Class<?> pojo) {
-		this.pojo = pojo;
-	}
+      public List<ColumnBean> getColumnBeans() {
+            return columnBeans;
+      }
 
-	public String getDesc() {
-		return desc;
-	}
+      public void setColumnBeans(List<ColumnBean> columnBeans) {
+            this.columnBeans = columnBeans;
+      }
 
-	public void setDesc(String desc) {
-		this.desc = desc;
-	}
+      public Class<?> getPojo() {
+            return pojo;
+      }
 
-	public String getAction() {
-		return action;
-	}
+      public void setPojo(Class<?> pojo) {
+            this.pojo = pojo;
+      }
 
-	public void setAction(String action) {
-		this.action = action;
-	}
+      public String getDesc() {
+            return desc;
+      }
+
+      public void setDesc(String desc) {
+            this.desc = desc;
+      }
+
+      public String getAction() {
+            return action;
+      }
+
+      public void setAction(String action) {
+            this.action = action;
+      }
 
 }

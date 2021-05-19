@@ -1,27 +1,25 @@
 package cn.oxo.iworks.builds.html;
 
 public class KValue {
-	
-	  private String key;
-	  
-	  private String value;
 
-	public String getKey() {
-		return key;
-	}
+      private String key;
 
-	public void setKey(String key) {
-		this.key = key;
-	}
+      private String value;
 
-	public String getValue() {
-		return value;
-	}
+      public String getKey() {
+            return key;
+      }
 
-	public void setValue(String value) {
-		this.value = value;
-	}
-	  
-	  
+      public void setKey(String key) {
+            this.key = key;
+      }
+
+      public String getValue() {
+            return value;
+      }
+
+      public void setValue(String value) {
+            this.value = value;
+      }
 
 }

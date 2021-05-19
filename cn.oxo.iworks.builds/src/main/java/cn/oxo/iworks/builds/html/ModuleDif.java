@@ -10,13 +10,12 @@ package cn.oxo.iworks.builds.html;
 @java.lang.annotation.Retention(value = java.lang.annotation.RetentionPolicy.RUNTIME)
 public abstract @interface ModuleDif {
 
-  
-    public abstract java.lang.String id();
+      public abstract java.lang.String id();
 
-    public abstract String name() default "";
+      public abstract String name() default "";
 
-    public abstract String action();
+      public abstract String action();
 
-    public Opt[] opt() default { Opt.add, Opt.delete, Opt.update, Opt.search };
+      public Opt[] opt() default { Opt.add, Opt.delete, Opt.update, Opt.search };
 
 }

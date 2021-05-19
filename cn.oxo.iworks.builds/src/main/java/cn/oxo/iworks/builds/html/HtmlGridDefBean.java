@@ -4,56 +4,52 @@ import cn.oxo.iworks.builds.html.FieldParams.FieldShow;
 
 public class HtmlGridDefBean {
 
-	private HtmlGridDef htmlGridDef;
-	
-	private String name;
+      private HtmlGridDef htmlGridDef;
 
-	private Object detail;
+      private String name;
 
-	public HtmlGridDef getHtmlGridDef() {
-		return htmlGridDef;
-	}
+      private Object detail;
 
-	public void setHtmlGridDef(HtmlGridDef htmlGridDef) {
-		this.htmlGridDef = htmlGridDef;
-	}
+      public HtmlGridDef getHtmlGridDef() {
+            return htmlGridDef;
+      }
 
-	public Object getDetail() {
-		return detail;
-	}
+      public void setHtmlGridDef(HtmlGridDef htmlGridDef) {
+            this.htmlGridDef = htmlGridDef;
+      }
 
-	public void setDetail(Object detail) {
-		this.detail = detail;
-	}
+      public Object getDetail() {
+            return detail;
+      }
 
-	public String getName() {
-		return name;
-	}
+      public void setDetail(Object detail) {
+            this.detail = detail;
+      }
 
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	public boolean isGrid() {
-		for(FieldShow  fieldShow : htmlGridDef.fieldShow()) {
-			if(fieldShow.equals(FieldShow.Grid)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	public boolean isFieldShow(String fieldShow_) {
-		for(FieldShow  fieldShow : htmlGridDef.fieldShow()) {
-			if(fieldShow.name().equals(fieldShow_)) {
-				return true;
-			}
-		}
-		return false;
-	}
-	
-	
-	
-	
+      public String getName() {
+            return name;
+      }
+
+      public void setName(String name) {
+            this.name = name;
+      }
+
+      public boolean isGrid() {
+            for (FieldShow fieldShow : htmlGridDef.fieldShow()) {
+                  if (fieldShow.equals(FieldShow.Grid)) {
+                        return true;
+                  }
+            }
+            return false;
+      }
+
+      public boolean isFieldShow(String fieldShow_) {
+            for (FieldShow fieldShow : htmlGridDef.fieldShow()) {
+                  if (fieldShow.name().equals(fieldShow_)) {
+                        return true;
+                  }
+            }
+            return false;
+      }
 
 }

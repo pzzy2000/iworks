@@ -1,38 +1,38 @@
 package cn.oxo.iworks.web.controller;
 
-//import io.swagger.annotations.ApiModel;
+// import io.swagger.annotations.ApiModel;
 
-//@ApiModel(value="返回结果")
+// @ApiModel(value="返回结果")
 public class RequestResult<V> {
 
-	private boolean success;
+      private boolean success;
 
-	private String msg;
+      private String msg;
 
-	private V result;
+      private V result;
 
-	public boolean isSuccess() {
-		return success;
-	}
+      public boolean isSuccess() {
+            return success;
+      }
 
-	public void setSuccess(boolean success) {
-		this.success = success;
-	}
+      public void setSuccess(boolean success) {
+            this.success = success;
+      }
 
-	public String getMsg() {
-		return msg;
-	}
+      public String getMsg() {
+            return msg;
+      }
 
-	public void setMsg(String msg) {
-		this.msg = msg;
-	}
+      public void setMsg(String msg) {
+            this.msg = msg;
+      }
 
-	public V getResult() {
-		return result;
-	}
+      public V getResult() {
+            return result;
+      }
 
-	public void setResult(V resultBean) {
-		this.result = resultBean;
-	}
+      public void setResult(V resultBean) {
+            this.result = resultBean;
+      }
 
 }

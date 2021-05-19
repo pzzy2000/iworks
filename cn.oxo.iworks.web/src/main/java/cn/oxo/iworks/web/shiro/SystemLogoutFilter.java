@@ -10,19 +10,19 @@ import org.apache.shiro.web.filter.authc.LogoutFilter;
 
 public class SystemLogoutFilter extends LogoutFilter {
 
-	@Override
-	protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
-		// 在这里执行退出系统前需要清空的数据
-		Subject subject = getSubject(request, response);
-//        String redirectUrl=getRedirectUrl(request,response,subject);
-		ServletContext context = request.getServletContext();
-		try {
-			subject.logout();
-			context.removeAttribute("error");
-		} catch (SessionException e) {
-			e.printStackTrace();
-		}
-//        issueRedirect(request,response,redirectUrl);
-		return false;
-	}
+      @Override
+      protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {
+            // 在这里执行退出系统前需要清空的数据
+            Subject subject = getSubject(request, response);
+            // String redirectUrl=getRedirectUrl(request,response,subject);
+            ServletContext context = request.getServletContext();
+            try {
+                  subject.logout();
+                  context.removeAttribute("error");
+            } catch (SessionException e) {
+                  e.printStackTrace();
+            }
+            // issueRedirect(request,response,redirectUrl);
+            return false;
+      }
 }

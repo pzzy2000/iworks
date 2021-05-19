@@ -15,103 +15,102 @@ import cn.oxo.iworks.databases.annotation.Table;
 
 public class ScanTableBean {
 
-    public TableBean scan(Class<?> clazz) throws MyBatisBuildServiceException {
+      public TableBean scan(Class<?> clazz) throws MyBatisBuildServiceException {
 
-	TableBean iTableBean = new TableBean();
+            TableBean iTableBean = new TableBean();
 
-	paserTable(iTableBean, clazz);
+            paserTable(iTableBean, clazz);
 
-	paserColumn(iTableBean, clazz);
+            paserColumn(iTableBean, clazz);
 
-	return iTableBean;
+            return iTableBean;
 
-    }
+      }
 
-    private void paserColumn(TableBean iTableBean, Class<?> clazz) throws MyBatisBuildServiceException {
+      private void paserColumn(TableBean iTableBean, Class<?> clazz) throws MyBatisBuildServiceException {
 
-	iTableBean.setPojo(clazz);
+            iTableBean.setPojo(clazz);
 
-	List<ColumnBean> columnBeans = new ArrayList<ColumnBean>();
+            List<ColumnBean> columnBeans = new ArrayList<ColumnBean>();
 
-	iTableBean.setColumnBeans(columnBeans);
+            iTableBean.setColumnBeans(columnBeans);
 
-	Field[] fields = FieldUtils.getAllFields(clazz);
+            Field[] fields = FieldUtils.getAllFields(clazz);
 
-	for (Field field : fields) {
- 
-	    if (field.isAnnotationPresent(Column.class)) {
+            for (Field field : fields) {
 
-		Column iColumn = field.getAnnotation(Column.class);
+                  if (field.isAnnotationPresent(Column.class)) {
 
-		ColumnBean iColumnBean = new ColumnBean();
+                        Column iColumn = field.getAnnotation(Column.class);
 
-		iColumnBean.setColumnType(iColumn.columnType());
+                        ColumnBean iColumnBean = new ColumnBean();
 
-		iColumnBean.setLength(iColumn.length());
-		
-		iColumnBean.setScale(iColumn.scale());
+                        iColumnBean.setColumnType(iColumn.columnType());
 
-		iColumnBean.setName(iColumn.name());
+                        iColumnBean.setLength(iColumn.length());
 
-		iColumnBean.setDesc(iColumn.desc());
-		
-		iColumnBean.setDefaultValue(iColumn.defaultValue());
+                        iColumnBean.setScale(iColumn.scale());
 
-		if (field.getType().equals(String.class)) {
-		    iColumnBean.setSelectType(iColumn.selectType());
-		} else {
-		    iColumnBean.setSelectType(SelectType.EQ);
-		}
+                        iColumnBean.setName(iColumn.name());
 
-		iColumnBean.setFieldType(field.getType());
+                        iColumnBean.setDesc(iColumn.desc());
 
-		iColumnBean.setFieldName(field.getName());
+                        iColumnBean.setDefaultValue(iColumn.defaultValue());
 
-		iColumnBean.setCanNull(iColumn.isCanNull());
+                        if (field.getType().equals(String.class)) {
+                              iColumnBean.setSelectType(iColumn.selectType());
+                        } else {
+                              iColumnBean.setSelectType(SelectType.EQ);
+                        }
 
-		if (field.isAnnotationPresent(Index.class)) {
-		    iColumnBean.setIndex(field.getAnnotation(Index.class));
-		}
-		
-		haveLength(iColumnBean);
+                        iColumnBean.setFieldType(field.getType());
 
-		System.out.println("-> " + iColumnBean.toString());
+                        iColumnBean.setFieldName(field.getName());
 
-		if (field.isAnnotationPresent(Id.class)) {
-		    iTableBean.setIdColumn(iColumnBean);
-		} else {
-		    columnBeans.add(iColumnBean);
-		}
+                        iColumnBean.setCanNull(iColumn.isCanNull());
 
-	    }
+                        if (field.isAnnotationPresent(Index.class)) {
+                              iColumnBean.setIndex(field.getAnnotation(Index.class));
+                        }
 
-	}
-    }
+                        haveLength(iColumnBean);
 
-    private void  haveLength(ColumnBean iColumnBean) {
-	ColumnType columnType = iColumnBean.getColumnType();
-	if (columnType.equals(ColumnType.DATE) || columnType.equals(ColumnType.TIMESTAMP)
-		|| columnType.equals(ColumnType.TIME)) {
-	     iColumnBean.setLength(-1);
-	} else {
-//	    return iColumnBean.getLength();
-	}
-    }
+                        System.out.println("-> " + iColumnBean.toString());
 
-    private void paserTable(TableBean iTableBean, Class<?> clazz) throws MyBatisBuildServiceException {
+                        if (field.isAnnotationPresent(Id.class)) {
+                              iTableBean.setIdColumn(iColumnBean);
+                        } else {
+                              columnBeans.add(iColumnBean);
+                        }
 
-	if (clazz.isAnnotationPresent(Table.class)) {
+                  }
 
-	    Table iTable = clazz.getAnnotation(Table.class);
+            }
+      }
 
-	    iTableBean.setName(iTable.name());
-	    iTableBean.setAction(iTable.action());
-	    iTableBean.setDesc(iTable.desc());
+      private void haveLength(ColumnBean iColumnBean) {
+            ColumnType columnType = iColumnBean.getColumnType();
+            if (columnType.equals(ColumnType.DATE) || columnType.equals(ColumnType.TIMESTAMP) || columnType.equals(ColumnType.TIME)) {
+                  iColumnBean.setLength(-1);
+            } else {
+                  // return iColumnBean.getLength();
+            }
+      }
 
-	} else {
-	    throw new MyBatisBuildServiceException(clazz.getName() + " not find  @Table");
-	}
+      private void paserTable(TableBean iTableBean, Class<?> clazz) throws MyBatisBuildServiceException {
 
-    }
+            if (clazz.isAnnotationPresent(Table.class)) {
+
+                  Table iTable = clazz.getAnnotation(Table.class);
+
+                  iTableBean.setName(iTable.name());
+                  iTableBean.setAction(iTable.action());
+                  iTableBean.setDesc(iTable.desc());
+
+            } else {
+                  throw new MyBatisBuildServiceException(clazz.getName() + " not find  @Table");
+            }
+
+      }
 
 }

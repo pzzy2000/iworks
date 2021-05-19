@@ -11,11 +11,11 @@ import java.lang.annotation.Target;
 @Target({ ElementType.TYPE, ElementType.ANNOTATION_TYPE })
 public @interface GPSCCache {
 
-	String store();
-  
-	/**
-	 * 
-	 * @return
-	 */
-	String[] cachefield() default { "id" };
+      String store();
+
+      /**
+       * 
+       * @return
+       */
+      String[] cachefield() default { "id" };
 }

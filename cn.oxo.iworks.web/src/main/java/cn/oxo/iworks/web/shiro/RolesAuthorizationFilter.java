@@ -12,25 +12,26 @@ import org.apache.shiro.web.filter.authz.AuthorizationFilter;
 
 public class RolesAuthorizationFilter extends AuthorizationFilter {
 
-	// TODO - complete JavaDoc
+      // TODO - complete JavaDoc
 
-	@SuppressWarnings({ "unchecked" })
-	public boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws IOException {
+      @Override
+      @SuppressWarnings({ "unchecked" })
+      public boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) throws IOException {
 
-		Subject subject = getSubject(request, response);
-		String[] rolesArray = (String[]) mappedValue;
-		if (rolesArray == null || rolesArray.length == 0) {
-			return false;
-		}
-		print(rolesArray);
-		Set<String> roles = CollectionUtils.asSet(rolesArray);
-		return subject.hasAllRoles(roles);
-	}
+            Subject subject = getSubject(request, response);
+            String[] rolesArray = (String[]) mappedValue;
+            if (rolesArray == null || rolesArray.length == 0) {
+                  return false;
+            }
+            print(rolesArray);
+            Set<String> roles = CollectionUtils.asSet(rolesArray);
+            return subject.hasAllRoles(roles);
+      }
 
-	private void print(String[] rolesArray) {
-		for (String x : rolesArray) {
-			System.out.print(">>> " + x);
-		}
-	}
+      private void print(String[] rolesArray) {
+            for (String x : rolesArray) {
+                  System.out.print(">>> " + x);
+            }
+      }
 
 }

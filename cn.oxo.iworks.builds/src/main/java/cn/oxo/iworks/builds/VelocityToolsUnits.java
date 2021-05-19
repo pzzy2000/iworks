@@ -11,93 +11,93 @@ import java.util.Properties;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.Velocity;
 import org.apache.velocity.app.VelocityEngine;
+import org.apache.velocity.runtime.RuntimeConstants;
 
 import cn.oxo.iworks.builds.db.DBUtils;
 
 public class VelocityToolsUnits {
 
-    private static Properties properties = new Properties();
+      private static Properties properties = new Properties();
 
-    static {
-	properties.setProperty("resource.loader", "class");
-	properties.setProperty("class.resource.loader.class",
-		"org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
-	// properties.setProperty("input.encoding", "UTF-8");
-	// properties.setProperty("output.encoding", "UTF-8");
-	properties.setProperty(Velocity.ENCODING_DEFAULT, "UTF-8");
-	properties.setProperty(Velocity.INPUT_ENCODING, "UTF-8");
-	properties.setProperty(Velocity.OUTPUT_ENCODING, "UTF-8");
+      static {
+            properties.setProperty("resource.loader", "class");
+            properties.setProperty("class.resource.loader.class", "org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader");
+            // properties.setProperty("input.encoding", "UTF-8");
+            // properties.setProperty("output.encoding", "UTF-8");
+            properties.setProperty(RuntimeConstants.ENCODING_DEFAULT, "UTF-8");
+            properties.setProperty(RuntimeConstants.INPUT_ENCODING, "UTF-8");
+            properties.setProperty(RuntimeConstants.OUTPUT_ENCODING, "UTF-8");
 
-    }
+      }
 
-    private static File createPath(String file) {
-	File iFile = new File(file);
-	if (!iFile.getParentFile().exists()) {
-	    iFile.getParentFile().mkdirs();
-	}
-	return iFile;
-    }
+      private static File createPath(String file) {
+            File iFile = new File(file);
+            if (!iFile.getParentFile().exists()) {
+                  iFile.getParentFile().mkdirs();
+            }
+            return iFile;
+      }
 
-    public static void toFile(String vm, Map<String, Object> params, String file) throws Exception {
+      public static void toFile(String vm, Map<String, Object> params, String file) throws Exception {
 
-	// FileWriter iFileWriter = new FileWriter(file);
-	StringWriter iFileWriter = new StringWriter();
+            // FileWriter iFileWriter = new FileWriter(file);
+            StringWriter iFileWriter = new StringWriter();
 
-	VelocityEngine velocityEngine = new VelocityEngine(properties);
-	VelocityContext context = new VelocityContext();
+            VelocityEngine velocityEngine = new VelocityEngine(properties);
+            VelocityContext context = new VelocityContext();
 
-	for (Entry<String, Object> param : params.entrySet()) {
+            for (Entry<String, Object> param : params.entrySet()) {
 
-	    context.put(param.getKey(), param.getValue());
-	}
+                  context.put(param.getKey(), param.getValue());
+            }
 
-	velocityEngine.mergeTemplate(vm, "UTF8", context, iFileWriter);
+            velocityEngine.mergeTemplate(vm, "UTF8", context, iFileWriter);
 
-	String cn = iFileWriter.toString().replaceAll(" {1,}", " ");
-	
-//	String cn = iFileWriter.toString().replaceAll("\\s{2,}", " ");
+            String cn = iFileWriter.toString().replaceAll(" {1,}", " ");
 
-	OutputStreamWriter fileWriter = new OutputStreamWriter(new FileOutputStream(createPath(file)), "UTF-8");
+            // String cn = iFileWriter.toString().replaceAll("\\s{2,}", " ");
 
-	fileWriter.write(cn);
+            OutputStreamWriter fileWriter = new OutputStreamWriter(new FileOutputStream(createPath(file)), "UTF-8");
 
-	fileWriter.flush();
+            fileWriter.write(cn);
 
-	fileWriter.close();
+            fileWriter.flush();
 
-    }
+            fileWriter.close();
 
-	public static void toDB(String vm, Map<String, Object> params, DBUtils dbutils) throws Exception {
+      }
 
-		// FileWriter iFileWriter = new FileWriter(file);
+      public static void toDB(String vm, Map<String, Object> params, DBUtils dbutils) throws Exception {
 
-		StringWriter iFileWriter = new StringWriter();
+            // FileWriter iFileWriter = new FileWriter(file);
 
-		VelocityEngine velocityEngine = new VelocityEngine(properties);
-		VelocityContext context = new VelocityContext();
+            StringWriter iFileWriter = new StringWriter();
 
-		for (Entry<String, Object> param : params.entrySet()) {
+            VelocityEngine velocityEngine = new VelocityEngine(properties);
+            VelocityContext context = new VelocityContext();
 
-			context.put(param.getKey(), param.getValue());
-		}
+            for (Entry<String, Object> param : params.entrySet()) {
 
-		velocityEngine.mergeTemplate(vm, "UTF8", context, iFileWriter);
+                  context.put(param.getKey(), param.getValue());
+            }
 
-		String sql = iFileWriter.toString().replaceAll(" {1,}", " ");
+            velocityEngine.mergeTemplate(vm, "UTF8", context, iFileWriter);
 
-		System.out.println("create table :  " + sql);
+            String sql = iFileWriter.toString().replaceAll(" {1,}", " ");
 
-		if (dbutils == null) {
-			System.out.println("dbutils null !  mysql ->MYSQLDBUtils ;  Mariadb - >  MariadbDBUtils ");
-		} else {
+            System.out.println("create table :  " + sql);
 
-			dbutils.exec(sql);
+            if (dbutils == null) {
+                  System.out.println("dbutils null !  mysql ->MYSQLDBUtils ;  Mariadb - >  MariadbDBUtils ");
+            } else {
 
-		}
+                  dbutils.exec(sql);
 
-		iFileWriter.flush();
+            }
 
-		iFileWriter.close();
-	}
+            iFileWriter.flush();
+
+            iFileWriter.close();
+      }
 
 }

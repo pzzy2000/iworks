@@ -7,15 +7,15 @@ import org.apache.logging.log4j.Logger;
 
 public abstract class ABPropertiesSearchFactory implements IPropertiesSearchFactory {
 
-	protected Logger logger = LogManager.getLogger(ABPropertiesSearchFactory.class);
+      protected Logger logger = LogManager.getLogger(ABPropertiesSearchFactory.class);
 
-	protected abstract Object searchObject(String id, Class<?> clazz);
+      protected abstract Object searchObject(String id, Class<?> clazz);
 
-	@SuppressWarnings({ "unchecked", "rawtypes" })
-	@Override
-	public <V extends Serializable> V searchObjectById(String id, Class clazz) {
+      @SuppressWarnings({ "unchecked", "rawtypes" })
+      @Override
+      public <V extends Serializable> V searchObjectById(String id, Class clazz) {
 
-		return (V) searchObject(id, clazz);
-	}
+            return (V) searchObject(id, clazz);
+      }
 
 }

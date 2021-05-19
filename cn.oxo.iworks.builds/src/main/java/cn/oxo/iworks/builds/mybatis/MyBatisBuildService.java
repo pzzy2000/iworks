@@ -4,9 +4,9 @@ import cn.oxo.iworks.builds.base.ABBuildService;
 
 public class MyBatisBuildService extends ABBuildService {
 
-	public MyBatisBuildService(String basePath, boolean isCreateHtml) {
-		super(basePath, isCreateHtml);
+      public MyBatisBuildService(String basePath, boolean isCreateHtml) {
+            super(basePath, isCreateHtml);
 
-	}
+      }
 
 }

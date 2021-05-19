@@ -2,27 +2,27 @@ package cn.oxo.iworks.web.shiro;
 
 public enum ShiroClientMsg {
 
-	ClientParamsError(1000, "客户端参数错误"),
+      ClientParamsError(1000, "客户端参数错误"),
 
-	ClientLoginFail(1001, "客户端登录失败"),
-	
-	ClientNeedLogin(1002, "客户没有登录");
+      ClientLoginFail(1001, "客户端登录失败"),
 
-	private Integer code;
+      ClientNeedLogin(1002, "客户没有登录");
 
-	private String msg;
+      private Integer code;
 
-	private ShiroClientMsg(Integer code, String msg) {
-		this.code = code;
-		this.msg = msg;
-	}
+      private String msg;
 
-	public Integer getCode() {
-		return code;
-	}
+      private ShiroClientMsg(Integer code, String msg) {
+            this.code = code;
+            this.msg = msg;
+      }
 
-	public String getMsg() {
-		return msg;
-	}
+      public Integer getCode() {
+            return code;
+      }
+
+      public String getMsg() {
+            return msg;
+      }
 
 }

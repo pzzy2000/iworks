@@ -10,22 +10,25 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 public @interface AllowParams {
-	
-	public enum  Type{
-		exclude,include,none
-	}
 
-	//返回个格式 bean:field,field;bean:field,field;
-	
-	/**
-	 * 1: 包含 ;0:排除
-	 * @return
-	 */
-	public Type    type();
-	/**
-	 * 格式 bean:field,field;bean:field,field;
-	 * @return
-	 */
-	public String[] field() ;
+      public enum Type {
+            exclude, include, none
+      }
+
+      // 返回个格式 bean:field,field;bean:field,field;
+
+      /**
+       * 1: 包含 ;0:排除
+       * 
+       * @return
+       */
+      public Type type();
+
+      /**
+       * 格式 bean:field,field;bean:field,field;
+       * 
+       * @return
+       */
+      public String[] field();
 
 }

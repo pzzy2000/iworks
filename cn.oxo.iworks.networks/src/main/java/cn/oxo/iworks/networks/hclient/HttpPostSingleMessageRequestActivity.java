@@ -11,29 +11,29 @@ import org.apache.http.HttpStatus;
  * 
  */
 public class HttpPostSingleMessageRequestActivity extends HttpRequestResponseActivity<PostSingleMessageRequest> {
-	
-	protected Logger logger = Logger.getLogger(HttpPostSingleMessageRequestActivity.class.getName());
-	
-	public HttpPostSingleMessageRequestActivity() {
-		super(new HttpProtocolService());
-		
-	}
-	
-	@Override
-	public void doActive(String url, PostSingleMessageRequest request) throws HttpRequestServiceException {
-		logger.info("do active url " + url);
-		if (request instanceof PostSingleMessageRequest) {
-			PostSingleMessageRequest requestResponse = (PostSingleMessageRequest) request;
-			IHttpProtocolService httpProtocolService = getHttpProtocolService();
-			GetPostHttpRequestResult response = httpProtocolService.postSingleMessage(url, requestResponse);
-			requestResponse.setRequestResult(response);
-			if (response.getHttpCode() != HttpStatus.SC_OK) {
-				throw new HttpRequestServiceException("Request  Failure  status : " + response.getHttpCode() + " error : " + requestResponse.getRequestResult().getError());
-			}
-		} else {
-			throw new HttpRequestServiceException(" " + request.getClass() + " error !  PostSingleMessageRequest ");
-		}
-		
-	}
-	
+
+      protected Logger logger = Logger.getLogger(HttpPostSingleMessageRequestActivity.class.getName());
+
+      public HttpPostSingleMessageRequestActivity() {
+            super(new HttpProtocolService());
+
+      }
+
+      @Override
+      public void doActive(String url, PostSingleMessageRequest request) throws HttpRequestServiceException {
+            logger.info("do active url " + url);
+            if (request instanceof PostSingleMessageRequest) {
+                  PostSingleMessageRequest requestResponse = request;
+                  IHttpProtocolService httpProtocolService = getHttpProtocolService();
+                  GetPostHttpRequestResult response = httpProtocolService.postSingleMessage(url, requestResponse);
+                  requestResponse.setRequestResult(response);
+                  if (response.getHttpCode() != HttpStatus.SC_OK) {
+                        throw new HttpRequestServiceException("Request  Failure  status : " + response.getHttpCode() + " error : " + requestResponse.getRequestResult().getError());
+                  }
+            } else {
+                  throw new HttpRequestServiceException(" " + request.getClass() + " error !  PostSingleMessageRequest ");
+            }
+
+      }
+
 }

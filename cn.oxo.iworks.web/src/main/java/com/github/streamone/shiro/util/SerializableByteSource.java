@@ -16,38 +16,38 @@ import org.apache.shiro.util.SimpleByteSource;
  */
 public class SerializableByteSource extends SimpleByteSource implements Serializable {
 
-	/**
-	 * <p>
-	 * Add default constructor to support more serialization solution such as
-	 * jackson.
-	 * </p>
-	 */
-	public SerializableByteSource() {
-		super((byte[]) null);
-	}
+      /**
+       * <p>
+       * Add default constructor to support more serialization solution such as
+       * jackson.
+       * </p>
+       */
+      public SerializableByteSource() {
+            super((byte[]) null);
+      }
 
-	public SerializableByteSource(byte[] bytes) {
-		super(bytes);
-	}
+      public SerializableByteSource(byte[] bytes) {
+            super(bytes);
+      }
 
-	public SerializableByteSource(char[] chars) {
-		super(chars);
-	}
+      public SerializableByteSource(char[] chars) {
+            super(chars);
+      }
 
-	public SerializableByteSource(String string) {
-		super(string);
-	}
+      public SerializableByteSource(String string) {
+            super(string);
+      }
 
-	public SerializableByteSource(ByteSource source) {
-		super(source);
-	}
+      public SerializableByteSource(ByteSource source) {
+            super(source);
+      }
 
-	public SerializableByteSource(File file) {
-		super(file);
-	}
+      public SerializableByteSource(File file) {
+            super(file);
+      }
 
-	public SerializableByteSource(InputStream stream) {
-		super(stream);
-	}
+      public SerializableByteSource(InputStream stream) {
+            super(stream);
+      }
 
 }

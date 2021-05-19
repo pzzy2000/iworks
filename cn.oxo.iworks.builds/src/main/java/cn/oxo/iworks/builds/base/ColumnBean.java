@@ -1,135 +1,127 @@
 package cn.oxo.iworks.builds.base;
 
-
-
-
 import cn.oxo.iworks.databases.annotation.ColumnType;
 import cn.oxo.iworks.databases.annotation.Index;
 import cn.oxo.iworks.databases.annotation.SelectType;
 
 public class ColumnBean {
 
-    private String name;
+      private String name;
 
-    private ColumnType columnType;
+      private ColumnType columnType;
 
-    private SelectType selectType;
+      private SelectType selectType;
 
-    private int length;
-    
-    private int scale;
+      private int length;
 
-    private Class<?> fieldType;
+      private int scale;
 
-    private String fieldName;
+      private Class<?> fieldType;
 
-    private boolean canNull;
+      private String fieldName;
 
-    private String desc;
-    
-    private Index  index;
-    
-    private String defaultValue;
+      private boolean canNull;
 
-    public String getName() {
+      private String desc;
 
-	return name;
-    }
+      private Index index;
 
-    public void setName(String name) {
-	this.name = name;
-    }
+      private String defaultValue;
 
-    public ColumnType getColumnType() {
+      public String getName() {
 
-	return columnType;
-    }
-    
-   
+            return name;
+      }
 
-    public void setColumnType(ColumnType columnType) {
-	this.columnType = columnType;
-    }
+      public void setName(String name) {
+            this.name = name;
+      }
 
-    public SelectType getSelectType() {
-	return selectType;
-    }
+      public ColumnType getColumnType() {
 
-    public void setSelectType(SelectType selectType) {
-	this.selectType = selectType;
-    }
+            return columnType;
+      }
 
-    public int getLength() {
-	return length;
-    }
+      public void setColumnType(ColumnType columnType) {
+            this.columnType = columnType;
+      }
 
-    public void setLength(int length) {
-	this.length = length;
-    }
+      public SelectType getSelectType() {
+            return selectType;
+      }
 
-    public Class<?> getFieldType() {
-	return fieldType;
-    }
+      public void setSelectType(SelectType selectType) {
+            this.selectType = selectType;
+      }
 
-    public void setFieldType(Class<?> fieldType) {
-	this.fieldType = fieldType;
-    }
+      public int getLength() {
+            return length;
+      }
 
-    public String getFieldName() {
-	return fieldName;
-    }
+      public void setLength(int length) {
+            this.length = length;
+      }
 
-    public void setFieldName(String fieldName) {
-	this.fieldName = fieldName;
-    }
+      public Class<?> getFieldType() {
+            return fieldType;
+      }
 
-    public boolean isCanNull() {
-	return canNull;
-    }
+      public void setFieldType(Class<?> fieldType) {
+            this.fieldType = fieldType;
+      }
 
-    public void setCanNull(boolean canNull) {
-	this.canNull = canNull;
-    }
+      public String getFieldName() {
+            return fieldName;
+      }
 
-    public String getDesc() {
-	return desc;
-    }
+      public void setFieldName(String fieldName) {
+            this.fieldName = fieldName;
+      }
 
-    public void setDesc(String desc) {
-	this.desc = desc;
-    }
+      public boolean isCanNull() {
+            return canNull;
+      }
 
-    public Index getIndex() {
-        return index;
-    }
+      public void setCanNull(boolean canNull) {
+            this.canNull = canNull;
+      }
 
-    public void setIndex(Index index) {
-        this.index = index;
-    }
+      public String getDesc() {
+            return desc;
+      }
 
-    public String getDefaultValue() {
-        return defaultValue;
-    }
+      public void setDesc(String desc) {
+            this.desc = desc;
+      }
 
-    public void setDefaultValue(String defaultValue) {
-        this.defaultValue = defaultValue;
-    }
+      public Index getIndex() {
+            return index;
+      }
 
-    public int getScale() {
-		return scale;
-	}
+      public void setIndex(Index index) {
+            this.index = index;
+      }
 
-	public void setScale(int scale) {
-		this.scale = scale;
-	}
+      public String getDefaultValue() {
+            return defaultValue;
+      }
 
-	@Override
-    public String toString() {
-	return "ColumnBean [name=" + name + ", columnType=" + columnType + ", selectType=" + selectType + ", length="
-		+ length + ", fieldType=" + fieldType + ", fieldName=" + fieldName + ", canNull=" + canNull + ", desc="
-		+ desc + ", index=" + index + ", defaultValue=" + defaultValue + "]";
-    }
+      public void setDefaultValue(String defaultValue) {
+            this.defaultValue = defaultValue;
+      }
 
-    
+      public int getScale() {
+            return scale;
+      }
+
+      public void setScale(int scale) {
+            this.scale = scale;
+      }
+
+      @Override
+      public String toString() {
+            return "ColumnBean [name=" + name + ", columnType=" + columnType + ", selectType=" + selectType + ", length=" + length + ", fieldType=" + fieldType + ", fieldName=" + fieldName
+                                                + ", canNull=" + canNull + ", desc=" + desc + ", index=" + index + ", defaultValue=" + defaultValue + "]";
+      }
 
 }
