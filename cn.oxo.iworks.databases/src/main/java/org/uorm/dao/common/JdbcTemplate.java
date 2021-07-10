@@ -251,11 +251,11 @@ public class JdbcTemplate {
             }
             stmt = connection.prepareStatement(sql);
             int idx = 1;
-            EntityMapCache iEntityMapCache = this.objectReader.scan(paramClass);
+//            EntityMapCache iEntityMapCache = this.objectReader.scan(paramClass);
             for (SqlParameter param : params) {
 
-                Field iField = iEntityMapCache.searchByColumnName(param.getName());
-                Column column = iField.getAnnotation(Column.class);
+//                Field iField = iEntityMapCache.searchByColumnName(param.getName());
+//                Column column = iField.getAnnotation(Column.class);
                 Object val = param.getValue();
 
                 stmt.setObject(idx, val);

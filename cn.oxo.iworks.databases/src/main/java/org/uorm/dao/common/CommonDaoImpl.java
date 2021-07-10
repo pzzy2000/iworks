@@ -136,6 +136,7 @@ public class CommonDaoImpl extends JdbcTemplate implements ICommonDao {
                 for (Field iField : fieldsList) {
                     if (iField.getName().equals(field)) {
                         Column column = iField.getAnnotation(Column.class);
+                        if(column.isCache()==false)continue;
                         params[idx] = new SqlParameter(column.name(), vals);
                         if (idx == 0) {
                             sql.append(column.name()).append(" = ?");
