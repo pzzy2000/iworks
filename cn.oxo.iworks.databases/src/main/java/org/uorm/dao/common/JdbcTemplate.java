@@ -36,8 +36,6 @@ import org.uorm.utils.PropertyHolderUtil;
 
 import com.alibaba.druid.pool.DruidPooledPreparedStatement;
 
-import cn.oxo.iworks.databases.annotation.Column;
-
 /**
  *
  * @author <a href="mailto:xunchangguo@gmail.com">郭训常</a>

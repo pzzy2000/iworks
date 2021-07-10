@@ -14,7 +14,6 @@
  */
 package org.uorm.dao.common;
 
-import java.lang.reflect.Field;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
@@ -24,11 +23,8 @@ import java.util.Arrays;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.uorm.dao.transation.OneThreadMultiConnectionTransactionManager;
-import org.uorm.orm.mapping.EntityMapCache;
 import org.uorm.orm.mapping.IObjectReader;
 import org.uorm.utils.Assert;
-
-import cn.oxo.iworks.databases.annotation.Column;
 
 /**
  * 同一个线程同一时刻可以有多个连接共存

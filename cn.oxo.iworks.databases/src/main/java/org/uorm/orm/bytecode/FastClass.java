@@ -22,6 +22,8 @@ import java.lang.reflect.Modifier;
 
 import org.apache.commons.lang3.reflect.FieldUtils;
 
+import cn.oxo.iworks.databases.annotation.Column;
+
 /**
  * Fast access to class information
  *
@@ -73,6 +75,7 @@ public class FastClass implements Serializable {
      */
     @SuppressWarnings("unchecked")
     public Object invoke(Object obj, Field field, Object args) throws IllegalAccessException {
+    	if(field.getAnnotation(Column.class).isCache()==false)return obj;
         if (field.getType().isEnum()) {
             if (args != null) {
                 Object i = Enum.valueOf((Class)field.getType(), args.toString());
