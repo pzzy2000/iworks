@@ -51,5 +51,7 @@ public @interface Column {
       public String defaultValue() default "";
 
       public boolean isCanNull() default false;
+      
+      public  boolean isCache() default true;
 
 }
