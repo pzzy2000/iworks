@@ -31,5 +31,9 @@ public class BuildDaoBean {
       public void setClazz(Class<?> clazz) {
             this.clazz = clazz;
       }
+      
+      public String toBean() {
+    	  return className.substring(0,className.length()-4);
+      }
 
 }

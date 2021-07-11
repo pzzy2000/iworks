@@ -15,7 +15,7 @@ public interface Inface${BuildDaoBean.className}Service {
     
     
        /**
-             *  增加或更新
+                *  增加或更新
              */
             public ${BuildDaoBean.className}   saveUpdate(OptType  optType ,   ${BuildDaoBean.className}   opt${BuildDaoBean.className}, Long   optUserId)throws SystemOptServiceException;
             

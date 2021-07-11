@@ -14,63 +14,59 @@ import cn.oxo.iworks.databases.SystemOptServiceException;
 
 import ${BuildDaoBean.clazz.getName()};
 import ${BuildDaoBean.basePath}.bean.search.${BuildDaoBean.toBean()}SearchBean;
-import ${BuildDaoBean.basePath}.service.I${BuildDaoBean.toBean()}Service;
+
 import ${BuildDaoBean.basePath}.controller.aop.core.IAop${BuildDaoBean.toBean()}Service;
 
 
 
 //@Component(IAop${BuildDaoBean.toBean()}Service.name)
-public abstract class Aop${BuildDaoBean.toBean()}Service implements IAop${BuildDaoBean.toBean()}Service {
+public abstract class Aop${BuildDaoBean.toBean()}ExBaseService extends Aop${BuildDaoBean.toBean()}Service {
 
-    @Autowired
-    @Qualifier(I${BuildDaoBean.toBean()}Service.name)
-    private I${BuildDaoBean.toBean()}Service i${BuildDaoBean.toBean()}Service ;
     
-     //@Override
-     //public ${BuildDaoBean.className}  saveUpdate(OptType  optType ,   ${BuildDaoBean.className}    i${BuildDaoBean.className},Long   optUserId )throws SystemOptServiceException{
-	 //   return  i${BuildDaoBean.toBean()}Service.saveUpdate(  optType ,  i${BuildDaoBean.className} ,optUserId );
-	 //}
+    // @Override
+    // public ${BuildDaoBean.className}  saveUpdate(OptType  optType ,   ${BuildDaoBean.className}    i${BuildDaoBean.className},Long   optUserId )throws SystemOptServiceException{
+	//    throw new SystemOptServiceException(1001, "暂不支持"); 
+	// }
             
        	 @Override 
      public SelectPage<${BuildDaoBean.className} > search(OptType  optType ,    
 				           ${BuildDaoBean.toBean()}SearchBean  searchBean,CommSearchBean  commSearchBean ,Long   optUserId  )throws SystemOptServiceException{
 	
-	 return  i${BuildDaoBean.toBean()}Service.search(  optType , searchBean,  commSearchBean ,optUserId  );
+	 throw new SystemOptServiceException(1001, "暂不支持");
 					
 	}
 	@Override
 	public List<${BuildDaoBean.className} > searchList(OptType  optType ,    
 				           ${BuildDaoBean.toBean()}SearchBean  searchBean,CommSearchBean  commSearchBean  )throws SystemOptServiceException{
              
-			 return  i${BuildDaoBean.toBean()}Service.searchList(  optType ,    
-				                                                          searchBean,  commSearchBean  );
+			 throw new SystemOptServiceException(1001, "暂不支持");
             
     }
             @Override
     public  ${BuildDaoBean.className}    remove(OptType  optType ,  ${BuildDaoBean.toBean()}SearchBean  searchBean,Long   optUserId)throws SystemOptServiceException{
 			
-			   return  i${BuildDaoBean.toBean()}Service.remove(  optType ,   searchBean,optUserId);
+			   throw new SystemOptServiceException(1001, "暂不支持");
 			
 	}
 	@Override
 	 public  List<${BuildDaoBean.className} >    removes(OptType  optType , ${BuildDaoBean.toBean()}SearchBean  searchBean
 			,Long   optUserId
 			)throws SystemOptServiceException{
-			 return  i${BuildDaoBean.toBean()}Service.removes(  optType ,  searchBean,optUserId);
+			 throw new SystemOptServiceException(1001, "暂不支持");
 			}
 			
             
             @Override
            public  ${BuildDaoBean.className} get(Long id)throws SystemOptServiceException
 		   {
-		           return  i${BuildDaoBean.toBean()}Service.get(id);
+		           throw new SystemOptServiceException(1001, "暂不支持");
 		   
 		   }
 		   
 		 @Override
 	public ${BuildDaoBean.className} searchSingle(OptType optType, ${BuildDaoBean.toBean()}SearchBean searchBean) throws SystemOptServiceException {
 		// TODO Auto-generated method stub
-		return i${BuildDaoBean.toBean()}Service.searchSingle(optType, searchBean);
+		 throw new SystemOptServiceException(1001, "暂不支持");
 	}
 
 }

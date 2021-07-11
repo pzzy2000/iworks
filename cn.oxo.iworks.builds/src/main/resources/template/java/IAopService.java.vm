@@ -1,12 +1,39 @@
-package ${BuildDaoBean.basePath}.controller.aop;
+package ${BuildDaoBean.basePath}.controller.aop.core;
 
 
+ import java.util.List;
+
+import cn.oxo.iworks.databases.CommSearchBean;
+import cn.oxo.iworks.databases.SQLUilts.OptType;
+import cn.oxo.iworks.databases.SelectPage;
+import cn.oxo.iworks.databases.SystemOptServiceException;
  
-import ${BuildDaoBean.basePath}.inface.Inface${BuildDaoBean.className}Service;
+ 
+import ${BuildDaoBean.clazz.getName()};
+import ${BuildDaoBean.basePath}.bean.search.${BuildDaoBean.toBean()}SearchBean;
 
-public interface IAop${BuildDaoBean.className}Service  extends Inface${BuildDaoBean.className}Service {
+
+
+public interface IAop${BuildDaoBean.toBean()}Service  {
     
-            public String name="IAop${BuildDaoBean.className}Service";
+            public String name="IAop${BuildDaoBean.toBean()}Service";
+            
+             /**
+                                                *  增加或更新
+             */
+           // public ${BuildDaoBean.className}   saveUpdate(OptType  optType ,   ${BuildDaoBean.className}   i${BuildDaoBean.className}, Long   optUserId)throws SystemOptServiceException;
+            
+            public SelectPage<${BuildDaoBean.className} > search(OptType  optType , ${BuildDaoBean.toBean()}SearchBean  searchBean,CommSearchBean  commSearchBean , Long   optUserId  )throws SystemOptServiceException;
+            
+            public List<${BuildDaoBean.className} > searchList(OptType  optType ,  ${BuildDaoBean.toBean()}SearchBean  searchBean,CommSearchBean  commSearchBean  )throws SystemOptServiceException;
+            
+            public ${BuildDaoBean.className}  searchSingle(OptType optType, ${BuildDaoBean.toBean()}SearchBean searchBean)throws SystemOptServiceException;
+            
+            public  ${BuildDaoBean.className}    remove(OptType  optType ,  ${BuildDaoBean.toBean()}SearchBean  searchBean,Long   optUserId)throws SystemOptServiceException;
+            
+            public  List<${BuildDaoBean.className} >    removes(OptType  optType ,  ${BuildDaoBean.toBean()}SearchBean  searchBean,Long   optUserId)throws SystemOptServiceException;
+            
+             public  ${BuildDaoBean.className} get(Long id)throws SystemOptServiceException;
             
                 
             

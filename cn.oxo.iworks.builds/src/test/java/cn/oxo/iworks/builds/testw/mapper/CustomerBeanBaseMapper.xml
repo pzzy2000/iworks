@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper
+	namespace="cn.oxo.iworks.builds.test.service.mybatis.CustomerBaseMapper">
+	<resultMap id="CustomerBeanBean"
+		type="cn.oxo.iworks.builds.test.bean.CustomerBean">
+		<id column="id" jdbcType="BIGINT" property="id" />
+		<result column="name" jdbcType="VARCHAR" property="name" />
+		<result column="wx_name" jdbcType="VARCHAR" property="wxName" />
+		<result column="open_id" jdbcType="VARCHAR" property="openId" />
+		<result column="wk_id" jdbcType="VARCHAR" property="wkId" />
+		<result column="faces" jdbcType="VARCHAR" property="faces" />
+		<result column="token" jdbcType="VARCHAR" property="token" />
+	</resultMap>
+
+	<sql id="Base_Column_List">
+		`id` ,`name` ,`wx_name` ,`open_id` ,`wk_id` ,`faces` ,`token`
+	</sql>
+
+	<sql id="order_by">
+		<if test="commSearchBean!=null and commSearchBean.dir !=null ">
+			order by ${commSearchBean.dir}
+			<choose>
+				<when test="commSearchBean.sort != null"> ${commSearchBean.sort} </when>
+				<otherwise>desc</otherwise>
+			</choose>
+
+		</if>
+
+	</sql>
+
+
+	<select id="selectByPrimaryKey" parameterType="java.lang.Long"
+		resultMap="CustomerBeanBean">
+		select
+		<include refid="Base_Column_List" />
+		from customer
+		where
+		`id` = #{id,jdbcType=BIGINT}
+	</select>
+
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Long">
+
+		delete from customer
+		where
+		`id` = #{id,jdbcType=BIGINT}
+	</delete>
+
+	<insert id="insertSelective"
+		parameterType="cn.oxo.iworks.builds.test.bean.CustomerBean">
+		insert into customer
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+
+			<if test="id != null">
+				`id` ,
+			</if>
+
+
+			<if test="name != null">
+				`name`,
+			</if>
+
+			<if test="wxName != null">
+				`wx_name`,
+			</if>
+
+			<if test="openId != null">
+				`open_id`,
+			</if>
+
+			<if test="wkId != null">
+				`wk_id`,
+			</if>
+
+			<if test="faces != null">
+				`faces`,
+			</if>
+
+			<if test="token != null">
+				`token`
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=BIGINT},
+			</if>
+			<if test="name != null">
+				#{name,jdbcType=VARCHAR} ,
+			</if>
+			<if test="wxName != null">
+				#{wxName,jdbcType=VARCHAR} ,
+			</if>
+			<if test="openId != null">
+				#{openId,jdbcType=VARCHAR} ,
+			</if>
+			<if test="wkId != null">
+				#{wkId,jdbcType=VARCHAR} ,
+			</if>
+			<if test="faces != null">
+				#{faces,jdbcType=VARCHAR} ,
+			</if>
+			<if test="token != null">
+				#{token,jdbcType=VARCHAR}
+			</if>
+		</trim>
+	</insert>
+
+	<update id="updateByPrimaryKeySelective"
+		parameterType="cn.oxo.iworks.builds.test.bean.CustomerBean">
+		update customer
+		<set>
+			<if test="name != null">
+				`name` =#{name,jdbcType=VARCHAR} ,
+			</if>
+			<if test="wxName != null">
+				`wx_name` =#{wxName,jdbcType=VARCHAR} ,
+			</if>
+			<if test="openId != null">
+				`open_id` =#{openId,jdbcType=VARCHAR} ,
+			</if>
+			<if test="wkId != null">
+				`wk_id` =#{wkId,jdbcType=VARCHAR} ,
+			</if>
+			<if test="faces != null">
+				`faces` =#{faces,jdbcType=VARCHAR} ,
+			</if>
+			<if test="token != null">
+				`token` =#{token,jdbcType=VARCHAR}
+			</if>
+		</set>
+		where
+		`id` = #{id,jdbcType=BIGINT}
+	</update>
+
+
+	<sql id="search_entity">
+		<if test="searchBean !=null">
+			where 1=1
+			<if test="searchBean.name != null">
+				and
+				`name` = #{searchBean.name,jdbcType=VARCHAR}
+			</if>
+			<if test="searchBean.wxName != null">
+				and
+				`wx_name` = #{searchBean.wxName,jdbcType=VARCHAR}
+			</if>
+			<if test="searchBean.openId != null">
+				and
+				`open_id` = #{searchBean.openId,jdbcType=VARCHAR}
+			</if>
+			<if test="searchBean.wkId != null">
+				and
+				`wk_id` = #{searchBean.wkId,jdbcType=VARCHAR}
+			</if>
+			<if test="searchBean.faces != null">
+				and
+				`faces` = #{searchBean.faces,jdbcType=VARCHAR}
+			</if>
+			<if test="searchBean.token != null">
+				and
+				`token` = #{searchBean.token,jdbcType=VARCHAR}
+			</if>
+		</if>
+	</sql>
+
+	<select id="searchCustomerSelective"
+		resultMap="CustomerBeanBean">
+		SELECT
+		<include refid="Base_Column_List" />
+		from customer
+		<include refid="search_entity" />
+		<!-- <include refid="order_by" /> -->
+
+	</select>
+
+</mapper>
