@@ -245,7 +245,7 @@ public abstract class ABBuildService implements IBuildService {
 		try {
 			String vm = "template/java/Action.java.vm";
 
-			String aopfileName = clazz.getSimpleName() + "Controller.java";
+			String aopfileName = clazz.getSimpleName().substring(0, clazz.getSimpleName().length() - 4) + "Controller.java";
 			VelocityToolsUnits.toFile(vm, values, outPath + "\\controller\\" + aopfileName);
 
 		} catch (Exception e) {
