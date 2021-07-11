@@ -47,5 +47,7 @@ public @interface FormModel {
       String parameterName() default parameter_null;
 
       Format format() default Format.defaults;
+      
+      String verification() default parameter_null;
 
 }
