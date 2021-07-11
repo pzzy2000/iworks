@@ -99,9 +99,8 @@ public class MYBindBeanHandlerMethodArgumentResolver implements HandlerMethodArg
 	}
 
 	@Override
-	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer arg1, NativeWebRequest webRequest,
-			WebDataBinderFactory arg3) throws Exception {
-
+	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer arg1, NativeWebRequest webRequest,WebDataBinderFactory arg3) throws Exception {
+		
 		FormModel iFormModel = parameter.getParameterAnnotation(FormModel.class);
 
 		Object result = null;
