@@ -126,7 +126,7 @@ public class MYBindBeanHandlerMethodArgumentResolver implements HandlerMethodArg
 			result = createRequestJsonBean(webRequest, iFormModel.parameterName(), parameter.getParameterType());
 		}
 
-		verificationfilter.verification(iFormModel.verification(), result);
+//		verificationfilter.verification(iFormModel.verification(), result);
 
 		return result;
 

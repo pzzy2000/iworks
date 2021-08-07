@@ -31,7 +31,7 @@ public class LongObjectMapper extends ObjectMapper {
 
             registerModule(simpleModule);
             
-            this.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
+            this.setSerializationInclusion(JsonInclude.Include.NON_NULL);
            
             this.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
