@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import ${BuildDaoBean.clazz.getName()};
 
-import ${BuildDaoBean.basePath}.pojo.bean.${BuildDaoBean.className}SearchBean;
-import ${BuildDaoBean.basePath}.service.mybatis.${BuildDaoBean.className}BaseMapper;
+import ${BuildDaoBean.basePath}.bean.search.${BuildDaoBean.toBean()}SearchBean;
+import ${BuildDaoBean.basePath}.service.mybatis.${BuildDaoBean.toBean()}BaseMapper;
 import cn.oxo.iworks.databases.ABBaseUnits;
 import cn.oxo.iworks.databases.CommSearchBean;
 import cn.oxo.iworks.databases.SQLUilts.OptType;
@@ -18,15 +18,15 @@ import cn.oxo.iworks.databases.SysOptError;
 import cn.oxo.iworks.databases.SystemOptServiceException;
 import cn.oxo.iworks.databases.SelectPage;
 
-@Component("${BuildDaoBean.className}SearchUnits")
-public class ${BuildDaoBean.className}SearchUnits  extends ABBaseUnits {
+@Component("${BuildDaoBean.toBean()}SearchUnits")
+public class ${BuildDaoBean.toBean()}SearchUnits  extends ABBaseUnits {
 
 @Autowired
-private ${BuildDaoBean.className}BaseMapper  i${BuildDaoBean.className}BaseMapper;
+private ${BuildDaoBean.toBean()}BaseMapper  i${BuildDaoBean.toBean()}BaseMapper;
 
    @SuppressWarnings("deprecation")
 	private Page<${BuildDaoBean.className}>  createPage(OptType optType,
-		                            ${BuildDaoBean.className}SearchBean searchBean,CommSearchBean commSearchBean){
+		                            ${BuildDaoBean.toBean()}SearchBean searchBean,CommSearchBean commSearchBean){
 		if(commSearchBean ==null){
 		return null;
 		}else{
@@ -51,7 +51,7 @@ private ${BuildDaoBean.className}BaseMapper  i${BuildDaoBean.className}BaseMappe
 	}
 
     public SelectPage<${BuildDaoBean.className}> search(OptType optType,
-		                            ${BuildDaoBean.className}SearchBean searchBean,CommSearchBean commSearchBean) throws SystemOptServiceException {
+		                            ${BuildDaoBean.toBean()}SearchBean searchBean,CommSearchBean commSearchBean) throws SystemOptServiceException {
        
         Page<${BuildDaoBean.className}> page =createPage(optType, searchBean, commSearchBean);
 		 List<${BuildDaoBean.className}> result= list(page, searchBean, commSearchBean);
@@ -74,11 +74,11 @@ private ${BuildDaoBean.className}BaseMapper  i${BuildDaoBean.className}BaseMappe
 	
 	
 	    public List<${BuildDaoBean.className}> list(OptType optType,
-		                            ${BuildDaoBean.className}SearchBean searchBean,CommSearchBean commSearchBean) throws SystemOptServiceException {
+		                            ${BuildDaoBean.toBean()}SearchBean searchBean,CommSearchBean commSearchBean) throws SystemOptServiceException {
        
         Page<${BuildDaoBean.className}> page =createPage(optType, searchBean, commSearchBean);
         if(page ==null){
-        return i${BuildDaoBean.className}BaseMapper.search${BuildDaoBean.className}Selective(searchBean,commSearchBean);
+        return i${BuildDaoBean.toBean()}BaseMapper.search${BuildDaoBean.toBean()}Selective(searchBean,commSearchBean);
         }else{
         List<${BuildDaoBean.className}> result = list(page,searchBean, commSearchBean);
 
@@ -88,16 +88,16 @@ private ${BuildDaoBean.className}BaseMapper  i${BuildDaoBean.className}BaseMappe
 
     }
 	
-    private List<${BuildDaoBean.className}> list(Page<${BuildDaoBean.className}> page ,${BuildDaoBean.className}SearchBean searchBean, CommSearchBean commSearchBean) throws SystemOptServiceException {
+    private List<${BuildDaoBean.className}> list(Page<${BuildDaoBean.className}> page ,${BuildDaoBean.toBean()}SearchBean searchBean, CommSearchBean commSearchBean) throws SystemOptServiceException {
 
-		return i${BuildDaoBean.className}BaseMapper.search${BuildDaoBean.className}Selective(page,searchBean,commSearchBean);
+		return i${BuildDaoBean.toBean()}BaseMapper.search${BuildDaoBean.toBean()}Selective(page,searchBean,commSearchBean);
 
 	}
 	
 	
 	
 
-    public ${BuildDaoBean.className} searchSingle(OptType optType, ${BuildDaoBean.className}SearchBean searchBean) throws SystemOptServiceException {
+    public ${BuildDaoBean.className} searchSingle(OptType optType, ${BuildDaoBean.toBean()}SearchBean searchBean) throws SystemOptServiceException {
         CommSearchBean commSearchBean = new CommSearchBean();
 		commSearchBean.setPageNum(1);
 		commSearchBean.setPageSize(1);

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="${BuildDaoBean.basePath}.service.mybatis.${BuildDaoBean.className}BaseMapper">
+<mapper namespace="${BuildDaoBean.basePath}.service.mybatis.${BuildDaoBean.toBean()}BaseMapper">
   <resultMap id="${BuildDaoBean.className}Bean" type="${BuildDaoBean.clazz.getName()}">
      <id column="${TableBean.idColumn.name}" jdbcType="${TableBean.idColumn.columnType.getType()}" property="${TableBean.idColumn.fieldName}" />
     #foreach($columnBean  in   ${TableBean.columnBeans})
@@ -98,7 +98,7 @@
 	     </if>
   </sql>
   
-  <select id="search${BuildDaoBean.className}Selective"  resultMap="${BuildDaoBean.className}Bean">
+  <select id="search${BuildDaoBean.toBean()}Selective"  resultMap="${BuildDaoBean.className}Bean">
      SELECT
       <include refid="Base_Column_List" />
 	  from ${TableBean.name}

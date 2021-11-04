@@ -1,0 +1,12 @@
+package ${BuildDaoBean.basePath}.controller.aop;
+
+
+ 
+import ${BuildDaoBean.basePath}.controller.aop.core.IAop${BuildDaoBean.toBean()}Service;
+
+
+public interface IAop${BuildDaoBean.toBean()}ExService  extends IAop${BuildDaoBean.toBean()}Service {
+    
+            
+
+}

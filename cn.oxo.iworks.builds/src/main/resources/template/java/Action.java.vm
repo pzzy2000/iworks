@@ -1,37 +1,34 @@
  package   ${BuildDaoBean.basePath}.controller;
 
+
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import cn.zy.dev.tools.units.CommSearchBean;
-import cn.zy.dev.tools.units.SelectPage;
-import cn.zy.dev.tools.units.SQLUilts.OptType;
-import cn.zy.dev.tools.web.spring.bind.annotation.FormModel;
-import cn.zy.dev.tools.web.spring.controller.ResponseEntityUnits;
-import cn.zy.dev.tools.web.spring.shiro.client.ABShirOAuth2ClientHtmlController;
+import org.springframework.web.bind.annotation.RequestMethod;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import cn.oxo.iworks.web.controller.ABSpringShiroBootController;
+import cn.oxo.iworks.web.controller.ResponseEntityUnits;
+import cn.oxo.iworks.web.controller.bind.annotation.FormModel;
 
 
 import ${BuildDaoBean.clazz.getName()};
-import ${BuildDaoBean.basePath}.pojo.bean.${BuildDaoBean.className}SearchBean;
-import ${BuildDaoBean.basePath}.controller.aop.IAop${BuildDaoBean.className}Service;
+import ${BuildDaoBean.basePath}.bean.search.${BuildDaoBean.toBean()}SearchBean;
+import ${BuildDaoBean.basePath}.controller.aop.IAop${BuildDaoBean.toBean()}ExService;
 @Controller
 @RequestMapping("${TableBean.action}")
-public class ${BuildDaoBean.className}Controller extends ABShirOAuth2ClientHtmlController {
+public class ${BuildDaoBean.toBean()}Controller extends ABSpringShiroBootController   { //ABShirOAuth2ClientHtmlController
 
     @Autowired
-    @Qualifier(IAop${BuildDaoBean.className}Service.name)
-    private IAop${BuildDaoBean.className}Service service ;
+    @Qualifier(IAop${BuildDaoBean.toBean()}ExService.name)
+    private IAop${BuildDaoBean.toBean()}ExService service ;
 	
 	 
 	@RequestMapping(value = "/list", method = { RequestMethod.POST })
     public ResponseEntity<?>  list(OptType optType, 
-            @FormModel(parameterName = "bean") ${BuildDaoBean.className}SearchBean searchBean,
+            @FormModel(parameterName = "bean") ${BuildDaoBean.toBean()}SearchBean searchBean,
 			@FormModel(parameterName = "commSearchBean") CommSearchBean commSearchBean) throws Exception {
      
             SelectPage<${BuildDaoBean.className}> selectPage = service.search(optType, searchBean, commSearchBean, getLoginUserId()) ;      
@@ -39,16 +36,15 @@ public class ${BuildDaoBean.className}Controller extends ABShirOAuth2ClientHtmlC
       
     }
     
-    @RequestMapping(value = "/save", method = { RequestMethod.POST })
-	public ResponseEntity<?> save(OptType optType, @FormModel(parameterName = "bean") ${BuildDaoBean.className} bean) throws Exception {
-
-		${BuildDaoBean.className} i${BuildDaoBean.className} = service.saveUpdate(optType, bean, getLoginUserId());
-		return ResponseEntityUnits.createSuccessResponseEntity(i${BuildDaoBean.className});
-
-	}
+    
+    //@RequestMapping(value = "/save", method = { RequestMethod.POST })
+	//public ResponseEntity<?> save(OptType optType, @FormModel(parameterName = "bean") ${BuildDaoBean.className} bean) throws Exception {
+	//	${BuildDaoBean.className} i${BuildDaoBean.className} = service.saveUpdate(optType, bean, getLoginUserId());
+	//	return ResponseEntityUnits.createSuccessResponseEntity(i${BuildDaoBean.className});
+	//}
 	
 	@RequestMapping(value = "/get", method = { RequestMethod.POST })
-	public ResponseEntity<?> get(OptType optType, @FormModel(parameterName = "bean") ${BuildDaoBean.className}SearchBean bean) throws Exception {
+	public ResponseEntity<?> get(OptType optType, @FormModel(parameterName = "bean") ${BuildDaoBean.toBean()}SearchBean bean) throws Exception {
 
 		${BuildDaoBean.className} i${BuildDaoBean.className} = service.get(bean.getId());
 		return ResponseEntityUnits.createSuccessResponseEntity(i${BuildDaoBean.className});
@@ -56,7 +52,7 @@ public class ${BuildDaoBean.className}Controller extends ABShirOAuth2ClientHtmlC
 	}
 
 	@RequestMapping(value = "/delete", method = { RequestMethod.POST })
-	public ResponseEntity<?> delete(OptType optType, @FormModel(parameterName = "bean") ${BuildDaoBean.className}SearchBean bean) throws Exception {
+	public ResponseEntity<?> delete(OptType optType, @FormModel(parameterName = "bean") ${BuildDaoBean.toBean()}SearchBean bean) throws Exception {
 
 		
 		List<${BuildDaoBean.className}> i${BuildDaoBean.className}s =service.removes(optType, bean, getLoginUserId());

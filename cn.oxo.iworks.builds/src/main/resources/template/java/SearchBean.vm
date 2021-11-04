@@ -1,8 +1,8 @@
-package ${BuildDaoBean.basePath}.pojo.bean;
+package ${BuildDaoBean.basePath}.bean.search;
 
 import ${BuildDaoBean.clazz.getName()};
 import java.util.List;
-public class ${BuildDaoBean.className}SearchBean extends ${BuildDaoBean.className} {
+public class ${BuildDaoBean.toBean()}SearchBean extends ${BuildDaoBean.className} {
 
     private List<Long> ids;
 

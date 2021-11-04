@@ -30,250 +30,217 @@ import ognl.OgnlRuntime;;
 
 public class MYBindBeanHandlerMethodArgumentResolver implements HandlerMethodArgumentResolver {
 
-      private static Logger logger = LogManager.getLogger(MYBindBeanHandlerMethodArgumentResolver.class);
+	private static Logger logger = LogManager.getLogger(MYBindBeanHandlerMethodArgumentResolver.class);
 
-      private Map<String, AllowBeanParams> allowParams = new ConcurrentHashMap<String, AllowBeanParams>();
+	private Map<String, AllowBeanParams> allowParams = new ConcurrentHashMap<String, AllowBeanParams>();
 
-      class AllowBeanParams {
-            private Type type;
+	private IVerificationfilter verificationfilter;
 
-            // bean
-            private Map<String, List<String>> fieldMap = new HashMap<String, List<String>>();
+	public MYBindBeanHandlerMethodArgumentResolver(IVerificationfilter verificationfilter) {
+		this();
+		this.verificationfilter = verificationfilter;
 
-            public AllowBeanParams(Type type, String[] fields_) {
-                  super();
-                  this.type = type;
-                  // this.field = field;
-                  if (fields_ == null)
-                        return;
-                  for (String fields : fields_) {
-                        int i = fields.indexOf(":");
-                        String bean = fields.substring(0, i);
-                        List<String> field = Arrays.asList(fields.substring(i + 1).split(","));
-                        fieldMap.put(bean, field);
-                  }
+	}
 
-            }
+	public MYBindBeanHandlerMethodArgumentResolver() {
+		OgnlRuntime.setPropertyAccessor(Object.class, new MYObjectAccessor());
 
-            public Type getType() {
-                  return type;
-            }
+		OgnlRuntime.setPropertyAccessor(List.class, new MYListPropertyAccessor());
+	}
 
-            public Map<String, List<String>> getFieldMap() {
-                  return fieldMap;
-            }
+	class AllowBeanParams {
+		private Type type;
 
-      }
+		// bean
+		private Map<String, List<String>> fieldMap = new HashMap<String, List<String>>();
 
-      private AllowBeanParams getAllowParams(Method iMethod) {
-            String key = iMethod.getDeclaringClass().getName() + "." + iMethod.getName();
-            AllowBeanParams iAllowParams = allowParams.get(key);
-            if (iAllowParams == null) {
-                  synchronized (key) {
-                        if (iMethod.isAnnotationPresent(AllowParams.class)) {
-                              AllowParams iAllow_Params = iMethod.getAnnotation(AllowParams.class);
-                              allowParams.put(key, new AllowBeanParams(iAllow_Params.type(), iAllow_Params.field()));
-                              return allowParams.get(key);
-                        } else {
-                              allowParams.put(key, new AllowBeanParams(Type.none, null));
-                        }
-                        return allowParams.get(key);
-                  }
-            } else {
-                  return iAllowParams;
-            }
-      }
+		public AllowBeanParams(Type type, String[] fields_) {
+			super();
+			this.type = type;
+			// this.field = field;
+			if (fields_ == null)
+				return;
+			for (String fields : fields_) {
+				int i = fields.indexOf(":");
+				String bean = fields.substring(0, i);
+				List<String> field = Arrays.asList(fields.substring(i + 1).split(","));
+				fieldMap.put(bean, field);
+			}
 
-      public MYBindBeanHandlerMethodArgumentResolver() {
-            OgnlRuntime.setPropertyAccessor(Object.class, new MYObjectAccessor());
+		}
 
-            OgnlRuntime.setPropertyAccessor(List.class, new MYListPropertyAccessor());
-      }
+		public Type getType() {
+			return type;
+		}
 
-      @Override
-      public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer arg1, NativeWebRequest webRequest, WebDataBinderFactory arg3) throws Exception {
+		public Map<String, List<String>> getFieldMap() {
+			return fieldMap;
+		}
 
-            FormModel iFormModel = parameter.getParameterAnnotation(FormModel.class);
+	}
 
-            Object result = null;
+	private AllowBeanParams getAllowParams(Method iMethod) {
+		String key = iMethod.getDeclaringClass().getName() + "." + iMethod.getName();
+		AllowBeanParams iAllowParams = allowParams.get(key);
+		if (iAllowParams == null) {
+			synchronized (key) {
+				if (iMethod.isAnnotationPresent(AllowParams.class)) {
+					AllowParams iAllow_Params = iMethod.getAnnotation(AllowParams.class);
+					allowParams.put(key, new AllowBeanParams(iAllow_Params.type(), iAllow_Params.field()));
+					return allowParams.get(key);
+				} else {
+					allowParams.put(key, new AllowBeanParams(Type.none, null));
+				}
+				return allowParams.get(key);
+			}
+		} else {
+			return iAllowParams;
+		}
+	}
 
-            if (iFormModel.parameterName().equals(FormModel.parameter_null)) {
+	@Override
+	public Object resolveArgument(MethodParameter parameter, ModelAndViewContainer arg1, NativeWebRequest webRequest,WebDataBinderFactory arg3) throws Exception {
+		
+		FormModel iFormModel = parameter.getParameterAnnotation(FormModel.class);
 
-                  Object iObject = createNullRequestBean(webRequest, iFormModel.parameterName(), parameter.getParameterType());
-                  result = iObject;
-            } else
+		Object result = null;
 
-            // 普通格式
-            if (iFormModel.format().equals(FormModel.Format.defaults)) {
-                  Method iMethod = parameter.getMethod();
-                  AllowBeanParams iAllowParams = getAllowParams(iMethod);
-                  Object iObject = createRequestBean(webRequest, iFormModel.parameterName(), parameter.getParameterType(), iAllowParams);
+		if (iFormModel.parameterName().equals(FormModel.parameter_null)) {
 
-                  result = iObject;
+			Object iObject = createNullRequestBean(webRequest, iFormModel.parameterName(),
+					parameter.getParameterType());
+			result = iObject;
+		} else
 
-            } else {
-                  // json 格式
-                  result = createRequestJsonBean(webRequest, iFormModel.parameterName(), parameter.getParameterType());
-            }
+		// 普通格式
+		if (iFormModel.format().equals(FormModel.Format.defaults)) {
+			Method iMethod = parameter.getMethod();
+			AllowBeanParams iAllowParams = getAllowParams(iMethod);
+			Object iObject = createRequestBean(webRequest, iFormModel.parameterName(), parameter.getParameterType(),
+					iAllowParams);
 
-            return result;
+			result = iObject;
 
-            // if (result != null) {
-            // Method iMethod = parameter.getMethod();
-            // AllowParams iAllowParams = getAllowParams(iMethod);
-            // if (iAllowParams == null) {
-            // return result;
-            // } else {
-            // String name = iFormModel.parameterName();
-            // int type = iAllowParams.type();
-            // if(type ==0)// 排除
-            // {
-            // for (String x : iAllowParams.field()) {
-            // if (x.startsWith(name)) {
-            // if (x.startsWith(name)) {
-            // String[] f = x.substring(name.length() + 1).split(",");
-            // for (String x1 : f) {
-            // BeanUtilsBean.getInstance().copyProperty(result, x1, null);
-            // }
-            // }
-            // }
-            // }
-            // }else {
-            // //包含
-            // for (String x : iAllowParams.field()) {
-            // if (x.startsWith(name)) {
-            // String[] f = x.substring(name.length() + 1).split(",");
-            // for (String x1 : f) {
-            // BeanUtilsBean.getInstance().copyProperty(result, x1, null);
-            // }
-            // }
-            // }
-            // }
-            //
-            //
-            //// String name = iFormModel.parameterName();
-            //// if (iAllowParams.exclude() != null) {
-            //// for (String x : iAllowParams.exclude()) {
-            //// // bean:field,field
-            //// if (x.startsWith(name)) {
-            //// String[] f = x.substring(name.length() + 1).split(",");
-            //// for (String x1 : f) {
-            //// BeanUtilsBean.getInstance().copyProperty(result, x1, null);
-            //// }
-            //// }
-            //// }
-            //// }
-            // return result;
-            // }
-            //
-            // }else {
-            // return result;
-            // }
+		} else {
+			// json 格式
+			result = createRequestJsonBean(webRequest, iFormModel.parameterName(), parameter.getParameterType());
+		}
 
-      }
+//		verificationfilter.verification(iFormModel.verification(), result);
 
-      @Override
-      public boolean supportsParameter(MethodParameter parameter) {
-            return parameter.hasParameterAnnotation(FormModel.class);
+		return result;
 
-      }
+	}
 
-      @SuppressWarnings("unchecked")
-      protected <V> V createRequestJsonBean(NativeWebRequest request, String identifier, Class<V> clazz) throws Exception {
+	@Override
+	public boolean supportsParameter(MethodParameter parameter) {
+		return parameter.hasParameterAnnotation(FormModel.class);
 
-            String re = request.getParameter(identifier);
-            JSONObject iJSONObject = JSON.parseObject(re);
-            return iJSONObject.toJavaObject(clazz);
+	}
 
-      }
+	@SuppressWarnings("unchecked")
+	protected <V> V createRequestJsonBean(NativeWebRequest request, String identifier, Class<V> clazz)
+			throws Exception {
 
-      protected <V> V createNullRequestBean(NativeWebRequest request, String identifier, Class<V> clazz) throws Exception {
+		String re = request.getParameter(identifier);
+		JSONObject iJSONObject = JSON.parseObject(re);
+		return iJSONObject.toJavaObject(clazz);
 
-            V v = clazz.newInstance();
-            for (Entry<String, String[]> parameter : request.getParameterMap().entrySet()) {
-                  try {
-                        {
-                              String expression = parameter.getKey();
-                              if (parameter.getValue().length == 0)
-                                    continue;
+	}
 
-                              OnGLUnits.setPropertys(v, expression, parameter.getValue().length == 1 ? parameter.getValue()[0] : java.util.Arrays.asList(parameter.getValue()));
+	protected <V> V createNullRequestBean(NativeWebRequest request, String identifier, Class<V> clazz)
+			throws Exception {
 
-                        }
-                  } catch (OnGLUnitsException e) {
-                        logger.error(e.getMessage());
-                        // throw new Exception(e);
-                  }
-            }
+		V v = clazz.newInstance();
+		for (Entry<String, String[]> parameter : request.getParameterMap().entrySet()) {
+			try {
+				{
+					String expression = parameter.getKey();
+					if (parameter.getValue().length == 0)
+						continue;
 
-            return v;
+					OnGLUnits.setPropertys(v, expression, parameter.getValue().length == 1 ? parameter.getValue()[0]
+							: java.util.Arrays.asList(parameter.getValue()));
 
-      }
+				}
+			} catch (OnGLUnitsException e) {
+				logger.error(e.getMessage());
+				// throw new Exception(e);
+			}
+		}
 
-      protected <V> V createRequestBean(NativeWebRequest request, String identifier, Class<V> clazz, AllowBeanParams iAllowParams) throws Exception {
+		return v;
 
-            V v = clazz.newInstance();
+	}
 
-            for (Entry<String, String[]> parameter : request.getParameterMap().entrySet()) {
-                  try {
-                        if (parameter.getKey().startsWith(identifier + ".")) {
-                              String bean = parameter.getKey().substring(0, parameter.getKey().indexOf("."));
-                              String expression = parameter.getKey().substring(parameter.getKey().indexOf(".") + 1);
-                              if (parameter.getValue().length == 0)
-                                    continue;
-                              if (parameter.getValue().length == 1 && (parameter.getValue()[0] == null || parameter.getValue()[0].equals("")))
-                                    continue;
+	protected <V> V createRequestBean(NativeWebRequest request, String identifier, Class<V> clazz,
+			AllowBeanParams iAllowParams) throws Exception {
 
-                              if (expression.toLowerCase().endsWith("ids_")) {
-                                    expression = expression.substring(0, expression.length() - 1);
-                              }
+		V v = clazz.newInstance();
 
-                              // UI
-                              if (iAllowParams.getType().equals(Type.none)) {
-                                    OnGLUnits.setPropertys(v, expression, values(parameter.getKey(), parameter.getValue()));
+		for (Entry<String, String[]> parameter : request.getParameterMap().entrySet()) {
+			try {
+				if (parameter.getKey().startsWith(identifier + ".")) {
+					String bean = parameter.getKey().substring(0, parameter.getKey().indexOf("."));
+					String expression = parameter.getKey().substring(parameter.getKey().indexOf(".") + 1);
+					if (parameter.getValue().length == 0)
+						continue;
+					if (parameter.getValue().length == 1
+							&& (parameter.getValue()[0] == null || parameter.getValue()[0].equals("")))
+						continue;
 
-                              } else {
-                                    // 1: 包含 ;0:排除
-                                    Type type = iAllowParams.getType();
+					if (expression.toLowerCase().endsWith("ids_")) {
+						expression = expression.substring(0, expression.length() - 1);
+					}
 
-                                    if (!iAllowParams.getFieldMap().containsKey(bean)) {
-                                          OnGLUnits.setPropertys(v, expression, values(parameter.getKey(), parameter.getValue()));
-                                    } else {
-                                          if (type.equals(Type.include)) {
-                                                if (iAllowParams.getFieldMap().get(bean).contains(expression)) {
-                                                      OnGLUnits.setPropertys(v, expression, values(parameter.getKey(), parameter.getValue()));
-                                                }
-                                          } else {
-                                                if (!iAllowParams.getFieldMap().get(bean).contains(expression)) {
-                                                      OnGLUnits.setPropertys(v, expression, values(parameter.getKey(), parameter.getValue()));
-                                                }
-                                          }
-                                    }
+					// UI
+					if (iAllowParams.getType().equals(Type.none)) {
+						OnGLUnits.setPropertys(v, expression, values(parameter.getKey(), parameter.getValue()));
 
-                              }
+					} else {
+						// 1: 包含 ;0:排除
+						Type type = iAllowParams.getType();
 
-                              //
+						if (!iAllowParams.getFieldMap().containsKey(bean)) {
+							OnGLUnits.setPropertys(v, expression, values(parameter.getKey(), parameter.getValue()));
+						} else {
+							if (type.equals(Type.include)) {
+								if (iAllowParams.getFieldMap().get(bean).contains(expression)) {
+									OnGLUnits.setPropertys(v, expression,
+											values(parameter.getKey(), parameter.getValue()));
+								}
+							} else {
+								if (!iAllowParams.getFieldMap().get(bean).contains(expression)) {
+									OnGLUnits.setPropertys(v, expression,
+											values(parameter.getKey(), parameter.getValue()));
+								}
+							}
+						}
 
-                        } else {
-                              continue;
-                        }
-                  } catch (Exception e) {
-                        logger.error(logger, e);
-                        throw new Exception(e);
-                  }
-            }
+					}
 
-            return v;
+					//
 
-      }
+				} else {
+					continue;
+				}
+			} catch (Exception e) {
+				logger.error(logger, e);
+				throw new Exception(e);
+			}
+		}
 
-      @SuppressWarnings({ "rawtypes", "unchecked" })
-      private Object values(String key, String[] value) {
-            if (key.toLowerCase().endsWith("ids_")) {
-                  return Arrays.asList(value[0].split(","));
-            } else {
-                  return value.length == 1 ? value[0] : Arrays.asList(value);
-            }
+		return v;
 
-      }
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private Object values(String key, String[] value) {
+		if (key.toLowerCase().endsWith("ids_")) {
+			return Arrays.asList(value[0].split(","));
+		} else {
+			return value.length == 1 ? value[0] : Arrays.asList(value);
+		}
+
+	}
 }
