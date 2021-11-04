@@ -5,10 +5,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
+import javax.sql.DataSource;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.aspectj.lang.JoinPoint;
+import org.springframework.data.redis.core.RedisTemplate;
 
 import cn.oxo.iworks.cache.params.DefaultSimpleIdAutoWritePrpertiesObjectService;
 import cn.oxo.iworks.cache.params.IAutoWritePrpertiesObjectService;
@@ -18,9 +20,7 @@ import cn.oxo.iworks.cache.params.IPropertiesSearchFactory;
  * @Component
  * @Aspect
  * @Order(1)
- * @AfterReturning(value =
- * "execution(public * cn.oxo.cloudstore..controller.aop..IAop*Service.*(..))",
- * returning = "result")
+ * @AfterReturning(value ="execution(public * cn.oxo.cloudstore..controller.aop..IAop*Service.*(..))",returning = "result")
  */
 public abstract class AutoWriteReutnObjectAspect {
 
@@ -28,26 +28,16 @@ public abstract class AutoWriteReutnObjectAspect {
 
       private IAutoWritePrpertiesObjectService autoWritePrpertiesObjectService;
 
-      protected IPlatformCacheService platformCacheService;
+      protected IPlatformRedisService platformRedisService;
+      /**
+       * 
+       * @param jp
+       * @param result
+       * @AfterReturning(value ="execution(public * cn.oxo.cloudstore..controller.aop..IAop*Service.*(..))",returning = "result")
+       */
+      public abstract void setBeanParams(JoinPoint jp, Object result);
 
-      // @AfterReturning(value = "execution(public *
-      // cn.oxo.cloudstore..controller.aop..IAop*Service.*(..))", returning =
-      // "result")
-      // public void sss(JoinPoint jp, Object result) {
-      // try {
-      // // System.out.println(">>>>>>>>>>>>>>>>>>>> 1121212 :result" +
-      // result.getClass()
-      // // + "result " + result);
-      // autoWritePrpertiesObjectService.setPrperties(result);
-      // } catch (Exception e) {
-      // logger.error(e.getMessage(), e);
-      // }
-      // }
-
-      // @AfterReturning(value = "execution(public *
-      // cn.oxo.cloudstore..controller.aop..IAop*Service.*(..))", returning =
-      // "result")
-      public void setParams(JoinPoint jp, Object result) {
+      protected void setParams(JoinPoint jp, Object result) {
             try {
                   autoWritePrpertiesObjectService.setPrperties(result);
             } catch (Exception e) {
@@ -55,10 +45,16 @@ public abstract class AutoWriteReutnObjectAspect {
             }
       }
 
-      public AutoWriteReutnObjectAspect(IPlatformCacheService platformCacheService) {
-            super();
-            this.platformCacheService = platformCacheService;
+      public AutoWriteReutnObjectAspect(IPlatformRedisService platformRedisService) {
+         
+            this.platformRedisService = platformRedisService;
       }
+      
+      @SuppressWarnings("rawtypes")
+	public AutoWriteReutnObjectAspect(RedisTemplate redisTemplate, DataSource dataSource) {
+          
+          this.platformRedisService = new PlatformRedisService(redisTemplate,dataSource);
+    }
 
       protected abstract void regexPackage(List<String> bean);
 
@@ -74,7 +70,7 @@ public abstract class AutoWriteReutnObjectAspect {
                   @Override
                   public <V extends Serializable> V searchObjectById(String id, Class clazz) {
 
-                        Serializable iSerializable = platformCacheService.searchObjectById(id, clazz);
+                        Serializable iSerializable = platformRedisService.searchObjectById(id, clazz);
 
                         return (V) iSerializable;
 

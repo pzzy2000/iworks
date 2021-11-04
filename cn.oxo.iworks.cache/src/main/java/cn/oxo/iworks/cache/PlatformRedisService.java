@@ -7,82 +7,83 @@ import javax.sql.DataSource;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.uorm.DefaultSearch;
-import org.uorm.ISearch;
+import org.springframework.data.redis.core.RedisTemplate;
 
-public class PlatformRedisService implements IPlatformCacheService {
+public class PlatformRedisService implements IPlatformRedisService {
 
-      private Logger logger = LogManager.getLogger(PlatformRedisService.class);
+	private Logger logger = LogManager.getLogger(PlatformRedisService.class);
 
-      protected IGPSCacheService cacheService;
+	protected IRedisService redisService;
 
-      protected ISearch search;
+	protected IDBCacheSearch dbCacheSearch;
 
-      public PlatformRedisService(DataSource dataSource, IGPSCacheService cacheService) {
-            super();
-            this.search = new DefaultSearch(dataSource);
-            this.cacheService = cacheService;
-      }
+	@SuppressWarnings("rawtypes")
+	public PlatformRedisService(RedisTemplate redisTemplate, DataSource dataSource) {
+		super();
+		this.redisService = new RedisService(redisTemplate);
+		this.dbCacheSearch = new DefaultDBCacheSearch(dataSource);
+		;
+	}
 
-      @SuppressWarnings("unchecked")
-      @Override
-      public <V extends Serializable> V searchObjectById(String id, Class<V> clazz) {
-            if (StringUtils.isEmpty(id))
-                  return null;
-            Serializable v = cacheService.get(id, "id", clazz);
-            if (v == null) {
-                  try {
-                        v = search.search(clazz, "id", id);
-                        if (v != null) {
-                              cacheService.set(id, "id", v);
-                        }
-                  } catch (Exception e) {
-                        logger.error(e.getMessage(), e);
-                        v = null;
-                  }
-            }
-            return (V) v;
+	public PlatformRedisService(IRedisService redisService, DataSource dataSource) {
+		super();
+		this.redisService = redisService;
+		this.dbCacheSearch = new DefaultDBCacheSearch(dataSource);
+		;
+	}
 
-      }
+	public PlatformRedisService(IRedisService redisService, IDBCacheSearch dbCacheSearch) {
+		super();
+		this.redisService = redisService;
+		this.dbCacheSearch = dbCacheSearch;
+	}
 
-      @Override
-      public void put(Object value) {
-            cacheService.put(value);
-      }
+	@Override
+	public void clearCache(Object result) {
 
-      @Override
-      public void clear(Object value) {
-            cacheService.clear(value);
+		redisService.clear(result);
 
-      }
+	}
 
-      @Override
-      public void set(Object key, String field, Object value) {
-            cacheService.set(key, field, value);
+	@Override
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public <V extends Serializable> V searchObjectById(String id, Class clazz) {
 
-      }
+		if (StringUtils.isEmpty(id))
+			return null;
 
-      @Override
-      public void set(Object key, String field, Object value, long expireTime) {
-            cacheService.set(key, field, value, expireTime);
+		V v = (V) redisService.get(id, "id", clazz);
+		if (v == null) {
+			try {
 
-      }
+				Serializable iSerializable = dbCacheSearch.search(clazz, "id", id);
+				if (iSerializable != null) {
+					v = (V) iSerializable;
+					redisService.set(id, "id", v);
+				}
+			} catch (Exception e) {
+				v = null;
+				logger.error(e.getMessage(), e);
+			}
+		}
+		return v;
+	}
 
-      @Override
-      public <V> boolean exists(Object key, String field, Class<V> clazz) {
+	@Override
+	public <V> V findBy(Object key, String field, Class<V> clazz) {
+		V v = redisService.get(key, field, clazz);
+		return v;
+	}
 
-            return cacheService.exists(key, field, clazz);
-      }
+	@Override
+	public void cache(Object result) {
+		redisService.put(result);
 
-      @Override
-      public <V> V get(Object key, String field, Class<V> clazz) {
+	}
 
-            return cacheService.get(key, field, clazz);
-      }
-
-      @Override
-      public <V> void delete(String key, String field, Class<V> clazz) {
-            cacheService.delete(key, field, clazz);
-      }
+	@Override
+	public void set(Object key, String field, Object value) {
+		redisService.set(key, field, value);
+	}
 
 }
