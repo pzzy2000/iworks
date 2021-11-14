@@ -282,6 +282,16 @@ public abstract class ABBuildService implements IBuildService {
     } catch (Exception e) {
         throw new MyBatisBuildServiceException(e);
     }
+    
+    try {
+        String vm = "template/java/FeignServicejava.vm";
+
+        String aopfileName = clazz.getSimpleName().substring(0, clazz.getSimpleName().length() - 4) + "FeignService.java";
+        VelocityToolsUnits.toFile(vm, values, outPath + "\\cloud\\feign\\imples\\" + aopfileName);
+
+    } catch (Exception e) {
+        throw new MyBatisBuildServiceException(e);
+    }
 
     
 }

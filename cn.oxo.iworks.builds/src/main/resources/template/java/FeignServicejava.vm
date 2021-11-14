@@ -1,0 +1,76 @@
+ package   ${BuildDaoBean.basePath}.cloud.feign.imples;
+
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import cn.oxo.iworks.databases.CommSearchBean;
+import cn.oxo.iworks.databases.SQLUilts.OptType;
+import cn.oxo.iworks.databases.SelectPage;
+import cn.oxo.iworks.databases.SystemOptServiceException;
+
+import ${BuildDaoBean.clazz.getName()};
+import ${BuildDaoBean.basePath}.bean.search.${BuildDaoBean.toBean()}SearchBean;
+import ${BuildDaoBean.basePath}.controller.aop.IAop${BuildDaoBean.toBean()}ExService;
+import ${BuildDaoBean.basePath}.feign.ifaces.I${BuildDaoBean.toBean()}FeignService;
+@Controller
+@RequestMapping("${TableBean.action}")
+public class ${BuildDaoBean.toBean()}FeignService   implements I${BuildDaoBean.toBean()}FeignService {
+
+    @Autowired
+    @Qualifier(IAop${BuildDaoBean.toBean()}ExService.name)
+    private IAop${BuildDaoBean.toBean()}ExService service ;
+	
+	 
+	@Override
+    public SelectPage<${BuildDaoBean.className}> search(OptType optType, ${BuildDaoBean.toBean()}SearchBean searchBean,CommSearchBean commSearchBean,Long optUserId) throws SystemOptServiceException {
+     
+            SelectPage<${BuildDaoBean.className}> selectPage = service.search(optType, searchBean, commSearchBean, optUserId) ;      
+          return selectPage;
+      
+    }
+    
+    @Override
+     public List<${BuildDaoBean.className}> searchList(OptType optType, ${BuildDaoBean.toBean()}SearchBean searchBean,CommSearchBean commSearchBean) throws SystemOptServiceException {
+     
+           return service.searchList(optType, searchBean, commSearchBean) ;      
+          
+      
+    }
+    
+    @Override
+    public ${BuildDaoBean.className} get(Long id) throws SystemOptServiceException {
+
+		 ${BuildDaoBean.className} i${BuildDaoBean.className} = service.get(id);
+		
+		return i${BuildDaoBean.className};
+
+	}
+
+	@Override
+	public ${BuildDaoBean.className} remove(OptType optType, ${BuildDaoBean.toBean()}SearchBean bean,Long optUserId) throws SystemOptServiceException {
+
+		
+		${BuildDaoBean.className} i${BuildDaoBean.className} =service.remove(optType, bean, optUserId);
+
+	
+		return i${BuildDaoBean.className};
+
+	}
+    
+    
+    
+    
+    
+    //@RequestMapping(value = "/save", method = { RequestMethod.POST })
+	//public ResponseEntity<?> save(OptType optType, ${BuildDaoBean.className} bean) throws Exception {
+	//	${BuildDaoBean.className} i${BuildDaoBean.className} = service.saveUpdate(optType, bean, getLoginUserId());
+	//	return ResponseEntityUnits.createSuccessResponseEntity(i${BuildDaoBean.className});
+	//}
+	
+	
+	
+}
