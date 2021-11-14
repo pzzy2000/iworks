@@ -1,7 +1,7 @@
 package cn.oxo.iworks.web.controller;
 
-import cn.oxo.iworks.web.shiro.ActionType;
-import cn.oxo.iworks.web.shiro.LoginType;
+import cn.oxo.iworks.web.shiro.bak.ActionType;
+import cn.oxo.iworks.web.shiro.bak.LoginType;
 
 public class LoginInfoBean {
 

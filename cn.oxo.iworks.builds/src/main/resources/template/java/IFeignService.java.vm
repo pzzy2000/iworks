@@ -1,0 +1,51 @@
+package ${BuildDaoBean.basePath}.feign.ifaces;
+
+import java.util.List;
+
+import ${BuildDaoBean.clazz.getName()};
+import ${BuildDaoBean.basePath}.bean.search.${BuildDaoBean.toBean()}SearchBean;
+import ${BuildDaoBean.basePath}.controller.aop.core.IAop${BuildDaoBean.toBean()}Service;
+
+
+import org.springframework.cloud.openfeign.thirds.MyParams;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+
+import cn.oxo.iworks.databases.CommSearchBean;
+import cn.oxo.iworks.databases.SQLUilts.OptType;
+import cn.oxo.iworks.databases.SelectPage;
+import cn.oxo.iworks.databases.SysOptError;
+import cn.oxo.iworks.databases.SystemOptServiceException;
+
+
+public interface I${BuildDaoBean.toBean()}FeignService extends IAop${BuildDaoBean.toBean()}Service {
+
+
+   // public ${BuildDaoBean.className}   saveUpdate(OptType  optType ,   ${BuildDaoBean.className}   i${BuildDaoBean.className}, Long   optUserId)throws SystemOptServiceException;
+         
+     @Override
+     @RequestMapping(value = "/search/pages", method = RequestMethod.POST)       
+     default public SelectPage<${BuildDaoBean.className} > search(@MyParams(name = "optType") OptType  optType , @MyParams(name = "searchBean") ${BuildDaoBean.toBean()}SearchBean  searchBean,@MyParams(name = "commSearchBean") CommSearchBean  commSearchBean , @MyParams(name = "optUserId") Long   optUserId  )throws SystemOptServiceException{
+        throw new SystemOptServiceException(SysOptError.ExecError.getCode(), "暂不支持");
+     }
+     
+     @Override
+     @RequestMapping(value = "/search/list", method = RequestMethod.POST)              
+     default List<${BuildDaoBean.className} > searchList(@MyParams(name = "optType") OptType  optType , @MyParams(name = "searchBean") ${BuildDaoBean.toBean()}SearchBean  searchBean,@MyParams(name = "commSearchBean") CommSearchBean  commSearchBean )throws SystemOptServiceException{
+        throw new SystemOptServiceException(SysOptError.ExecError.getCode(), "暂不支持");
+     }
+       
+     
+      @Override
+     @RequestMapping(value = "/remove", method = RequestMethod.POST)  
+     default  ${BuildDaoBean.className}    remove(@MyParams(name = "optType") OptType  optType ,  @MyParams(name = "searchBean") ${BuildDaoBean.toBean()}SearchBean  searchBean,  @MyParams(name = "optUserId") Long   optUserId)throws SystemOptServiceException{
+      throw new SystemOptServiceException(SysOptError.ExecError.getCode(), "暂不支持");
+     }
+            
+      @Override
+     @RequestMapping(value = "/get", method = RequestMethod.POST)  
+     default  ${BuildDaoBean.className} get(@MyParams(name = "id") Long id)throws SystemOptServiceException{
+     throw new SystemOptServiceException(SysOptError.ExecError.getCode(), "暂不支持");
+     }
+
+}

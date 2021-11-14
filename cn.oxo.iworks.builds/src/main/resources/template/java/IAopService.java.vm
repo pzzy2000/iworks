@@ -27,11 +27,11 @@ public interface IAop${BuildDaoBean.toBean()}Service  {
             
             public List<${BuildDaoBean.className} > searchList(OptType  optType ,  ${BuildDaoBean.toBean()}SearchBean  searchBean,CommSearchBean  commSearchBean  )throws SystemOptServiceException;
             
-            public ${BuildDaoBean.className}  searchSingle(OptType optType, ${BuildDaoBean.toBean()}SearchBean searchBean)throws SystemOptServiceException;
+            //public ${BuildDaoBean.className}  searchSingle(OptType optType, ${BuildDaoBean.toBean()}SearchBean searchBean)throws SystemOptServiceException;
             
             public  ${BuildDaoBean.className}    remove(OptType  optType ,  ${BuildDaoBean.toBean()}SearchBean  searchBean,Long   optUserId)throws SystemOptServiceException;
             
-            public  List<${BuildDaoBean.className} >    removes(OptType  optType ,  ${BuildDaoBean.toBean()}SearchBean  searchBean,Long   optUserId)throws SystemOptServiceException;
+            //public  List<${BuildDaoBean.className} >    removes(OptType  optType ,  ${BuildDaoBean.toBean()}SearchBean  searchBean,Long   optUserId)throws SystemOptServiceException;
             
              public  ${BuildDaoBean.className} get(Long id)throws SystemOptServiceException;
             

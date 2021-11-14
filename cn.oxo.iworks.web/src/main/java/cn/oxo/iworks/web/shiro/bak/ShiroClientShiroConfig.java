@@ -1,4 +1,4 @@
-package cn.oxo.iworks.web.shiro;
+package cn.oxo.iworks.web.shiro.bak;
 
 import java.io.Serializable;
 import java.util.HashMap;

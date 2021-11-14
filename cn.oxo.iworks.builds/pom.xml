@@ -9,7 +9,6 @@
 		<artifactId>cn.oxo.iworks</artifactId>
 		<version>0.0.1</version>
 	</parent>
-	<groupId>cn.oxo.iworks.builds</groupId>
 	<artifactId>cn.oxo.iworks.builds</artifactId>
 	<name>cn.oxo.iworks.builds</name>
 	<url>http://maven.apache.org</url>

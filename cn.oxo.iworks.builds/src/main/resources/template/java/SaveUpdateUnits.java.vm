@@ -79,10 +79,10 @@ private ${BuildDaoBean.toBean()}BaseMapper  i${BuildDaoBean.toBean()}BaseMapper;
          throw new SystemOptServiceException(SysOptError.SysError.getCode(),SysOptError.SysError.getName()+"[操作没实现]");
     }
     
-     public List<${BuildDaoBean.className}>  removes(OptType optType, ${BuildDaoBean.toBean()}SearchBean  searchBean  ) throws SystemOptServiceException {
-         
-         
-         throw new SystemOptServiceException(SysOptError.SysError.getCode(),SysOptError.SysError.getName()+"[操作没实现]");
-    }
+   
+     //public List<${BuildDaoBean.className}>  removes(OptType optType, ${BuildDaoBean.toBean()}SearchBean  searchBean  ) throws SystemOptServiceException {
+     //     throw new SystemOptServiceException(SysOptError.SysError.getCode(),SysOptError.SysError.getName()+"[操作没实现]");
+     //}
+    
 
 }

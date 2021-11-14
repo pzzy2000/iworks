@@ -51,6 +51,8 @@ public abstract class ABBuildService implements IBuildService {
 		buildService(tableBean, tableBean.getPojo(), outPath);
 
 		buildAction(tableBean, tableBean.getPojo(), outPath);
+		
+		buildFeign(tableBean, tableBean.getPojo(), outPath);
 
 //		buildInface(tableBean, tableBean.getPojo(), outPath);
 
@@ -254,6 +256,35 @@ public abstract class ABBuildService implements IBuildService {
 
 		
 	}
+	
+	protected void buildFeign(TableBean iTableBean, Class<?> clazz, String outPath)
+        throws MyBatisBuildServiceException {
+
+	     
+    Map<String, Object> values = createVParams(iTableBean, clazz);
+
+    try {
+        String vm = "template/java/IFeignService.java.vm";
+
+        String aopfileName = clazz.getSimpleName().substring(0, clazz.getSimpleName().length() - 4) + "FeignService.java";
+        VelocityToolsUnits.toFile(vm, values, outPath + "\\feign\\ifaces\\" + "I" +  aopfileName);
+
+    } catch (Exception e) {
+        throw new MyBatisBuildServiceException(e);
+    }
+    
+    try {
+        String vm = "template/java/IFeignServiceClient.java.vm";
+
+        String aopfileName = clazz.getSimpleName().substring(0, clazz.getSimpleName().length() - 4) + "FeignServiceClient.java";
+        VelocityToolsUnits.toFile(vm, values, outPath + "\\feign\\" + "I" + aopfileName);
+
+    } catch (Exception e) {
+        throw new MyBatisBuildServiceException(e);
+    }
+
+    
+}
 
 	protected void buildService(TableBean iTableBean, Class<?> clazz, String outPath)
 			throws MyBatisBuildServiceException {

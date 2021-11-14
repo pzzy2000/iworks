@@ -5,7 +5,7 @@ import cn.oxo.iworks.builds.base.TableBean;
 import cn.oxo.iworks.builds.db.DBUtils;
 import cn.oxo.iworks.builds.db.MariadbDBUtils;
 import cn.oxo.iworks.builds.mybatis.MyBatisBuildService;
-import cn.oxo.iworks.builds.test.bean.CustomerBean;
+
 
 
 public  class CreateDb {
@@ -21,11 +21,11 @@ public  class CreateDb {
 
         DBUtils iMYSQLDBUtils = new MariadbDBUtils(url, username, password);
         {
-            TableBean iTableBean = iIBuildService.init(CustomerBean.class);
-
-//             iIBuildService.createTable(iTableBean, iMYSQLDBUtils);
-
-            iIBuildService.build(iTableBean, outPath);
+//            TableBean iTableBean = iIBuildService.init(CustomerBean.class);
+//
+////             iIBuildService.createTable(iTableBean, iMYSQLDBUtils);
+//
+//            iIBuildService.build(iTableBean, outPath);
         }
 
     }

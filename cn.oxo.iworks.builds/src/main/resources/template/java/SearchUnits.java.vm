@@ -97,16 +97,4 @@ private ${BuildDaoBean.toBean()}BaseMapper  i${BuildDaoBean.toBean()}BaseMapper;
 	
 	
 
-    public ${BuildDaoBean.className} searchSingle(OptType optType, ${BuildDaoBean.toBean()}SearchBean searchBean) throws SystemOptServiceException {
-        CommSearchBean commSearchBean = new CommSearchBean();
-		commSearchBean.setPageNum(1);
-		commSearchBean.setPageSize(1);
-		Page<${BuildDaoBean.className}> page =createPage(optType, searchBean, commSearchBean);
-		List<${BuildDaoBean.className}>  result = list(page, searchBean,commSearchBean);
-		if(result.size()>1)throw new SystemOptServiceException(SysOptError.SysError.getCode(),SysOptError.SysError.getName()+"[查询结果大于1个]");
-	    return result.size() ==0 ? null:result.get(0);
-				
-	}
-	
-
 }
