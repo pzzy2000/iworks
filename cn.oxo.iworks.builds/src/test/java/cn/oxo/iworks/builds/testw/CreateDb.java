@@ -14,9 +14,9 @@ public  class CreateDb {
 
         String basePath = "cn.oxo.iworks.builds.test";
         String outPath = "d:\\charging1";
-        String url = "jdbc:mysql://admin.ixd2018.com:13038/charging_point";
-        String username = "charging";
-        String password = "charging";
+        String url = "";
+        String username = "";
+        String password = "";
         IBuildService iIBuildService = new MyBatisBuildService(basePath, false);
 
         DBUtils iMYSQLDBUtils = new MariadbDBUtils(url, username, password);
