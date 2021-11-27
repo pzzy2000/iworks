@@ -15,9 +15,9 @@ import com.alibaba.fastjson.JSON;
 import cn.oxo.iworks.web.controller.ErrorResult;
 import cn.oxo.iworks.web.controller.RequestResult;
 
-public class ShiroWxClientLoginOutAuthenticatingFilter extends LogoutFilter {
+public class ShiroAdminLoginOutAuthenticatingFilter extends LogoutFilter {
 
-    private String url_login = "/ecmi/client/login/out";
+    private String url_login = "/admin/business/admin/loginout";
 
     private static RequestResult<ErrorResult> iRequestResult = new RequestResult<ErrorResult>();
 
@@ -29,7 +29,7 @@ public class ShiroWxClientLoginOutAuthenticatingFilter extends LogoutFilter {
         iRequestResult.setResult(new ErrorResult(0, "退出成功"));
     }
 
-    private Logger logger = LogManager.getLogger(ShiroWxClientLoginOutAuthenticatingFilter.class);
+    private Logger logger = LogManager.getLogger(ShiroAdminLoginOutAuthenticatingFilter.class);
 
     @Override
     protected boolean preHandle(ServletRequest request, ServletResponse response) throws Exception {

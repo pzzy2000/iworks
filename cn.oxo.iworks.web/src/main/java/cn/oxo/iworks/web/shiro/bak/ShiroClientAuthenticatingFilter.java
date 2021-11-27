@@ -20,6 +20,8 @@ import com.alibaba.fastjson.JSON;
 
 import cn.oxo.iworks.web.controller.ErrorResult;
 import cn.oxo.iworks.web.controller.RequestResult;
+import cn.oxo.iworks.web.shiro.ShiroClientAuthenticationException;
+import cn.oxo.iworks.web.shiro.ShiroClientMsg;
 
 public class ShiroClientAuthenticatingFilter extends AuthenticatingFilter {
 

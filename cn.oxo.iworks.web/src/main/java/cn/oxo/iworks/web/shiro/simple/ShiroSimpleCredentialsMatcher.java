@@ -7,21 +7,19 @@ import org.apache.shiro.authc.AuthenticationInfo;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.authc.credential.SimpleCredentialsMatcher;
 
-import cn.oxo.iworks.web.shiro.ShiroUnits;
+public class ShiroSimpleCredentialsMatcher extends SimpleCredentialsMatcher {
 
-public class ShiroWxSimpleCredentialsMatcher extends SimpleCredentialsMatcher {
-
-    private Logger logger = LogManager.getLogger(ShiroWxSimpleCredentialsMatcher.class);
+    private Logger logger = LogManager.getLogger(ShiroSimpleCredentialsMatcher.class);
 
     public boolean doCredentialsMatch(AuthenticationToken token, AuthenticationInfo info) {
-        ShiroIMbuyClientUserPasswordToken iManagerPlatformUserPasswordToken = (ShiroIMbuyClientUserPasswordToken)token;
+        ShiroClientUserPasswordToken iManagerPlatformUserPasswordToken = (ShiroClientUserPasswordToken)token;
         logger.info(
             "shiro simple credentials matcher :" + iManagerPlatformUserPasswordToken.getUserType() + " " + iManagerPlatformUserPasswordToken.getLoginType());
         switch (iManagerPlatformUserPasswordToken.getUserType()) {
             case client: {
                 switch (iManagerPlatformUserPasswordToken.getLoginType()) {
                     case Wx: {
-                        ShiroIMbuyClientAuthenticationInfo iSimpleAuthenticationInfo = (ShiroIMbuyClientAuthenticationInfo)info;
+                        ShiroClientAuthenticationInfo iSimpleAuthenticationInfo = (ShiroClientAuthenticationInfo)info;
 
                         // 验证 openid
                         if (StringUtils.isEmpty(iSimpleAuthenticationInfo.getOpenId())) {
@@ -33,7 +31,7 @@ public class ShiroWxSimpleCredentialsMatcher extends SimpleCredentialsMatcher {
                         return true;
                     }
                     case Access: {
-                        ShiroIMbuyClientAuthenticationInfo iSimpleAuthenticationInfo = (ShiroIMbuyClientAuthenticationInfo)info;
+                        ShiroClientAuthenticationInfo iSimpleAuthenticationInfo = (ShiroClientAuthenticationInfo)info;
                         String password = ShiroUnits.createPassword(iManagerPlatformUserPasswordToken.getUsername(),iManagerPlatformUserPasswordToken.getPasswords());
                         if (password.equals(iSimpleAuthenticationInfo.getCode())) {
                             return true;
@@ -52,7 +50,7 @@ public class ShiroWxSimpleCredentialsMatcher extends SimpleCredentialsMatcher {
             }
 
             case manager: {
-                ShiroIMbuyClientAuthenticationInfo iSimpleAuthenticationInfo = (ShiroIMbuyClientAuthenticationInfo)info;
+                ShiroClientAuthenticationInfo iSimpleAuthenticationInfo = (ShiroClientAuthenticationInfo)info;
 
                 String userInfoName = (String)iSimpleAuthenticationInfo.getPrincipals().getPrimaryPrincipal();
 

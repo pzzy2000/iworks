@@ -22,8 +22,8 @@ import cn.oxo.iworks.web.controller.RequestResult;
 import cn.oxo.iworks.web.shiro.ShiroClientAuthenticationException;
 import cn.oxo.iworks.web.shiro.ShiroClientMsg;
 
-public class ShiroIMbuyAdminAuthenticatingFilter extends AuthenticatingFilter {
-    private Logger logger = LogManager.getLogger(ShiroIMbuyAdminAuthenticatingFilter.class);
+public class ShiroAdminAuthenticatingFilter extends AuthenticatingFilter {
+    private Logger logger = LogManager.getLogger(ShiroAdminAuthenticatingFilter.class);
     public static String key_user_access = "bean.access";
     private String key_user_password = "bean.password";
     // private String key_user_logintype = "bean.logintype";
@@ -42,7 +42,7 @@ public class ShiroIMbuyAdminAuthenticatingFilter extends AuthenticatingFilter {
 
         logger.info("admin login access : " + access + " code : " + password);
 
-        ShiroIMbuyClientUserPasswordToken crawlerClientUserPasswordToken = new ShiroIMbuyClientUserPasswordToken(access, password);
+        ShiroClientUserPasswordToken crawlerClientUserPasswordToken = new ShiroClientUserPasswordToken(access, password);
 
         crawlerClientUserPasswordToken.setRememberMe(true);
 
@@ -58,7 +58,7 @@ public class ShiroIMbuyAdminAuthenticatingFilter extends AuthenticatingFilter {
     }
 
     protected boolean onLoginSuccess(AuthenticationToken token, Subject subject, ServletRequest request, ServletResponse response) throws Exception {
-        ShiroIMbuyClientUserPasswordToken crawlerClientUserPasswordToken = (ShiroIMbuyClientUserPasswordToken)token;
+        ShiroClientUserPasswordToken crawlerClientUserPasswordToken = (ShiroClientUserPasswordToken)token;
 
         HttpServletRequest httpRequest = (HttpServletRequest)request;
 

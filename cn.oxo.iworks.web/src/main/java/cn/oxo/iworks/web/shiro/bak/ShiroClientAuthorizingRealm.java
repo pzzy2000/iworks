@@ -14,6 +14,7 @@ import org.apache.shiro.subject.PrincipalCollection;
 
 import cn.oxo.iworks.databases.SystemOptServiceException;
 import cn.oxo.iworks.web.LoginSessionBean;
+import cn.oxo.iworks.web.shiro.ClientInfoBean;
 
 public class ShiroClientAuthorizingRealm extends AuthorizingRealm {
 

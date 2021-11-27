@@ -1,4 +1,6 @@
-package cn.oxo.iworks.web.shiro.bak;
+package cn.oxo.iworks.web.shiro;
+
+import cn.oxo.iworks.web.shiro.bak.LoginType;
 
 public class ClientInfoBean {
 

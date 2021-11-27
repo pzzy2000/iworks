@@ -2,10 +2,10 @@ package cn.oxo.iworks.web.shiro.simple;
 
 import org.apache.shiro.authc.SimpleAuthenticationInfo;
 
-import cn.oxo.imibuying.commons.params.LoginType;
 import cn.oxo.iworks.web.UserType;
+import cn.oxo.iworks.web.shiro.LoginType;
 
-public class ShiroIMbuyClientAuthenticationInfo extends SimpleAuthenticationInfo {
+public class ShiroClientAuthenticationInfo extends SimpleAuthenticationInfo {
 
     private LoginType loginType;
 
@@ -19,21 +19,21 @@ public class ShiroIMbuyClientAuthenticationInfo extends SimpleAuthenticationInfo
     
     private String token;
 
-    public ShiroIMbuyClientAuthenticationInfo() {}
+    public ShiroClientAuthenticationInfo() {}
 
-    public ShiroIMbuyClientAuthenticationInfo(LoginType loginType,  String realmName) {
+    public ShiroClientAuthenticationInfo(LoginType loginType,  String realmName) {
         super(null, null, realmName);
         this.loginType = loginType;
        
     }
 
-    public ShiroIMbuyClientAuthenticationInfo(LoginType loginType, Object principal, Object credentials, String realmName) {
+    public ShiroClientAuthenticationInfo(LoginType loginType, Object principal, Object credentials, String realmName) {
         super(principal, credentials, realmName);
         this.loginType = loginType;
       
     }
 
-    public ShiroIMbuyClientAuthenticationInfo(Object principal, Object credentials, String realmName) {
+    public ShiroClientAuthenticationInfo(Object principal, Object credentials, String realmName) {
         super(principal, credentials, realmName);
 
     }

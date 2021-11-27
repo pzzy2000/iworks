@@ -2,11 +2,10 @@ package cn.oxo.iworks.web.shiro.simple;
 
 import org.apache.shiro.authc.UsernamePasswordToken;
 
-import cn.oxo.imibuying.commons.params.IMBuySysType;
-import cn.oxo.imibuying.commons.params.LoginType;
 import cn.oxo.iworks.web.UserType;
+import cn.oxo.iworks.web.shiro.LoginType;
 
-public class ShiroIMbuyClientUserPasswordToken extends UsernamePasswordToken {
+public class ShiroClientUserPasswordToken extends UsernamePasswordToken {
 
     private static final long serialVersionUID = 7544295776678876804L;
 
@@ -22,15 +21,15 @@ public class ShiroIMbuyClientUserPasswordToken extends UsernamePasswordToken {
     
     private String openId;
     
-    private IMBuySysType buySysType;
+//    private SysType buySysType;
   
-    public ShiroIMbuyClientUserPasswordToken(String access, String password) {
+    public ShiroClientUserPasswordToken(String access, String password) {
         super(access, password, true);
         this.access = access;
         loginType = LoginType.Access;
     }
 
-    public ShiroIMbuyClientUserPasswordToken(String platformUserName,String code, String avatarUrl) {
+    public ShiroClientUserPasswordToken(String platformUserName,String code, String avatarUrl) {
         super(code, code, true);
         this.avatarUrl = avatarUrl;
         this.platformUserName = platformUserName;
@@ -93,13 +92,7 @@ public class ShiroIMbuyClientUserPasswordToken extends UsernamePasswordToken {
         this.openId = openId;
     }
 
-    public IMBuySysType getBuySysType () {
-        return buySysType;
-    }
-
-    public void setBuySysType (IMBuySysType buySysType) {
-        this.buySysType = buySysType;
-    }
+    
 
     
 }

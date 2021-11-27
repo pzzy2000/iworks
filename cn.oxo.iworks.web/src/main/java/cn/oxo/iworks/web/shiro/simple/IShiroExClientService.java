@@ -6,7 +6,7 @@ import cn.oxo.iworks.web.shiro.ClientInfoBean;
 public interface IShiroExClientService {
 
    
-    public ShiroWxClientInfoBean loginByClient(ClientUserLoginBean wxUserInfoBean) throws SystemOptServiceException;
+    public ShiroClientInfoBean loginByClient(ClientUserLoginBean wxUserInfoBean) throws SystemOptServiceException;
     
     public ClientInfoBean loginByManager(String access) throws SystemOptServiceException;
 

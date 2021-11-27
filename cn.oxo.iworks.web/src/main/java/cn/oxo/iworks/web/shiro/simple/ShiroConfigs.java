@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.servlet.Filter;
 import javax.servlet.ServletRequest;
@@ -24,7 +23,6 @@ import org.apache.shiro.web.mgt.DefaultWebSecurityManager;
 import org.apache.shiro.web.servlet.ShiroHttpServletRequest;
 import org.apache.shiro.web.servlet.SimpleCookie;
 import org.redisson.api.RedissonClient;
-import org.redisson.spring.cache.CacheConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -35,14 +33,13 @@ import com.github.streamone.shiro.cache.RedissonShiroCacheManager;
 import com.github.streamone.shiro.session.RedissonSessionDao;
 import com.github.streamone.shiro.session.RedissonWebSessionManager;
 
-import cn.oxo.iworks.web.shiro.AuthenticationInfoCache;
-import cn.oxo.iworks.web.shiro.AuthorizationInfoCache;
-import cn.oxo.iworks.web.shiro.ShiroClientAuthenticatingFilter;
-import cn.oxo.iworks.web.shiro.ShiroClientShiroConfig;
-import cn.oxo.iworks.web.shiro.ShiroUnits;
+import cn.oxo.iworks.web.shiro.bak.AuthenticationInfoCache;
+import cn.oxo.iworks.web.shiro.bak.AuthorizationInfoCache;
+import cn.oxo.iworks.web.shiro.bak.ShiroClientAuthenticatingFilter;
+import cn.oxo.iworks.web.shiro.bak.ShiroClientShiroConfig;
 
 @Configuration
-public class ShiroIMbuyConfigs {
+public class ShiroConfigs {
 
     protected Map<String, String> filterChain () {
         Map<String, String> filterChains = new LinkedHashMap<String, String>();
@@ -115,11 +112,11 @@ public class ShiroIMbuyConfigs {
         }
 
         Map<String, Filter> filter = new HashMap<String, Filter>();
-        filter.put("ClientAuthc", new ShiroIMbuyClientAuthenticatingFilter());
-        filter.put("ClientExitAuthc", new ShiroWxClientLoginOutAuthenticatingFilter());
-        filter.put("AdminAuthc", new ShiroIMbuyAdminAuthenticatingFilter());
+        filter.put("ClientAuthc", new ShiroClientAuthenticatingFilter());
+        filter.put("ClientExitAuthc", new ShiroClientLoginOutAuthenticatingFilter());
+        filter.put("AdminAuthc", new ShiroAdminAuthenticatingFilter());
         filter.put("NoAuthc", new NoAnonymousFilter());
-        filter.put("AdminExitAuthc", new ShiroIMbuyAdminLoginOutAuthenticatingFilter());
+        filter.put("AdminExitAuthc", new ShiroAdminLoginOutAuthenticatingFilter());
         // filter.put("ClientRoles", new RolesAuthorizationFilter());
         shiroFilterFactoryBean.setFilters(filter);
         return shiroFilterFactoryBean;
@@ -180,7 +177,7 @@ public class ShiroIMbuyConfigs {
     }
 
     @Bean
-    public org.apache.shiro.mgt.SecurityManager securityManager (@Autowired ShiroWxClientAuthorizingRealm managerPlatformAuthorizingRealm, @Autowired RedissonWebSessionManager redissonWebSessionManager,
+    public org.apache.shiro.mgt.SecurityManager securityManager (@Autowired ShiroClientAuthorizingRealm managerPlatformAuthorizingRealm, @Autowired RedissonWebSessionManager redissonWebSessionManager,
         @Autowired RedissonShiroCacheManager redissonShiroCacheManager) {
         DefaultWebSecurityManager defaultSecurityManager = new DefaultWebSecurityManager();
         defaultSecurityManager.setRealm(managerPlatformAuthorizingRealm);
@@ -203,9 +200,9 @@ public class ShiroIMbuyConfigs {
     }
 
     @Bean
-    public ShiroWxClientAuthorizingRealm managerPlatformAuthorizingRealm (CredentialsMatcher credentialsMatcher, AuthenticationInfoCache authenticationInfoCache, AuthorizationInfoCache authorizationInfoCache,
+    public ShiroClientAuthorizingRealm managerPlatformAuthorizingRealm (CredentialsMatcher credentialsMatcher, AuthenticationInfoCache authenticationInfoCache, AuthorizationInfoCache authorizationInfoCache,
         @Autowired IShiroExClientService shrioClientService) {
-        ShiroWxClientAuthorizingRealm iCrawlerClientAuthorizingRealm = new ShiroWxClientAuthorizingRealm(credentialsMatcher, shrioClientService);
+        ShiroClientAuthorizingRealm iCrawlerClientAuthorizingRealm = new ShiroClientAuthorizingRealm(credentialsMatcher, shrioClientService);
         iCrawlerClientAuthorizingRealm.setCredentialsMatcher(createCrawlerSimpleCredentialsMatcher());
         // iCrawlerClientAuthorizingRealm.setAuthenticationCache(authenticationInfoCache);
         // iCrawlerClientAuthorizingRealm.setAuthorizationCache(authorizationInfoCache);
@@ -213,8 +210,8 @@ public class ShiroIMbuyConfigs {
     }
 
     @Bean
-    public ShiroWxSimpleCredentialsMatcher createCrawlerSimpleCredentialsMatcher () {
-        ShiroWxSimpleCredentialsMatcher iCrawlerSimpleCredentialsMatcher = new ShiroWxSimpleCredentialsMatcher();
+    public ShiroSimpleCredentialsMatcher createCrawlerSimpleCredentialsMatcher () {
+        ShiroSimpleCredentialsMatcher iCrawlerSimpleCredentialsMatcher = new ShiroSimpleCredentialsMatcher();
         return iCrawlerSimpleCredentialsMatcher;
     }
 

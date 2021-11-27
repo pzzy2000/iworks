@@ -1,13 +1,10 @@
 package cn.oxo.iworks.web.shiro.simple;
 
-import cn.oxo.imibuying.commons.params.IMBuySysType;
-import cn.oxo.imibuying.commons.params.LoginType;
+import cn.oxo.iworks.web.shiro.LoginType;
 
 public class ClientUserLoginBean {
 
     private LoginType type;
-    
-    private IMBuySysType  sysType;
     
     // user
     private String access;
@@ -83,12 +80,5 @@ public class ClientUserLoginBean {
         this.openId = openId;
     }
 
-    public IMBuySysType getSysType () {
-        return sysType;
-    }
-
-    public void setSysType (IMBuySysType sysType) {
-        this.sysType = sysType;
-    }
-
+    
 }

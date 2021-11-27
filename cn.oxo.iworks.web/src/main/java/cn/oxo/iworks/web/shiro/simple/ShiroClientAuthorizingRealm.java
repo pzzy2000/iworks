@@ -1,6 +1,5 @@
 package cn.oxo.iworks.web.shiro.simple;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.apache.shiro.SecurityUtils;
@@ -13,22 +12,19 @@ import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 
-import com.alibaba.fastjson.JSON;
-
-import cn.oxo.imibuying.commons.params.IMBuySysType;
 import cn.oxo.iworks.databases.SystemOptServiceException;
 import cn.oxo.iworks.web.LoginSessionBean;
 import cn.oxo.iworks.web.UserType;
 import cn.oxo.iworks.web.shiro.ClientInfoBean;
 import cn.oxo.iworks.web.shiro.LoginType;
 
-public class ShiroWxClientAuthorizingRealm extends AuthorizingRealm {
+public class ShiroClientAuthorizingRealm extends AuthorizingRealm {
 
-    private Logger logger = LogManager.getFormatterLogger(ShiroWxClientAuthorizingRealm.class);
+    private Logger logger = LogManager.getFormatterLogger(ShiroClientAuthorizingRealm.class);
 
     private IShiroExClientService shiroExClientService;
 
-    public ShiroWxClientAuthorizingRealm(CredentialsMatcher credentialsMatcher, IShiroExClientService shiroExClientService) {
+    public ShiroClientAuthorizingRealm(CredentialsMatcher credentialsMatcher, IShiroExClientService shiroExClientService) {
         super(credentialsMatcher);
         this.shiroExClientService = shiroExClientService;
     }
@@ -53,7 +49,7 @@ public class ShiroWxClientAuthorizingRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo (AuthenticationToken token) throws AuthenticationException {
 
-        ShiroIMbuyClientUserPasswordToken platformToken = (ShiroIMbuyClientUserPasswordToken)token;
+        ShiroClientUserPasswordToken platformToken = (ShiroClientUserPasswordToken)token;
         // String access = (String)platformToken.getPrincipal();
         switch (platformToken.getUserType()) {
             case manager:
@@ -66,7 +62,7 @@ public class ShiroWxClientAuthorizingRealm extends AuthorizingRealm {
 
     }
 
-    private AuthenticationInfo manager (ShiroIMbuyClientUserPasswordToken platformToken, AuthenticationToken token) throws AuthenticationException {
+    private AuthenticationInfo manager (ShiroClientUserPasswordToken platformToken, AuthenticationToken token) throws AuthenticationException {
 
         String access = (String)platformToken.getPrincipal();
         try {
@@ -75,7 +71,7 @@ public class ShiroWxClientAuthorizingRealm extends AuthorizingRealm {
                 throw new AuthenticationException("登录错误[没发现相关人员]");
             }
 
-            ShiroIMbuyClientAuthenticationInfo iShiroWxClientAuthenticationInfo = new ShiroIMbuyClientAuthenticationInfo(iClientInfoBean.getAccess(), iClientInfoBean.getPassword(), getName());
+            ShiroClientAuthenticationInfo iShiroWxClientAuthenticationInfo = new ShiroClientAuthenticationInfo(iClientInfoBean.getAccess(), iClientInfoBean.getPassword(), getName());
             iShiroWxClientAuthenticationInfo.setUserType(UserType.manager);
             return iShiroWxClientAuthenticationInfo;
         } catch (SystemOptServiceException e) {
@@ -85,7 +81,7 @@ public class ShiroWxClientAuthorizingRealm extends AuthorizingRealm {
 
     }
 
-    private AuthenticationInfo client (ShiroIMbuyClientUserPasswordToken platformToken, AuthenticationToken token) throws AuthenticationException {
+    private AuthenticationInfo client (ShiroClientUserPasswordToken platformToken, AuthenticationToken token) throws AuthenticationException {
         String access = (String)platformToken.getPrincipal();
         switch (platformToken.getLoginType()) {
 
@@ -95,10 +91,10 @@ public class ShiroWxClientAuthorizingRealm extends AuthorizingRealm {
                     iWxUserInfoBean.setUserName(access);
                     iWxUserInfoBean.setType(platformToken.getLoginType());
                     iWxUserInfoBean.setCode(new String(platformToken.getPassword()));
-                    iWxUserInfoBean.setType(cn.oxo.imibuying.commons.params.LoginType.Access);
-                    iWxUserInfoBean.setSysType(platformToken.getBuySysType());
-                    ShiroWxClientInfoBean iClientInfoBean = shiroExClientService.loginByClient(iWxUserInfoBean);
-                    ShiroIMbuyClientAuthenticationInfo iShiroWxClientAuthenticationInfo = new ShiroIMbuyClientAuthenticationInfo(platformToken.getLoginType(), iClientInfoBean.getAccess(), iClientInfoBean.getPassword(), getName());
+                    iWxUserInfoBean.setType(LoginType.Access);
+                    
+                    ShiroClientInfoBean iClientInfoBean = shiroExClientService.loginByClient(iWxUserInfoBean);
+                    ShiroClientAuthenticationInfo iShiroWxClientAuthenticationInfo = new ShiroClientAuthenticationInfo(platformToken.getLoginType(), iClientInfoBean.getAccess(), iClientInfoBean.getPassword(), getName());
                     iShiroWxClientAuthenticationInfo.setCode(iClientInfoBean.getCode());
                     iShiroWxClientAuthenticationInfo.setId(iClientInfoBean.getId().toString());
                     iShiroWxClientAuthenticationInfo.setUserType(UserType.client);
@@ -116,10 +112,10 @@ public class ShiroWxClientAuthorizingRealm extends AuthorizingRealm {
                     iWxUserInfoBean.setUserName(platformToken.getPlatformUserName());
                     iWxUserInfoBean.setAvatarUrl(platformToken.getAvatarUrl());
                     iWxUserInfoBean.setCode(platformToken.getCode());  
-                    iWxUserInfoBean.setType(cn.oxo.imibuying.commons.params.LoginType.Wx);
-                    iWxUserInfoBean.setSysType(platformToken.getBuySysType());
-                    ShiroWxClientInfoBean iClientInfoBean = shiroExClientService.loginByClient(iWxUserInfoBean);
-                    ShiroIMbuyClientAuthenticationInfo iShiroWxClientAuthenticationInfo = new ShiroIMbuyClientAuthenticationInfo(platformToken.getLoginType(), iClientInfoBean.getOpenId(), iClientInfoBean.getOpenId(), getName());
+                    iWxUserInfoBean.setType(LoginType.Wx);
+                    
+                    ShiroClientInfoBean iClientInfoBean = shiroExClientService.loginByClient(iWxUserInfoBean);
+                    ShiroClientAuthenticationInfo iShiroWxClientAuthenticationInfo = new ShiroClientAuthenticationInfo(platformToken.getLoginType(), iClientInfoBean.getOpenId(), iClientInfoBean.getOpenId(), getName());
                     iShiroWxClientAuthenticationInfo.setCode(iClientInfoBean.getCode());
                     iShiroWxClientAuthenticationInfo.setOpenId(iClientInfoBean.getOpenId());
                     iShiroWxClientAuthenticationInfo.setId(iClientInfoBean.getId().toString());

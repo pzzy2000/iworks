@@ -1,6 +1,7 @@
 package cn.oxo.iworks.web.shiro.bak;
 
 import cn.oxo.iworks.databases.SystemOptServiceException;
+import cn.oxo.iworks.web.shiro.ClientInfoBean;
 
 public interface IShrioClientService {
 

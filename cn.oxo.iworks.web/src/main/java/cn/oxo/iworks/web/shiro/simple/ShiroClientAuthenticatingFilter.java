@@ -16,14 +16,13 @@ import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 
 import com.alibaba.fastjson.JSON;
 
-import cn.oxo.imibuying.commons.params.IMBuySysType;
-import cn.oxo.imibuying.commons.params.LoginType;
 import cn.oxo.iworks.web.UserType;
 import cn.oxo.iworks.web.controller.ErrorResult;
 import cn.oxo.iworks.web.controller.RequestResult;
+import cn.oxo.iworks.web.shiro.LoginType;
 import cn.oxo.iworks.web.shiro.ShiroClientAuthenticationException;
 import cn.oxo.iworks.web.shiro.ShiroClientMsg;
-import cn.oxo.iworks.web.shiro.ShiroClientUserPasswordToken;
+
 
 /**
  * avatarUrl: https://thirdwx.qlogo.cn/mmopen/vi_32/DYAIOgq83eqaMgaRyPApTUZuvbSW0hFbBE00aJW5ut4EyibMick3MMhyAibEpZxGs7UkRMkWooCkmJ4SN2iaTnFrag/132 access: MM password: 0217muFa1jgn6C0HDxIa1SAyWV07muFJ logintype: Wx
@@ -31,8 +30,8 @@ import cn.oxo.iworks.web.shiro.ShiroClientUserPasswordToken;
  * @author Administrator
  * @date 2021/11/13
  */
-public class ShiroIMbuyClientAuthenticatingFilter extends AuthenticatingFilter {
-    private Logger logger = LogManager.getLogger(ShiroIMbuyClientAuthenticatingFilter.class);
+public class ShiroClientAuthenticatingFilter extends AuthenticatingFilter {
+    private Logger logger = LogManager.getLogger(ShiroClientAuthenticatingFilter.class);
 
     private String key_user_logintype = "loginType";
 
@@ -57,7 +56,7 @@ public class ShiroIMbuyClientAuthenticatingFilter extends AuthenticatingFilter {
 
         LoginType logintype = LoginType.valueOf(httpRequest.getParameter(this.key_user_logintype));
 
-        IMBuySysType buySysType = IMBuySysType.valueOf(request.getParameter(this.key_user_sysType));
+//        SysType buySysType = SysType.valueOf(request.getParameter(this.key_user_sysType));
 
         switch (logintype) {
             case Access: {
@@ -65,10 +64,10 @@ public class ShiroIMbuyClientAuthenticatingFilter extends AuthenticatingFilter {
 
                 String password = httpRequest.getParameter(this.key_user_password);
 
-                ShiroIMbuyClientUserPasswordToken crawlerClientUserPasswordToken = new ShiroIMbuyClientUserPasswordToken(access, password);
+                ShiroClientUserPasswordToken crawlerClientUserPasswordToken = new ShiroClientUserPasswordToken(access, password);
                 crawlerClientUserPasswordToken.setUserType(UserType.client);
                 crawlerClientUserPasswordToken.setLoginType(LoginType.Access);
-                crawlerClientUserPasswordToken.setBuySysType(buySysType);
+//                crawlerClientUserPasswordToken.setBuySysType(buySysType);
                 return crawlerClientUserPasswordToken;
             }
             case Wx: {
@@ -79,10 +78,10 @@ public class ShiroIMbuyClientAuthenticatingFilter extends AuthenticatingFilter {
 
                 String name = request.getParameter(key_user_username);
 
-                ShiroIMbuyClientUserPasswordToken crawlerClientUserPasswordToken = new ShiroIMbuyClientUserPasswordToken(name, code, avatarUrl);
+                ShiroClientUserPasswordToken crawlerClientUserPasswordToken = new ShiroClientUserPasswordToken(name, code, avatarUrl);
                 crawlerClientUserPasswordToken.setUserType(UserType.client);
                 crawlerClientUserPasswordToken.setLoginType(LoginType.Wx);
-                crawlerClientUserPasswordToken.setBuySysType(buySysType);
+//                crawlerClientUserPasswordToken.setBuySysType(buySysType);
                 return crawlerClientUserPasswordToken;
             }
 
@@ -98,7 +97,7 @@ public class ShiroIMbuyClientAuthenticatingFilter extends AuthenticatingFilter {
     }
 
     protected boolean onLoginSuccess (AuthenticationToken token, Subject subject, ServletRequest request, ServletResponse response) throws Exception {
-        ShiroIMbuyClientUserPasswordToken crawlerClientUserPasswordToken = (ShiroIMbuyClientUserPasswordToken)token;
+        ShiroClientUserPasswordToken crawlerClientUserPasswordToken = (ShiroClientUserPasswordToken)token;
         request.setAttribute("openid", crawlerClientUserPasswordToken.getOpenId());
         return true;
     }
@@ -196,11 +195,11 @@ public class ShiroIMbuyClientAuthenticatingFilter extends AuthenticatingFilter {
 
                 LoginType logintype = LoginType.valueOf(request.getParameter(this.key_user_logintype));
 
-                IMBuySysType buySysType = IMBuySysType.valueOf(request.getParameter(this.key_user_sysType));
+//                SysType buySysType = SysType.valueOf(request.getParameter(this.key_user_sysType));
 
-                if (buySysType == null) {
-                    return toErrorPage(request, response, ShiroClientMsg.ClientParamsError);
-                }
+//                if (buySysType == null) {
+//                    return toErrorPage(request, response, ShiroClientMsg.ClientParamsError);
+//                }
 
                 switch (logintype) {
                     case Access: {
