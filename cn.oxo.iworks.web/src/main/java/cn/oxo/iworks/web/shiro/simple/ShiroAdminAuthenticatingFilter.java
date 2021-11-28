@@ -23,14 +23,24 @@ import cn.oxo.iworks.web.shiro.ShiroClientAuthenticationException;
 import cn.oxo.iworks.web.shiro.ShiroClientMsg;
 
 public class ShiroAdminAuthenticatingFilter extends AuthenticatingFilter {
+
     private Logger logger = LogManager.getLogger(ShiroAdminAuthenticatingFilter.class);
+
     public static String key_user_access = "bean.access";
+
     private String key_user_password = "bean.password";
+
     // private String key_user_logintype = "bean.logintype";
+
     public static String key_session_id = "auth";
+
     private String url_login = "/admin/business/admin/login";
 
-    protected AuthenticationToken createToken(ServletRequest request, ServletResponse arg1) throws Exception {
+    public ShiroAdminAuthenticatingFilter(String loginUrl) {
+        this.url_login = loginUrl;
+    }
+
+    protected AuthenticationToken createToken (ServletRequest request, ServletResponse arg1) throws Exception {
 
         HttpServletRequest httpRequest = (HttpServletRequest)request;
 
@@ -51,13 +61,13 @@ public class ShiroAdminAuthenticatingFilter extends AuthenticatingFilter {
         return crawlerClientUserPasswordToken;
     }
 
-    private boolean isLocalLoginPath(ServletRequest request, ServletResponse response) {
+    private boolean isLocalLoginPath (ServletRequest request, ServletResponse response) {
 
         boolean isisLoginRequest = pathsMatch(this.url_login, request);
         return isisLoginRequest;
     }
 
-    protected boolean onLoginSuccess(AuthenticationToken token, Subject subject, ServletRequest request, ServletResponse response) throws Exception {
+    protected boolean onLoginSuccess (AuthenticationToken token, Subject subject, ServletRequest request, ServletResponse response) throws Exception {
         ShiroClientUserPasswordToken crawlerClientUserPasswordToken = (ShiroClientUserPasswordToken)token;
 
         HttpServletRequest httpRequest = (HttpServletRequest)request;
@@ -67,7 +77,7 @@ public class ShiroAdminAuthenticatingFilter extends AuthenticatingFilter {
         return true;
     }
 
-    protected boolean onLoginFailure(AuthenticationToken token, Exception e, ServletRequest request, ServletResponse response) {
+    protected boolean onLoginFailure (AuthenticationToken token, Exception e, ServletRequest request, ServletResponse response) {
         this.logger.error(e.getMessage(), e);
         try {
             if ((e instanceof ShiroClientAuthenticationException)) {
@@ -82,11 +92,10 @@ public class ShiroAdminAuthenticatingFilter extends AuthenticatingFilter {
         return true;
     }
 
-    protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
+    protected boolean executeLogin (ServletRequest request, ServletResponse response) throws Exception {
         AuthenticationToken token = createToken(request, response);
         if (token == null) {
-            String msg =
-                "createToken method implementation returned null. A valid non-null AuthenticationToken must be created in order to execute a login attempt.";
+            String msg = "createToken method implementation returned null. A valid non-null AuthenticationToken must be created in order to execute a login attempt.";
 
             throw new IllegalStateException(msg);
         }
@@ -108,7 +117,7 @@ public class ShiroAdminAuthenticatingFilter extends AuthenticatingFilter {
     // return params;
     // }
 
-    protected boolean toErrorPage(ServletRequest request, ServletResponse response, ShiroClientAuthenticationException e) throws Exception {
+    protected boolean toErrorPage (ServletRequest request, ServletResponse response, ShiroClientAuthenticationException e) throws Exception {
         RequestResult<ErrorResult> iRequestResult = new RequestResult<ErrorResult>();
 
         iRequestResult.setSuccess(true);
@@ -128,7 +137,7 @@ public class ShiroAdminAuthenticatingFilter extends AuthenticatingFilter {
         return false;
     }
 
-    protected boolean toErrorPage(ServletRequest request, ServletResponse response, ShiroClientMsg crawlerClientMsg) throws Exception {
+    protected boolean toErrorPage (ServletRequest request, ServletResponse response, ShiroClientMsg crawlerClientMsg) throws Exception {
         RequestResult<ErrorResult> iRequestResult = new RequestResult<ErrorResult>();
 
         iRequestResult.setSuccess(true);
@@ -148,7 +157,7 @@ public class ShiroAdminAuthenticatingFilter extends AuthenticatingFilter {
         return false;
     }
 
-    protected boolean isAccessAllowed(ServletRequest request, ServletResponse response, Object mappedValue) {
+    protected boolean isAccessAllowed (ServletRequest request, ServletResponse response, Object mappedValue) {
         if (isLocalLoginPath(request, response)) {
             return false;
         }
@@ -159,7 +168,7 @@ public class ShiroAdminAuthenticatingFilter extends AuthenticatingFilter {
         return false;
     }
 
-    protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
+    protected boolean onAccessDenied (ServletRequest request, ServletResponse response) throws Exception {
         if (isLocalLoginPath(request, response)) {
             String access = request.getParameter(key_user_access);
 
@@ -181,7 +190,7 @@ public class ShiroAdminAuthenticatingFilter extends AuthenticatingFilter {
         return false;
     }
 
-    protected void saveRequestAndRedirectToLogin(ServletRequest request, ServletResponse response) throws IOException {
+    protected void saveRequestAndRedirectToLogin (ServletRequest request, ServletResponse response) throws IOException {
         RequestResult<ErrorResult> iRequestResult = new RequestResult<ErrorResult>();
 
         iRequestResult.setSuccess(false);

@@ -2,7 +2,6 @@ package cn.oxo.iworks.web.shiro.simple;
 
 import java.io.Serializable;
 import java.util.HashMap;
-import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.servlet.Filter;
@@ -25,9 +24,13 @@ import org.apache.shiro.web.servlet.SimpleCookie;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import com.github.streamone.shiro.cache.RedissonShiroCacheManager;
 import com.github.streamone.shiro.session.RedissonSessionDao;
@@ -38,33 +41,33 @@ import cn.oxo.iworks.web.shiro.bak.AuthorizationInfoCache;
 import cn.oxo.iworks.web.shiro.bak.ShiroClientAuthenticatingFilter;
 import cn.oxo.iworks.web.shiro.bak.ShiroClientShiroConfig;
 
-@Configuration
-public class ShiroConfigs {
+// @Configuration
+public abstract class ShiroConfigs {
 
-    protected Map<String, String> filterChain () {
-        Map<String, String> filterChains = new LinkedHashMap<String, String>();
-
-        filterChains.put("/ecmi/client/reg", "NoAuthc");
-        filterChains.put("/ecmi/client/config/base", "NoAuthc");
-
-        filterChains.put("/ecmi/client/login/out", "ClientExitAuthc");
-
-        // filterChains.put("/client/coupon/goods/order/**", "ClientAuthc");
-        // filterChains.put("/client/coupon/goods/**", "NoAuthc");
-
-        // filterChains.put("/client/business/portal/beaner/list", "NoAuthc");
-        // filterChains.put("/client/business/portal/category/list", "NoAuthc");
-        // filterChains.put("/client/business/coupon/goods/list", "NoAuthc");
-        // filterChains.put("/client/business/coupon/goods/detail/get", "NoAuthc");
-        //
-        // filterChains.put("/client/business/customer/login/out", "ClientExitAuthc");
-        // filterChains.put("/admin/business/admin/loginout", "AdminExitAuthc");
-        //
-        filterChains.put("/client/imbuy/**", "ClientAuthc");
-        filterChains.put("/admin/**", "AdminAuthc");
-        // filterChains.put("/**", "ClientAuthc,ClientRoles[manager]");
-        return filterChains;
-    }
+    // protected Map<String, String> filterChain () {
+    // Map<String, String> filterChains = new LinkedHashMap<String, String>();
+    //
+    // filterChains.put("/ecmi/client/reg", "NoAuthc");
+    // filterChains.put("/ecmi/client/config/base", "NoAuthc");
+    //
+    // filterChains.put("/ecmi/client/login/out", "ClientExitAuthc");
+    //
+    // // filterChains.put("/client/coupon/goods/order/**", "ClientAuthc");
+    // // filterChains.put("/client/coupon/goods/**", "NoAuthc");
+    //
+    // // filterChains.put("/client/business/portal/beaner/list", "NoAuthc");
+    // // filterChains.put("/client/business/portal/category/list", "NoAuthc");
+    // // filterChains.put("/client/business/coupon/goods/list", "NoAuthc");
+    // // filterChains.put("/client/business/coupon/goods/detail/get", "NoAuthc");
+    // //
+    // // filterChains.put("/client/business/customer/login/out", "ClientExitAuthc");
+    // // filterChains.put("/admin/business/admin/loginout", "AdminExitAuthc");
+    // //
+    // filterChains.put("/client/imbuy/**", "ClientAuthc");
+    // filterChains.put("/admin/**", "AdminAuthc");
+    // // filterChains.put("/**", "ClientAuthc,ClientRoles[manager]");
+    // return filterChains;
+    // }
 
     private static Logger logger = LogManager.getLogger(ShiroClientShiroConfig.class);
 
@@ -73,35 +76,41 @@ public class ShiroConfigs {
     @Autowired
     private Environment env;
 
+    protected abstract Map<String, String> filterChain ();
+    
+    
+    protected  abstract  String clientLoginUrl();
+    
+    protected  abstract  String adminLoginUrl();
+
     /*
      * 
      */
 
-    // /**
-    // * 允许跨域调用的过滤器
-    // */
-    // @SuppressWarnings({"rawtypes", "unchecked"})
-    // @Bean
-    // public CorsFilter corsFilter() {
-    //
-    // UrlBasedCorsConfigurationSource source = new
-    // UrlBasedCorsConfigurationSource();
-    // CorsConfiguration config = new CorsConfiguration();
-    // config.addAllowedOrigin("*");
-    // config.setAllowCredentials(true);
-    // config.addAllowedHeader("*");
-    // config.addAllowedMethod("*");
-    // source.registerCorsConfiguration("/**", config);
-    // FilterRegistrationBean bean = new FilterRegistrationBean(new
-    // CorsFilter(source));
-    // bean.setOrder(0);
-    // return new CorsFilter(source);
-    // }
+    /**
+     * 允许跨域调用的过滤器
+     */
+    @SuppressWarnings({"rawtypes", "unchecked"})
+    @Bean
+    public CorsFilter corsFilter () {
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedOrigin("*");
+        config.setAllowCredentials(true);
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
+        bean.setOrder(0);
+        return new CorsFilter(source);
+    }
 
     @Bean
     public ShiroFilterFactoryBean shiroFilter (SecurityManager securityManager) {
 
         ShiroFilterFactoryBean shiroFilterFactoryBean = new ShiroFilterFactoryBean();
+
         shiroFilterFactoryBean.setSecurityManager(securityManager);
 
         // Map<String, String> filterChainDefinitionMap = new LinkedHashMap<String, String>();
@@ -112,13 +121,21 @@ public class ShiroConfigs {
         }
 
         Map<String, Filter> filter = new HashMap<String, Filter>();
-        filter.put("ClientAuthc", new ShiroClientAuthenticatingFilter());
+        
+        filter.put("ClientAuthc", new ShiroClientAuthenticatingFilter(clientLoginUrl()));
+        
         filter.put("ClientExitAuthc", new ShiroClientLoginOutAuthenticatingFilter());
-        filter.put("AdminAuthc", new ShiroAdminAuthenticatingFilter());
+        
+        filter.put("AdminAuthc", new ShiroAdminAuthenticatingFilter(adminLoginUrl()));
+        
         filter.put("NoAuthc", new NoAnonymousFilter());
+        
         filter.put("AdminExitAuthc", new ShiroAdminLoginOutAuthenticatingFilter());
+        
         // filter.put("ClientRoles", new RolesAuthorizationFilter());
+        
         shiroFilterFactoryBean.setFilters(filter);
+        
         return shiroFilterFactoryBean;
 
     }
