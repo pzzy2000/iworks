@@ -1,4 +1,4 @@
-package cn.oxo.iworks.web.shiro.bak;
+package cn.oxo.iworks.web.shiro.simple;
 
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.cache.CacheException;

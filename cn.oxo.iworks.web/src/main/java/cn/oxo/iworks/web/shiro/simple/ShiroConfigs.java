@@ -26,7 +26,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -35,11 +34,6 @@ import org.springframework.web.filter.CorsFilter;
 import com.github.streamone.shiro.cache.RedissonShiroCacheManager;
 import com.github.streamone.shiro.session.RedissonSessionDao;
 import com.github.streamone.shiro.session.RedissonWebSessionManager;
-
-import cn.oxo.iworks.web.shiro.bak.AuthenticationInfoCache;
-import cn.oxo.iworks.web.shiro.bak.AuthorizationInfoCache;
-import cn.oxo.iworks.web.shiro.bak.ShiroClientAuthenticatingFilter;
-import cn.oxo.iworks.web.shiro.bak.ShiroClientShiroConfig;
 
 // @Configuration
 public abstract class ShiroConfigs {
@@ -69,19 +63,18 @@ public abstract class ShiroConfigs {
     // return filterChains;
     // }
 
-    private static Logger logger = LogManager.getLogger(ShiroClientShiroConfig.class);
+    private static Logger logger = LogManager.getLogger(ShiroConfigs.class);
 
     public static String header_key_auth = "auth";
 
     @Autowired
-    private Environment env;
+    protected Environment env;
 
     protected abstract Map<String, String> filterChain ();
-    
-    
-    protected  abstract  String clientLoginUrl();
-    
-    protected  abstract  String adminLoginUrl();
+
+    protected abstract String clientLoginUrl ();
+
+    protected abstract String adminLoginUrl ();
 
     /*
      * 
@@ -121,21 +114,21 @@ public abstract class ShiroConfigs {
         }
 
         Map<String, Filter> filter = new HashMap<String, Filter>();
-        
+
         filter.put("ClientAuthc", new ShiroClientAuthenticatingFilter(clientLoginUrl()));
-        
+
         filter.put("ClientExitAuthc", new ShiroClientLoginOutAuthenticatingFilter());
-        
+
         filter.put("AdminAuthc", new ShiroAdminAuthenticatingFilter(adminLoginUrl()));
-        
+
         filter.put("NoAuthc", new NoAnonymousFilter());
-        
+
         filter.put("AdminExitAuthc", new ShiroAdminLoginOutAuthenticatingFilter());
-        
+
         // filter.put("ClientRoles", new RolesAuthorizationFilter());
-        
+
         shiroFilterFactoryBean.setFilters(filter);
-        
+
         return shiroFilterFactoryBean;
 
     }

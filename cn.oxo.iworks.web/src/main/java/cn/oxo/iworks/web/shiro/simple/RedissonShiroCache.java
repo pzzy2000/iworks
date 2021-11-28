@@ -1,4 +1,4 @@
-package cn.oxo.iworks.web.shiro.bak;
+package cn.oxo.iworks.web.shiro.simple;
 
 import java.util.ArrayList;
 import java.util.Collection;
