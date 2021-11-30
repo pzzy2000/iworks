@@ -4,8 +4,10 @@ import cn.oxo.iworks.web.shiro.LoginType;
 
 public class ClientUserLoginBean {
 
-    private LoginType type;
+    private LoginType loginType;
     
+    private String  sysCode;
+
     // user
     private String access;
 
@@ -17,12 +19,8 @@ public class ClientUserLoginBean {
     private String userName;
 
     private String avatarUrl;
-    
-    private String openId;
-    
-    
 
-    
+    private String openId;
 
     public String getCode () {
         return code;
@@ -64,12 +62,13 @@ public class ClientUserLoginBean {
         this.password = password;
     }
 
-    public LoginType getType () {
-        return type;
+    
+    public LoginType getLoginType () {
+        return loginType;
     }
 
-    public void setType (LoginType type) {
-        this.type = type;
+    public void setLoginType (LoginType loginType) {
+        this.loginType = loginType;
     }
 
     public String getOpenId () {
@@ -80,5 +79,12 @@ public class ClientUserLoginBean {
         this.openId = openId;
     }
 
-    
+    public String getSysCode () {
+        return sysCode;
+    }
+
+    public void setSysCode (String sysCode) {
+        this.sysCode = sysCode;
+    }
+
 }

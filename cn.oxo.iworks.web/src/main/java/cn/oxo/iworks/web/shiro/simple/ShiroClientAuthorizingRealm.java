@@ -89,9 +89,8 @@ public class ShiroClientAuthorizingRealm extends AuthorizingRealm {
                 try {
                     ClientUserLoginBean iWxUserInfoBean = new ClientUserLoginBean();
                     iWxUserInfoBean.setUserName(access);
-                    iWxUserInfoBean.setType(platformToken.getLoginType());
+                    iWxUserInfoBean.setLoginType(platformToken.getLoginType());
                     iWxUserInfoBean.setCode(new String(platformToken.getPassword()));
-                    iWxUserInfoBean.setType(LoginType.Access);
                     
                     ShiroClientInfoBean iClientInfoBean = shiroExClientService.loginByClient(iWxUserInfoBean);
                     ShiroClientAuthenticationInfo iShiroWxClientAuthenticationInfo = new ShiroClientAuthenticationInfo(platformToken.getLoginType(), iClientInfoBean.getAccess(), iClientInfoBean.getPassword(), getName());
@@ -112,7 +111,7 @@ public class ShiroClientAuthorizingRealm extends AuthorizingRealm {
                     iWxUserInfoBean.setUserName(platformToken.getPlatformUserName());
                     iWxUserInfoBean.setAvatarUrl(platformToken.getAvatarUrl());
                     iWxUserInfoBean.setCode(platformToken.getCode());  
-                    iWxUserInfoBean.setType(LoginType.Wx);
+                    iWxUserInfoBean.setLoginType(platformToken.getLoginType());
                     
                     ShiroClientInfoBean iClientInfoBean = shiroExClientService.loginByClient(iWxUserInfoBean);
                     ShiroClientAuthenticationInfo iShiroWxClientAuthenticationInfo = new ShiroClientAuthenticationInfo(platformToken.getLoginType(), iClientInfoBean.getOpenId(), iClientInfoBean.getOpenId(), getName());

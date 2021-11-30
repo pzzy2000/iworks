@@ -34,7 +34,7 @@ public class ShiroClientAuthenticatingFilter extends AuthenticatingFilter {
 
     private String key_user_logintype = "loginType";
 
-    public static String key_user_username = "name";
+    public static String key_user_username = "userName";
 
     public static String key_user_access = "access";
     private String key_user_password = "password";
