@@ -115,7 +115,7 @@ public abstract class ABBuildService implements IBuildService {
 
 		try {
 			VelocityToolsUnits.toFile(vm, values,
-					outPath + "/service/mybatis/" + clazz.getSimpleName().substring(0, clazz.getSimpleName().length() - 4) + "BaseMapper.java");
+					outPath + "/service/mybatis/" + clazz.getSimpleName() + "BaseMapper.java");
 		} catch (Exception e) {
 			throw new MyBatisBuildServiceException(e);
 		}
@@ -130,7 +130,7 @@ public abstract class ABBuildService implements IBuildService {
 
 		try {
 			VelocityToolsUnits.toFile(vm, values, outPath + "/bean/search/"
-					+ clazz.getSimpleName().substring(0, clazz.getSimpleName().length() - 4) + "SearchBean.java");
+					+ clazz.getSimpleName() + "SearchBean.java");
 		} catch (Exception e) {
 			throw new MyBatisBuildServiceException(e);
 		}
@@ -180,7 +180,7 @@ public abstract class ABBuildService implements IBuildService {
 		try {
 			String vm = "template/java/IAopService.java.vm";
 
-			String aopfileName = "Aop" + clazz.getSimpleName().substring(0, clazz.getSimpleName().length() - 4)
+			String aopfileName = "Aop" + clazz.getSimpleName()
 					+ "Service.java";
 			VelocityToolsUnits.toFile(vm, values, outPath + "\\controller\\aop\\core\\" + "I" + aopfileName);
 
@@ -191,7 +191,7 @@ public abstract class ABBuildService implements IBuildService {
 		try {
 			String vm = "template/java/AopService.java.vm";
 
-			String aopfileName = "Aop" + clazz.getSimpleName().substring(0, clazz.getSimpleName().length() - 4)
+			String aopfileName = "Aop" + clazz.getSimpleName()
 					+ "Service.java";
 
 			VelocityToolsUnits.toFile(vm, values, outPath + "\\controller\\aop\\core\\imples\\" + aopfileName);
@@ -202,7 +202,7 @@ public abstract class ABBuildService implements IBuildService {
 		try {
 			String vm = "template/java/AopExBaseService.java.vm";
 
-			String aopfileName = "Aop" + clazz.getSimpleName().substring(0, clazz.getSimpleName().length() - 4)
+			String aopfileName = "Aop" + clazz.getSimpleName()
 					+ "ExBaseService.java";
 
 			VelocityToolsUnits.toFile(vm, values, outPath + "\\controller\\aop\\core\\imples\\" + aopfileName);
@@ -213,7 +213,7 @@ public abstract class ABBuildService implements IBuildService {
 		try {
 			String vm = "template/java/IAopExService.java.vm";
 
-			String aopfileName = "Aop" + clazz.getSimpleName().substring(0, clazz.getSimpleName().length() - 4)
+			String aopfileName = "Aop" + clazz.getSimpleName()
 					+ "ExService.java";
 			VelocityToolsUnits.toFile(vm, values, outPath + "\\controller\\aop\\" + "I" + aopfileName);
 
@@ -224,7 +224,7 @@ public abstract class ABBuildService implements IBuildService {
 		try {
 			String vm = "template/java/AopExService.java.vm";
 
-			String aopfileName = "Aop" + clazz.getSimpleName().substring(0, clazz.getSimpleName().length() - 4)
+			String aopfileName = "Aop" + clazz.getSimpleName()
 					+ "ExService.java";
 
 			VelocityToolsUnits.toFile(vm, values, outPath + "\\controller\\aop\\" + aopfileName);
@@ -247,7 +247,7 @@ public abstract class ABBuildService implements IBuildService {
 		try {
 			String vm = "template/java/Action.java.vm";
 
-			String aopfileName = clazz.getSimpleName().substring(0, clazz.getSimpleName().length() - 4) + "Controller.java";
+			String aopfileName = clazz.getSimpleName() + "Controller.java";
 			VelocityToolsUnits.toFile(vm, values, outPath + "\\controller\\" + aopfileName);
 
 		} catch (Exception e) {
@@ -266,7 +266,7 @@ public abstract class ABBuildService implements IBuildService {
     try {
         String vm = "template/java/IFeignService.java.vm";
 
-        String aopfileName = clazz.getSimpleName().substring(0, clazz.getSimpleName().length() - 4) + "FeignService.java";
+        String aopfileName = clazz.getSimpleName() + "FeignService.java";
         VelocityToolsUnits.toFile(vm, values, outPath + "\\feign\\ifaces\\" + "I" +  aopfileName);
 
     } catch (Exception e) {
@@ -276,7 +276,7 @@ public abstract class ABBuildService implements IBuildService {
     try {
         String vm = "template/java/IFeignServiceClient.java.vm";
 
-        String aopfileName = clazz.getSimpleName().substring(0, clazz.getSimpleName().length() - 4) + "FeignServiceClient.java";
+        String aopfileName = clazz.getSimpleName() + "FeignServiceClient.java";
         VelocityToolsUnits.toFile(vm, values, outPath + "\\feign\\" + "I" + aopfileName);
 
     } catch (Exception e) {
@@ -286,7 +286,7 @@ public abstract class ABBuildService implements IBuildService {
     try {
         String vm = "template/java/FeignServicejava.vm";
 
-        String aopfileName = clazz.getSimpleName().substring(0, clazz.getSimpleName().length() - 4) + "FeignService.java";
+        String aopfileName = clazz.getSimpleName() + "FeignService.java";
         VelocityToolsUnits.toFile(vm, values, outPath + "\\cloud\\feign\\imples\\" + aopfileName);
 
     } catch (Exception e) {
@@ -308,7 +308,7 @@ public abstract class ABBuildService implements IBuildService {
 		try {
 			String vm = "template/java/IBaseServiceImple.java.vm";
 
-			String aopfileName = clazz.getSimpleName().substring(0, clazz.getSimpleName().length() - 4) + "BaseServiceImple.java";
+			String aopfileName = clazz.getSimpleName() + "BaseServiceImple.java";
 
 			VelocityToolsUnits.toFile(vm, values, outPath + "\\service\\imples\\base\\" + aopfileName);
 		} catch (Exception e) {
@@ -318,7 +318,7 @@ public abstract class ABBuildService implements IBuildService {
 		try {
 			String vm = "template/java/IService.java.vm";
 
-			String aopfileName = clazz.getSimpleName().substring(0, clazz.getSimpleName().length() - 4) + "Service.java";
+			String aopfileName = clazz.getSimpleName() + "Service.java";
 			VelocityToolsUnits.toFile(vm, values, outPath + "\\service\\" + "I" + aopfileName);
 
 		} catch (Exception e) {
@@ -328,7 +328,7 @@ public abstract class ABBuildService implements IBuildService {
 		try {
 			String vm = "template/java/IServiceImple.java.vm";
 
-			String aopfileName = clazz.getSimpleName().substring(0, clazz.getSimpleName().length() - 4) + "ServiceImple.java";
+			String aopfileName = clazz.getSimpleName() + "ServiceImple.java";
 
 			VelocityToolsUnits.toFile(vm, values, outPath + "\\service\\imples\\" + aopfileName);
 		} catch (Exception e) {
@@ -345,7 +345,7 @@ public abstract class ABBuildService implements IBuildService {
 
 		try {
 			VelocityToolsUnits.toFile(vm, values,
-					outPath + "\\service\\units\\" + clazz.getSimpleName().substring(0, clazz.getSimpleName().length() - 4) + "SaveUpdateRemoveUnits.java");
+					outPath + "\\service\\units\\" + clazz.getSimpleName() + "SaveUpdateRemoveUnits.java");
 		} catch (Exception e) {
 			throw new MyBatisBuildServiceException(e);
 		}
@@ -360,7 +360,7 @@ public abstract class ABBuildService implements IBuildService {
 
 		try {
 			VelocityToolsUnits.toFile(vm, values,
-					outPath + "\\service\\units\\" + clazz.getSimpleName().substring(0, clazz.getSimpleName().length() - 4) + "SearchUnits.java");
+					outPath + "\\service\\units\\" + clazz.getSimpleName() + "SearchUnits.java");
 		} catch (Exception e) {
 			throw new MyBatisBuildServiceException(e);
 		}
