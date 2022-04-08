@@ -18,6 +18,13 @@ public class PlatformRedisService implements IPlatformRedisService {
 	protected IDBCacheSearch dbCacheSearch;
 
 	@SuppressWarnings("rawtypes")
+	public PlatformRedisService(RedisTemplate redisTemplate,IDBCacheSearch dbCacheSearch) {
+		super();
+		this.redisService = new RedisService(redisTemplate);
+		this.dbCacheSearch = dbCacheSearch;
+		;
+	}
+	
 	public PlatformRedisService(RedisTemplate redisTemplate, DataSource dataSource) {
 		super();
 		this.redisService = new RedisService(redisTemplate);
