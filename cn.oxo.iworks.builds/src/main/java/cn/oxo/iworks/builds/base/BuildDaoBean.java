@@ -33,7 +33,7 @@ public class BuildDaoBean {
       }
       
       public String toBean() {
-    	  return className.substring(0,className.length()-4);
+    	  return className;
       }
 
 }
