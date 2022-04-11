@@ -53,7 +53,7 @@ public class RedisService extends RedisGPSCacheService implements IRedisService 
 		for (String field : iGPSCCache.cachefield()) {
 			try {
 				Field iField = FieldUtils.getField(value.getClass(), field,true);
-				#iField.setAccessible(true);
+				//iField.setAccessible(true);
 				Object id = iField.get(value);
 				if (id == null) {
 					throw new RuntimeException("field : " + field + " result ： " + value.getClass() + " value null !");
