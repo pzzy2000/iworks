@@ -16,7 +16,6 @@ import org.apache.shiro.web.filter.authc.AuthenticatingFilter;
 
 import com.alibaba.fastjson.JSON;
 
-import cn.oxo.iworks.web.UserType;
 import cn.oxo.iworks.web.controller.ErrorResult;
 import cn.oxo.iworks.web.controller.RequestResult;
 import cn.oxo.iworks.web.shiro.ShiroClientAuthenticationException;
@@ -56,7 +55,7 @@ public class ShiroAdminAuthenticatingFilter extends AuthenticatingFilter {
 
         crawlerClientUserPasswordToken.setRememberMe(true);
 
-        crawlerClientUserPasswordToken.setUserType(UserType.manager);
+//        crawlerClientUserPasswordToken.setUserType(UserType.manager);
 
         return crawlerClientUserPasswordToken;
     }

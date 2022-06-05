@@ -68,4 +68,18 @@ public class RedisService extends RedisGPSCacheService implements IRedisService 
 		}
 	}
 
+    
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public void putByGeneral(String key, Object value) {
+        redisTemplate.opsForValue().set(key, value);
+         
+    }
+
+    @Override
+    public Object getByGeneral(String key) {
+        return redisTemplate.opsForValue().get(key);
+    }
+
 }

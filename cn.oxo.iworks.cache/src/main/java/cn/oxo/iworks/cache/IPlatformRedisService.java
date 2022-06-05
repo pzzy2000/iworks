@@ -17,4 +17,8 @@ public interface IPlatformRedisService {
 
     public <V> V findBy(Object key, String field, Class<V> clazz);
 
+    public void putByGeneral(String key, Object value);
+
+    public Object getByGeneral(String key);
+
 }

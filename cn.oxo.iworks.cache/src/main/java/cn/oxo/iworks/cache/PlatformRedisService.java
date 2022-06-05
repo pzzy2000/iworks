@@ -93,4 +93,18 @@ public class PlatformRedisService implements IPlatformRedisService {
 		redisService.set(key, field, value);
 	}
 
+   
+
+    @Override
+    public void putByGeneral(String key, Object value) {
+        redisService.putByGeneral(key, value);
+         
+    }
+
+    @Override
+    public Object getByGeneral(String key) {
+        // TODO Auto-generated method stub
+         return redisService.getByGeneral(key);
+    }
+
 }

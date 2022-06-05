@@ -12,7 +12,7 @@ public class LoginSessionBean {
 
       private String access;
 
-      private UserType userType;
+//      private UserType userType;
 
       private Long roleId;
 
@@ -52,14 +52,7 @@ public class LoginSessionBean {
             this.access = access;
       }
 
-      public UserType getUserType() {
-            return userType;
-      }
-
-      public void setUserType(UserType userType) {
-            this.userType = userType;
-      }
-
+      
       public Date getCreateDate() {
             return createDate;
       }
